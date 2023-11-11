@@ -54,7 +54,7 @@
     <div class="overflow-auto">
         <table class="table-auto border-collapse border border-gray-400"
             style="min-width: {{ 5 * $matrix->totalFeedbackmomenten }}em">
-            <thead>
+            <thead class="sticky top-0 bg-white shadow">
                 <tr>
                     <x-table.th disabled></x-table.th>
                     <x-table.th unimportant>Leerlijn:</x-table.th>
@@ -95,13 +95,13 @@
                         @endforeach
                     @endforeach
                 </tr>
-                <tr class="border-y-4 border-gray-200">
+            </thead>
+            <tbody>
+                <tr class="border-y-2 border-gray-200">
                     <x-table.th unimportant>Student</x-table.th>
                     <x-table.th unimportant>Group</x-table.th>
                     <x-table.th colspan="{{ $matrix->totalFeedbackmomenten }}">Feedback</x-table.th>
                 </tr>
-            </thead>
-            <tbody>
                 @foreach ($students as $key => $student)
                     <x-table.tr zebra="{{ $loop->even }}"
                         wire:key="student-{{ $student->id }}">
