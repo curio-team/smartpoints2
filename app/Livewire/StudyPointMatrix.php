@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\StudentScore;
 use Livewire\Component;
 use StudioKaa\Amoclient\Facades\AmoAPI;
 
@@ -1141,22 +1142,62 @@ class StudyPointMatrix extends Component
         $matrix = $data[0];
 
         // TODO: clean up spaghetti code
-        $matrix->totalFeedbackmomenten = collect($matrix->vakken)->pluck('modules')->map(fn($v) => collect($v)->pluck('feedbackmomenten')->map(fn($v) => collect($v)->flatten()->toArray())->flatten()->toArray())->flatten()->count();
+        $modules = collect($matrix->vakken)
+            ->pluck('modules');
+        $matrix->totalFeedbackmomenten = $modules
+            ->map(fn($v) => collect($v)
+                ->pluck('feedbackmomenten')
+                ->map(fn($v) => collect($v)
+                    ->flatten()
+                    ->toArray()
+                )
+                ->flatten()
+                ->toArray()
+            )
+            ->flatten()
+            ->count();
 
         $group = AmoAPI::get('groups/find/TTSDB-sd4o22e');
 
-        $students = collect($group['users'])
-            ->map(function($user) use ($group) {
+        $students = collect($group['users']);
+        $scores = StudentScore::getFeedbackForStudents($students->pluck('id')->toArray(), $modules->flatten()->pluck('version_id')->toArray());
+
+        $students = $students->map(function($user) use ($group, $scores) {
                 return (object) [
                     'id' => $user['id'],
                     'name' => $user['name'],
                     'group' => $group['name'],
-                    'feedbackmomenten' => [
-                    ]
+                    'feedbackmomenten' => $scores->where('student_id', $user['id'])->mapWithKeys(function($score) {
+                        return [
+                            $score['module_version_id'] . '-' . $score['feedbackmoment_id'] => $score['score']
+                        ];
+                    })->toArray()
                 ];
             });
 
         $this->students = $students;
         $this->matrix = $matrix;
+    }
+
+    public function updatedStudents($value, $key)
+    {
+        $parts = explode('.', $key);
+        $studentKey = $parts[0];
+        $moduleVersionWithFeedbackId = $parts[count($parts) - 1];
+        list($moduleVersionId, $feedbackmomentId) = explode('-', $moduleVersionWithFeedbackId);
+        $student = $this->students[$studentKey];
+
+        // Write the StudentScore to the database
+        $updatedScores = [
+            [
+                'student_id' => $student->id,
+                'module_version_id' => $moduleVersionId,
+                'feedbackmoment_id' => $feedbackmomentId,
+                'teacher_id' => auth()->user()->id,
+                'score' => $value
+            ],
+        ];
+
+        StudentScore::updateFeedbackForStudents($updatedScores);
     }
 }

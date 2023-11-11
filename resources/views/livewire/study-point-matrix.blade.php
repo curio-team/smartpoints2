@@ -1,6 +1,6 @@
 <div class="relative h-full grid grid-auto-rows grid-cols-1 overflow-auto"
     x-data="{
-        editMode: false,
+        editMode: {{ auth()->user()->type === 'teacher' ? 'true' : 'false' }},
         hoverRow: null,
         hoverColumn: null,
     }">
@@ -91,20 +91,24 @@
                 @foreach ($students as $key => $student)
                     <x-table.tr zebra="{{ $loop->even }}"
                         wire:key="student-{{ $student->id }}">
-                        <x-table.td>{{ $student->name }}</x-table.td>
+                        <x-table.td>
+                            {{ $student->name }}
+                            <small>({{ $student->id }})</small>
+                        </x-table.td>
                         <x-table.td>{{ $student->group }}</x-table.td>
                         @foreach ($matrix->vakken as $vak)
                             @foreach ($vak->modules as $module)
                                 @foreach ($module->feedbackmomenten as $feedbackmoment)
-                                    <x-table.td tight class="relative"
+                                    <x-table.td tight class="p-1"
                                         x-bind:class="{
                                             'bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                             'bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
                                         }"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
-                                        <x-input.text type="number" class="absolute w-full h-full top-0 left-0"
-                                            wire:model.defer="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->code }}"
+                                        <x-input.text type="number" class="w-full h-full text-center" step="1"
+                                            wire:model.live="students.{{ $key }}.feedbackmomenten.{{ $module->version_id }}-{{ $feedbackmoment->id }}"
+                                            min="0" max="{{ $feedbackmoment->points }}"
                                             x-bind:disabled="!editMode" />
                                     </x-table.td>
                                 @endforeach
@@ -115,4 +119,10 @@
             </tbody>
         </table>
     </div>
+
+    {{-- Debug by outputting the matrix and students to console --}}
+    <script>
+        console.log(@json($matrix));
+        console.log(@json($students));
+    </script>
 </div>
