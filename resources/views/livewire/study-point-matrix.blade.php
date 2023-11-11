@@ -1,17 +1,31 @@
-<form class="relative h-full grid grid-auto-rows grid-cols-1 overflow-auto"
+<form class="relative h-full flex flex-col overflow-auto content-start"
     x-data="{
         editMode: {{ auth()->user()->type === 'teacher' ? 'true' : 'false' }},
+        showFilters: true,
         hoverRow: null,
         hoverColumn: null,
         changesMade: {},
     }"
     x-on:study-point-matrix-changed.window="changesMade = {}"
     wire:submit="save">
-    <div>
-        <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2">
-            <div class="flex flex-row flex-grow gap-2 items-stretch">
+    <div class="flex flex-col gap-2 bg-gray-100 shadow p-2 px-4">
+        <div class="flex flex-row items-center justify-between gap-2">
+            @if(auth()->user()->type === 'teacher')
+                <x-input.select wire:model.live="selectedBlokKey">
+                    @foreach ($matrixes as $key => $otherMatrix)
+                        <option value="{{ $key }}">
+                            {{ $otherMatrix->blok }}
+                        </option>
+                    @endforeach
+                </x-input.select>
+            @else
+                <div class="font-bold capitalize">
+                    {{ $matrix->blok }}
+                </div>
+            @endif
+            <div class="flex justify-end flex-row flex-grow gap-2 items-stretch">
                 {{-- Mockup --}}
-                @php
+                {{-- @php
                 $tags = [
                     [
                         'name' => 'Vak',
@@ -27,11 +41,32 @@
                     <x-tag :color="$tag['color']" :allow-close="auth()->user()->type === 'teacher'">
                         {{ $tag['name'] }}
                     </x-tag>
-                @endforeach
+                @endforeach --}}
+                @if(auth()->user()->type === 'teacher')
+                <div x-cloak
+                    x-transition
+                    class="self-end"
+                    x-show="showFilters">
+                    <x-input.select wire:model.live="selectedGroupId">
+                        <option disabled value="-1">
+                            @lang('Select a group')
+                        </option>
+                        @foreach ($groups as $group)
+                            <option value="{{ $group->id }}"
+                                @if ($group->id === $this->selectedGroupId)
+                                    selected
+                                @endif>
+                                {{ $group->name }}
+                            </option>
+                        @endforeach
+                    </x-input.select>
+                </div>
+                @endif
             </div>
             <div class="flex flex-row gap-2 flex-none">
                 @if(auth()->user()->type === 'teacher')
-                    <x-button-icon icon="filter" />
+                    <x-button-icon icon="filter"
+                        @click="showFilters = !showFilters" />
                     <x-button-icon icon="edit"
                         @click="editMode = !editMode">
                         @lang('Edit')
@@ -51,7 +86,7 @@
             </div>
         </div>
     </div>
-    <div class="overflow-auto">
+    <div class="overflow-auto flex-grow">
         <table class="table-auto border-collapse border border-gray-400"
             style="min-width: {{ 5 * $matrix->totalFeedbackmomenten }}em">
             <thead class="sticky top-0 bg-white shadow">

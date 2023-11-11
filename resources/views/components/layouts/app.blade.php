@@ -10,7 +10,7 @@
         @endisset
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="grid auto-rows-auto grid-cols-1 h-full w-full">
+    <body class="flex flex-col h-full w-full">
         <nav class="bg-gray-800 text-white shadow-lg">
             <div class="flex flex-wrap items-center justify-between p-2 md:p-4">
                 <div class="flex-grow text-center md:text-start">
@@ -32,7 +32,7 @@
             </div>
         </nav>
 
-        <div class="mt-0 md:first-letter:mt-4 p-0 w-full overflow-auto">
+        <div class="flex-grow mt-0 md:first-letter:mt-4 p-0 w-full overflow-auto">
             {{ $slot }}
         </div>
     </body>
