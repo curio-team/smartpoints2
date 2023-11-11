@@ -24,7 +24,7 @@ class StudentScore extends Model
         return $this->belongsTo(User::class, 'student_id');
     }
 
-    public static function getFeedbackForStudents(array $ids, array $moduleVersionIds, ?array $feedbackMomentIds = null)
+    public static function queryFeedbackForStudents(array $ids, array $moduleVersionIds, ?array $feedbackMomentIds = null)
     {
         $query = StudentScore::whereIn('module_version_id', $moduleVersionIds)
             ->whereIn('student_id', $ids);
@@ -33,7 +33,7 @@ class StudentScore extends Model
             $query->whereIn('feedbackmoment_id', $feedbackMomentIds);
         }
 
-        return $query->get();
+        return $query;
     }
 
     public static function updateFeedbackForStudents(array $updatedScores)

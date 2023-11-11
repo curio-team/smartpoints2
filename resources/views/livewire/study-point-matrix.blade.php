@@ -134,7 +134,7 @@
             <tbody>
                 <tr class="border-y-2 border-gray-200">
                     <x-table.th unimportant>Student</x-table.th>
-                    <x-table.th unimportant>Group</x-table.th>
+                    <x-table.th unimportant>Total</x-table.th>
                     <x-table.th colspan="{{ $matrix->totalFeedbackmomenten }}">Feedback</x-table.th>
                 </tr>
                 @foreach ($students as $key => $student)
@@ -144,7 +144,9 @@
                             {{ $student->name }}
                             <small>({{ $student->id }})</small>
                         </x-table.td>
-                        <x-table.td>{{ $student->group }}</x-table.td>
+                        <x-table.td>
+                            {{ $student->total }}
+                        </x-table.td>
                         @foreach ($matrix->vakken as $vak)
                             @foreach ($vak->modules as $module)
                                 @foreach ($module->feedbackmomenten as $feedbackmoment)

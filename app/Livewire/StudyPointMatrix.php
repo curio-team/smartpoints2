@@ -83,24 +83,45 @@ class StudyPointMatrix extends Component
 
         $blokMatrix = $this->matrix;
         $modules = collect($blokMatrix->vakken)
-            ->pluck('modules');
+            ->pluck('modules')
+            ->flatten();
         $group = AmoAPI::get('groups/'.$this->selectedGroupId);
 
         $students = collect($group['users']);
-        $scores = StudentScore::getFeedbackForStudents($students->pluck('id')->toArray(), $modules->flatten()->pluck('version_id')->toArray());
+        $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $modules->pluck('version_id')->toArray())->get();
 
-        $students = $students->map(function($user) use ($group, $scores) {
-                return (object) [
-                    'id' => $user['id'],
-                    'name' => $user['name'],
-                    'group' => $group['name'],
-                    'feedbackmomenten' => $scores->where('student_id', $user['id'])->mapWithKeys(function($score) {
-                        return [
-                            $score['module_version_id'] . '-' . $score['feedbackmoment_id'] => $score['score']
-                        ];
-                    })->toArray()
-                ];
-            });
+        $students = $students->map(function($user) use ($group, $scores, $modules) {
+            $moments = $modules->map(
+                    fn($m) => collect($m->feedbackmomenten)
+                )
+                ->flatten();
+            $totalPointsToGain = $moments->sum('points');
+
+            // The sum of all highest scores per feedbackmoment
+            $scoreSum = $modules->map(
+                fn($m) => collect($m->feedbackmomenten)
+                    ->flatten()
+                    ->map(fn($fm) => $scores->where('student_id', $user['id'])
+                        ->where('module_version_id', $m->version_id)
+                        ->where('feedbackmoment_id', $fm->id)
+                        ->max('score')
+                    )
+                    ->sum()
+            )->sum();
+
+            $formattedTotal = $scoreSum . ' / ' . $totalPointsToGain;
+            return (object) [
+                'id' => $user['id'],
+                'name' => $user['name'],
+                'group' => $group['name'],
+                'total' => $formattedTotal,
+                'feedbackmomenten' => $scores->where('student_id', $user['id'])->mapWithKeys(function($score) {
+                    return [
+                        $score['module_version_id'] . '-' . $score['feedbackmoment_id'] => $score['score']
+                    ];
+                })->toArray()
+            ];
+        });
 
         $this->students = $students;
     }
