@@ -43,5 +43,7 @@
         <div class="flex-grow mt-0 md:first-letter:mt-4 p-0 w-full overflow-auto">
             {{ $slot }}
         </div>
+
+        <x-errors />
     </body>
 </html>

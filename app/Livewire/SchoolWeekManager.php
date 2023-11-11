@@ -2,10 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Traits\SendsNotifications;
 use Livewire\Component;
 
 class SchoolWeekManager extends Component
 {
+    use SendsNotifications;
+
     public $weeks;
     public $year_start;
     public $year_end;
@@ -19,10 +22,10 @@ class SchoolWeekManager extends Component
 
     public function mount()
     {
-        $this->resetFields();
+        $this->resetFields(true);
     }
 
-    public function resetFields()
+    public function resetFields(bool $silent = false)
     {
         $this->year_start = now()->year;
         $this->year_end = now()->year + 1;
@@ -34,6 +37,10 @@ class SchoolWeekManager extends Component
                 $arr['date_of_monday'] = $week->date_of_monday->toDateString();
                 return $arr;
             });
+
+        if (!$silent) {
+            $this->sendNotification(__('Reset'));
+        }
     }
 
     public function addWeek()
@@ -62,13 +69,15 @@ class SchoolWeekManager extends Component
             'date_of_monday' => $this->date_of_monday,
         ]);
 
-        $this->resetFields();
+        $this->resetFields(true);
+        $this->sendNotification(__('Created'), 'success');
     }
 
     public function deleteWeek($id)
     {
         \App\Models\SchoolWeek::find($id)->delete();
-        $this->resetFields();
+        $this->resetFields(true);
+        $this->sendNotification(__('Deleted'), 'warning');
     }
 
     public function updateWeek()
@@ -90,5 +99,6 @@ class SchoolWeekManager extends Component
         \App\Models\SchoolWeek::find($week['id'])->update([
             $property => $value,
         ]);
+        $this->sendNotification(__('Updated'));
     }
 }
