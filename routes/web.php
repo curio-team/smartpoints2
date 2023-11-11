@@ -2,7 +2,6 @@
 
 use App\Livewire\StudyPointMatrix;
 use Illuminate\Support\Facades\Route;
-use StudioKaa\Amoclient\Facades\AmoAPI;
 
 /*
 |--------------------------------------------------------------------------
