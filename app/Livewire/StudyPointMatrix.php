@@ -1179,6 +1179,11 @@ class StudyPointMatrix extends Component
         $this->matrix = $matrix;
     }
 
+    public function save()
+    {
+        $this->dispatch('study-point-matrix-changed');
+    }
+
     public function updatedStudents($value, $key)
     {
         $parts = explode('.', $key);

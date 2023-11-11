@@ -1,9 +1,12 @@
-<div class="relative h-full grid grid-auto-rows grid-cols-1 overflow-auto"
+<form class="relative h-full grid grid-auto-rows grid-cols-1 overflow-auto"
     x-data="{
         editMode: {{ auth()->user()->type === 'teacher' ? 'true' : 'false' }},
         hoverRow: null,
         hoverColumn: null,
-    }">
+        changesMade: {},
+    }"
+    x-on:study-point-matrix-changed.window="changesMade = {}"
+    wire:submit="save">
     <div>
         <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2">
             <div class="flex flex-row flex-grow gap-2 items-stretch">
@@ -32,6 +35,17 @@
                     <x-button-icon icon="edit"
                         @click="editMode = !editMode">
                         @lang('Edit')
+                    </x-button-icon>
+                    <x-button-icon icon="save"
+                        type="submit"
+                        x-cloak
+                        class="relative"
+                        x-show="Object.keys(changesMade).length > 0">
+                        <x-badge color="bg-red-500"
+                            class="absolute -top-1 -left-1">
+                            <span x-text="Object.keys(changesMade).length"></span>
+                        </x-badge>
+                        @lang('Save')
                     </x-button-icon>
                 @endif
             </div>
@@ -107,8 +121,9 @@
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
                                         <x-input.text type="number" class="w-full h-full text-center" step="1"
-                                            wire:model.live="students.{{ $key }}.feedbackmomenten.{{ $module->version_id }}-{{ $feedbackmoment->id }}"
+                                            wire:model="students.{{ $key }}.feedbackmomenten.{{ $module->version_id }}-{{ $feedbackmoment->id }}"
                                             min="0" max="{{ $feedbackmoment->points }}"
+                                            x-on:input="changesMade['{{ $module->version_id }}-{{ $feedbackmoment->id }}'] = true"
                                             x-bind:disabled="!editMode" />
                                     </x-table.td>
                                 @endforeach
@@ -120,9 +135,20 @@
         </table>
     </div>
 
+    <div id="loadingIndicator" wire:ignore>
+        <div class="absolute inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
+            <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+        </div>
+    </div>
+
     {{-- Debug by outputting the matrix and students to console --}}
     <script>
         console.log(@json($matrix));
         console.log(@json($students));
+
+        document.addEventListener('livewire:initialized', () => {
+            const loading = document.getElementById('loadingIndicator');
+            loading.setAttribute('wire:loading', '');
+        });
     </script>
-</div>
+</form>
