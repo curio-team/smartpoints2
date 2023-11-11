@@ -10,38 +10,25 @@
     wire:submit="save">
     <div class="flex flex-col gap-2 bg-gray-100 shadow p-2 px-4">
         <div class="flex flex-row items-center justify-between gap-2">
-            @if(auth()->user()->type === 'teacher')
-                <x-input.select wire:model.live="selectedBlokKey">
-                    @foreach ($matrixes as $key => $otherMatrix)
-                        <option value="{{ $key }}">
-                            {{ $otherMatrix->blok }}
-                        </option>
-                    @endforeach
-                </x-input.select>
-            @else
-                <div class="font-bold capitalize">
-                    {{ $matrix->blok }}
-                </div>
-            @endif
+            <div>
+                @if(auth()->user()->type === 'teacher')
+                    <x-input.select wire:model.live="selectedBlokKey">
+                        @foreach ($matrixes as $key => $otherMatrix)
+                            <option value="{{ $key }}">
+                                {{ $otherMatrix->blok }}
+                            </option>
+                        @endforeach
+                    </x-input.select>
+                @else
+                    <h2 class="font-bold capitalize">{{ $matrix->blok }}</h2>
+                @endif
+                <span class="text-sm italic">
+                    {{ \Carbon\Carbon::parse($matrix->datum_start)->format('d-m-Y') }}
+                    -
+                    {{ \Carbon\Carbon::parse($matrix->datum_eind)->format('d-m-Y') }}
+                </span>
+            </div>
             <div class="flex justify-end flex-row flex-grow gap-2 items-stretch">
-                {{-- Mockup --}}
-                {{-- @php
-                $tags = [
-                    [
-                        'name' => 'Vak',
-                        'color' => 'bg-blue-200',
-                    ],
-                    [
-                        'name' => 'Module',
-                        'color' => 'bg-green-200',
-                    ],
-                ];
-                @endphp
-                @foreach ($tags as $tag)
-                    <x-tag :color="$tag['color']" :allow-close="auth()->user()->type === 'teacher'">
-                        {{ $tag['name'] }}
-                    </x-tag>
-                @endforeach --}}
                 @if(auth()->user()->type === 'teacher')
                 <div x-cloak
                     x-transition
