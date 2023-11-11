@@ -3,11 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\StudentScore;
+use App\Traits\SendsNotifications;
 use Livewire\Component;
 use StudioKaa\Amoclient\Facades\AmoAPI;
 
 class StudyPointMatrix extends Component
 {
+    use SendsNotifications;
+
     public $groups;
     public $matrix;
     public $matrixes;

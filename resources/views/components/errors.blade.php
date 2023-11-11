@@ -17,7 +17,7 @@
             @endforeach
         @endif
 
-        document.addEventListener('livewire:initialized', function () {
+        document.addEventListener('livewire:init', function () {
             Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
                 succeed(({ snapshot, effect }) => {
                     const memo = JSON.parse(snapshot).memo;

@@ -8,6 +8,9 @@
     }"
     x-on:study-point-matrix-changed.window="changesMade = {}"
     wire:submit="save">
+    @php
+    $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0;
+    @endphp
     <div class="flex flex-col gap-2 bg-gray-100 shadow p-2 px-4">
         <div class="flex flex-row items-center justify-between gap-2">
             <div>
@@ -100,8 +103,12 @@
                     <x-table.th unimportant>Week:</x-table.th>
                     @foreach ($matrix->vakken as $vak)
                         @foreach ($vak->modules as $module)
-                            @foreach ($module->feedbackmomenten as $feedbackmoment)
-                                <x-table.th>{{ $feedbackmoment->week }}</x-table.th>
+                            @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
+                                <x-table.th x-bind:class="{
+                                    'outline outline-[2px] outline-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} >= {{ $feedbackmoment->week }} && {{ $currentWeek }} < {{ $module->feedbackmomenten[$fbmKey + 1]->week ?? '100' }},
+                                }">
+                                    {{ $feedbackmoment->week }}
+                                </x-table.th>
                             @endforeach
                         @endforeach
                     @endforeach
@@ -111,8 +118,10 @@
                     <x-table.th unimportant>Points:</x-table.th>
                     @foreach ($matrix->vakken as $vak)
                         @foreach ($vak->modules as $module)
-                            @foreach ($module->feedbackmomenten as $feedbackmoment)
-                                <x-table.th>{{ $feedbackmoment->points }}</x-table.th>
+                            @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
+                                <x-table.th>
+                                    {{ $feedbackmoment->points }}
+                                </x-table.th>
                             @endforeach
                         @endforeach
                     @endforeach
@@ -136,11 +145,12 @@
                         </x-table.td>
                         @foreach ($matrix->vakken as $vak)
                             @foreach ($vak->modules as $module)
-                                @foreach ($module->feedbackmomenten as $feedbackmoment)
+                                @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
                                     <x-table.td tight class="p-1"
                                         x-bind:class="{
                                             'bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                             'bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
+                                            'border-x-[2px] border-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} >= {{ $feedbackmoment->week }} && {{ $currentWeek }} < {{ $module->feedbackmomenten[$fbmKey + 1]->week ?? '100' }},
                                         }"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">

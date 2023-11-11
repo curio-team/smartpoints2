@@ -23,7 +23,7 @@ class SchoolWeek extends Model
     /**
      * Find the closest week to now based on the monday of the week.
      */
-    public static function getCurrentWeekNumber(): int
+    public static function getCurrentWeekNumber(): ?int
     {
         $now = now();
         $year = $now->year;
@@ -34,6 +34,6 @@ class SchoolWeek extends Model
             ->orderBy('date_of_monday', 'desc')
             ->first();
 
-        return $week;
+        return $week?->week_number;
     }
 }
