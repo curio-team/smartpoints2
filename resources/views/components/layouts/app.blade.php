@@ -17,8 +17,16 @@
                     <a class="text-xl font-semibold" href="{{ route('home') }}">SmartPoints 2.0</a>
                 </div>
                 <div class="flex md:items-center md:w-auto w-full" id="navbarNav">
-                    <ul class="hidden md:flex flex-col md:flex-row list-none md:ml-auto">
+                    <ul class="hidden md:flex flex-col md:flex-row list-none md:ml-auto gap-2 items-center">
                         @auth
+                        @teacher
+                        <li class="nav-item">
+                            <x-link href="{{ route('home') }}">Matrix</x-link>
+                        </li>
+                        <li class="nav-item">
+                            <x-link href="{{ route('weeks.manage') }}">Manage School Weeks</x-link>
+                        </li>
+                        @endteacher
                         <li class="nav-item">
                             {{ auth()->user()->name }}
                         </li>

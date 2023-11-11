@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\SchoolWeekManager;
 use App\Livewire\StudyPointMatrix;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', StudyPointMatrix::class)->middleware('auth')->name('home');
+Route::get('/school-weeks', SchoolWeekManager::class)->middleware('auth')->name('weeks.manage');
 
 Route::get('/login', function(){
 	return redirect('/amoclient/redirect');

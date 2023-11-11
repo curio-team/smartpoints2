@@ -11,7 +11,7 @@
     <div class="flex flex-col gap-2 bg-gray-100 shadow p-2 px-4">
         <div class="flex flex-row items-center justify-between gap-2">
             <div>
-                @if(auth()->user()->type === 'teacher')
+                @teacher
                     <x-input.select wire:model.live="selectedBlokKey">
                         @foreach ($matrixes as $key => $otherMatrix)
                             <option value="{{ $key }}">
@@ -21,7 +21,7 @@
                     </x-input.select>
                 @else
                     <h2 class="font-bold capitalize">{{ $matrix->blok }}</h2>
-                @endif
+                @endteacher
                 <span class="text-sm italic">
                     {{ \Carbon\Carbon::parse($matrix->datum_start)->format('d-m-Y') }}
                     -
@@ -29,7 +29,7 @@
                 </span>
             </div>
             <div class="flex justify-end flex-row flex-grow gap-2 items-stretch">
-                @if(auth()->user()->type === 'teacher')
+                @teacher
                 <div x-cloak
                     x-transition
                     class="self-end"
@@ -48,10 +48,10 @@
                         @endforeach
                     </x-input.select>
                 </div>
-                @endif
+                @endteacher
             </div>
             <div class="flex flex-row gap-2 flex-none">
-                @if(auth()->user()->type === 'teacher')
+                @teacher
                     <x-button-icon icon="filter"
                         @click="showFilters = !showFilters" />
                     <x-button-icon icon="edit"
@@ -69,7 +69,7 @@
                         </x-badge>
                         @lang('Save')
                     </x-button-icon>
-                @endif
+                @endteacher
             </div>
         </div>
     </div>

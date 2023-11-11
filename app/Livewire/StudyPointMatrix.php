@@ -129,7 +129,7 @@ class StudyPointMatrix extends Component
     public function save()
     {
         $this->getStudentScoresForBlok();
-        $this->dispatch('study-point-matrixes-changed');
+        $this->dispatch('study-point-matrix-changed');
     }
 
     public function updatedStudents($value, $key)
