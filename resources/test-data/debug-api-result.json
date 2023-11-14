@@ -1,0 +1,2484 @@
+[
+    {
+        "id": 1,
+        "blok": "Blok A",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "PRA",
+                "volgorde": 1,
+                "modules": [
+                    {
+                        "module": "A1 Gamecomputer",
+                        "version_number": 4,
+                        "version_id": 18,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 1,
+                        "week_eind": 5,
+                        "feedbackmomenten": [
+                            {
+                                "id": 32,
+                                "code": "FOPE",
+                                "naam": "PRA A1 Gamecomputer",
+                                "week": 5,
+                                "points": 4,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "A2 Web-app",
+                        "version_number": 4,
+                        "version_id": 21,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 6,
+                        "week_eind": 10,
+                        "feedbackmomenten": [
+                            {
+                                "id": 33,
+                                "code": "FTDU",
+                                "naam": "PRA A2 Web-app",
+                                "week": 10,
+                                "points": 4,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "A3 Data analyse",
+                        "version_number": 3,
+                        "version_id": 24,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 11,
+                        "week_eind": 13,
+                        "feedbackmomenten": [
+                            {
+                                "id": 104,
+                                "code": "FH3A",
+                                "naam": "PRA A3 Data analyse",
+                                "week": 13,
+                                "points": 3,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "A4 Tickets",
+                        "version_number": 3,
+                        "version_id": 25,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 14,
+                        "week_eind": 14,
+                        "feedbackmomenten": [
+                            {
+                                "id": 105,
+                                "code": "FWJ3",
+                                "naam": "PRA A4 Tickets",
+                                "week": 14,
+                                "points": 1,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "A5 Eindopdracht",
+                        "version_number": 3,
+                        "version_id": 26,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 15,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 106,
+                                "code": "FHBD",
+                                "naam": "PRA A5 Eindopdracht",
+                                "week": 16,
+                                "points": 6,
+                                "cesuur": 80
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "PRO",
+                "volgorde": 2,
+                "modules": [
+                    {
+                        "module": "WED-I",
+                        "version_number": 3,
+                        "version_id": 36,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 1,
+                        "week_eind": 4,
+                        "feedbackmomenten": [
+                            {
+                                "id": 72,
+                                "code": "FKXT",
+                                "naam": "Logboek en Zoekopdrachten verslag",
+                                "week": 4,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "ONT-I",
+                        "version_number": 2,
+                        "version_id": 42,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 5,
+                        "week_eind": 5,
+                        "feedbackmomenten": [
+                            {
+                                "id": 79,
+                                "code": "F53F",
+                                "naam": "Eindmeting ONT-I",
+                                "week": 12,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "PLA-I",
+                        "version_number": 2,
+                        "version_id": 43,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 6,
+                        "week_eind": 8,
+                        "feedbackmomenten": [
+                            {
+                                "id": 84,
+                                "code": "FE2G",
+                                "naam": "Afronding PLA-I",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "OPL-I",
+                        "version_number": 1,
+                        "version_id": 44,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 9,
+                        "week_eind": 9,
+                        "feedbackmomenten": []
+                    },
+                    {
+                        "module": "REF-I",
+                        "version_number": 2,
+                        "version_id": 45,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 10,
+                        "week_eind": 10,
+                        "feedbackmomenten": [
+                            {
+                                "id": 85,
+                                "code": "FGJC",
+                                "naam": "Reflectie A2",
+                                "week": 10,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 86,
+                                "code": "FFN4",
+                                "naam": "Reflectie A3",
+                                "week": 13,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 87,
+                                "code": "FGYH",
+                                "naam": "Eindreflectie Blok A",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "ONT-I",
+                        "version_number": 2,
+                        "version_id": 42,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 11,
+                        "week_eind": 12,
+                        "feedbackmomenten": [
+                            {
+                                "id": 79,
+                                "code": "F53F",
+                                "naam": "Eindmeting ONT-I",
+                                "week": 12,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "REF-I",
+                        "version_number": 2,
+                        "version_id": 45,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 13,
+                        "week_eind": 13,
+                        "feedbackmomenten": [
+                            {
+                                "id": 85,
+                                "code": "FGJC",
+                                "naam": "Reflectie A2",
+                                "week": 10,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 86,
+                                "code": "FFN4",
+                                "naam": "Reflectie A3",
+                                "week": 13,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 87,
+                                "code": "FGYH",
+                                "naam": "Eindreflectie Blok A",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "ONT-I",
+                        "version_number": 2,
+                        "version_id": 42,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 14,
+                        "week_eind": 15,
+                        "feedbackmomenten": [
+                            {
+                                "id": 79,
+                                "code": "F53F",
+                                "naam": "Eindmeting ONT-I",
+                                "week": 12,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "REF-I",
+                        "version_number": 2,
+                        "version_id": 45,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 16,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 85,
+                                "code": "FGJC",
+                                "naam": "Reflectie A2",
+                                "week": 10,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 86,
+                                "code": "FFN4",
+                                "naam": "Reflectie A3",
+                                "week": 13,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 87,
+                                "code": "FGYH",
+                                "naam": "Eindreflectie Blok A",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "NAT",
+                "volgorde": 3,
+                "modules": [
+                    {
+                        "module": "PRB-I",
+                        "version_number": 1,
+                        "version_id": 39,
+                        "leerlijn": "NAT A",
+                        "week_start": 1,
+                        "week_eind": 5,
+                        "feedbackmomenten": [
+                            {
+                                "id": 78,
+                                "code": "FS96",
+                                "naam": "Theoretische toets micro:bit",
+                                "week": 5,
+                                "points": 6,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "PRB-II",
+                        "version_number": 2,
+                        "version_id": 40,
+                        "leerlijn": "NAT A",
+                        "week_start": 6,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 82,
+                                "code": "F325",
+                                "naam": "Theoretische toets Python",
+                                "week": 8,
+                                "points": 8,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 83,
+                                "code": "FM94",
+                                "naam": "Eindtoets Blok A 'Fatal Warning'",
+                                "week": 16,
+                                "points": 10,
+                                "cesuur": 75
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "WEB",
+                "volgorde": 5,
+                "modules": [
+                    {
+                        "module": "WDV-I",
+                        "version_number": 3,
+                        "version_id": 2,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 1,
+                        "week_eind": 6,
+                        "feedbackmomenten": [
+                            {
+                                "id": 88,
+                                "code": "FEF3",
+                                "naam": "Theorietoets HTML\/CSS",
+                                "week": 6,
+                                "points": 10,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "ONT-I",
+                        "version_number": 2,
+                        "version_id": 42,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 7,
+                        "week_eind": 7,
+                        "feedbackmomenten": [
+                            {
+                                "id": 79,
+                                "code": "F53F",
+                                "naam": "Eindmeting ONT-I",
+                                "week": 12,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "FEV-I",
+                        "version_number": 1,
+                        "version_id": 49,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 8,
+                        "week_eind": 8,
+                        "feedbackmomenten": [
+                            {
+                                "id": 91,
+                                "code": "FKY7",
+                                "naam": "Javascript-element in HTML - opdracht",
+                                "week": 8,
+                                "points": 4,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "WDV-II",
+                        "version_number": 1,
+                        "version_id": 50,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 9,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 92,
+                                "code": "F4GU",
+                                "naam": "Eindtoets WDV-II",
+                                "week": 16,
+                                "points": 10,
+                                "cesuur": 75
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "NED",
+                "volgorde": 20,
+                "modules": [
+                    {
+                        "module": "NED-A",
+                        "version_number": 1,
+                        "version_id": 28,
+                        "leerlijn": "NED",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 50,
+                                "code": "FMBT",
+                                "naam": "Opdracht kennismaken en taalbiografie",
+                                "week": 4,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 51,
+                                "code": "FJNQ",
+                                "naam": "Spelling en Grammatica",
+                                "week": 8,
+                                "points": 3,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 52,
+                                "code": "FG2V",
+                                "naam": "Bouwstenen 1 en 2",
+                                "week": 12,
+                                "points": 3,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 53,
+                                "code": "FTQ7",
+                                "naam": "Bouwstenen 3 en 4",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ENG",
+                "volgorde": 21,
+                "modules": [
+                    {
+                        "module": "ENG-A",
+                        "version_number": 1,
+                        "version_id": 1,
+                        "leerlijn": "ENG",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 134,
+                                "code": "FSAW",
+                                "naam": "Maken Nul-meting van \"Reading and Listening en Spelling and Grammar\"...Lessons A2  Chapter 1:Writing, Spoken production & Spoken Interaction ....Spelling & Grammar B1 chapter 1 Dingen doen\u2026 & De man die",
+                                "week": 8,
+                                "points": 3,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 135,
+                                "code": "FS6C",
+                                "naam": "Lessons A2  Chapter 2: Lesson Spoken Production & Spoken Interaction and writing ....Reading and listening B1 Chapter 2. Spelling & Grammar \"Hoeveel waar en wanneer?\"",
+                                "week": 15,
+                                "points": 3,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": [
+                    {
+                        "module": "LOB-A",
+                        "version_number": 1,
+                        "version_id": 41,
+                        "leerlijn": "SLB ABC",
+                        "week_start": 8,
+                        "week_eind": 14,
+                        "feedbackmomenten": [
+                            {
+                                "id": 131,
+                                "code": "F59P",
+                                "naam": "LOB-I - opmaak en vakgebied",
+                                "week": 10,
+                                "points": 1,
+                                "cesuur": 90
+                            },
+                            {
+                                "id": 130,
+                                "code": "F5HG",
+                                "naam": "LOB-I - Pijlers, Werkomgeving en toekomst",
+                                "week": 14,
+                                "points": 3,
+                                "cesuur": 90
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "blok": "Blok B",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "PRA",
+                "volgorde": 1,
+                "modules": [
+                    {
+                        "module": "B1 Vertaalopdracht",
+                        "version_number": 3,
+                        "version_id": 61,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 1,
+                        "week_eind": 2,
+                        "feedbackmomenten": [
+                            {
+                                "id": 107,
+                                "code": "FWBF",
+                                "naam": "PRA B1 Vertaalopdracht",
+                                "week": 2,
+                                "points": 3,
+                                "cesuur": 80
+                            }
+                        ]
+                    },
+                    {
+                        "module": "B2 Devland junior",
+                        "version_number": 2,
+                        "version_id": 62,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 3,
+                        "week_eind": 5,
+                        "feedbackmomenten": [
+                            {
+                                "id": 108,
+                                "code": "FTKD",
+                                "naam": "PRA B2 Devland junior",
+                                "week": 5,
+                                "points": 3,
+                                "cesuur": 80
+                            }
+                        ]
+                    },
+                    {
+                        "module": "B3 Takenlijst",
+                        "version_number": 2,
+                        "version_id": 63,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 6,
+                        "week_eind": 11,
+                        "feedbackmomenten": [
+                            {
+                                "id": 109,
+                                "code": "F5XT",
+                                "naam": "PRA B3 Takenlijst",
+                                "week": 11,
+                                "points": 6,
+                                "cesuur": 80
+                            }
+                        ]
+                    },
+                    {
+                        "module": "B4 Fotokiosk",
+                        "version_number": 2,
+                        "version_id": 64,
+                        "leerlijn": "PRA lj1",
+                        "week_start": 12,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 110,
+                                "code": "F57C",
+                                "naam": "PRA B4 Fotokiosk",
+                                "week": 16,
+                                "points": 6,
+                                "cesuur": 85
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "PRO",
+                "volgorde": 2,
+                "modules": [
+                    {
+                        "module": "GIT-I",
+                        "version_number": 1,
+                        "version_id": 38,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 1,
+                        "week_eind": 3,
+                        "feedbackmomenten": [
+                            {
+                                "id": 77,
+                                "code": "FYU3",
+                                "naam": "Eindmeting GIT-I",
+                                "week": 3,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "PLA-I \/ SAM-II",
+                        "version_number": 2,
+                        "version_id": 46,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 4,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 80,
+                                "code": "FYQD",
+                                "naam": "Eindmeting PLA-II\/ SAM-I",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "OPL-II",
+                        "version_number": 1,
+                        "version_id": 47,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 9,
+                        "week_eind": 11,
+                        "feedbackmomenten": [
+                            {
+                                "id": 81,
+                                "code": "F6QY",
+                                "naam": "Eindopdracht OPL-II",
+                                "week": 11,
+                                "points": 1,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "SEP-I",
+                        "version_number": 1,
+                        "version_id": 48,
+                        "leerlijn": "PRO lj1",
+                        "week_start": 13,
+                        "week_eind": 14,
+                        "feedbackmomenten": []
+                    }
+                ]
+            },
+            {
+                "vak": "NAT",
+                "volgorde": 3,
+                "modules": [
+                    {
+                        "module": "CSD-I",
+                        "version_number": 3,
+                        "version_id": 77,
+                        "leerlijn": "NAT BC",
+                        "week_start": 1,
+                        "week_eind": 8,
+                        "feedbackmomenten": [
+                            {
+                                "id": 175,
+                                "code": "FX2C",
+                                "naam": "CSD-I",
+                                "week": 8,
+                                "points": 10,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "CSD-II",
+                        "version_number": 1,
+                        "version_id": 85,
+                        "leerlijn": "NAT BC",
+                        "week_start": 9,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 176,
+                                "code": "F6XT",
+                                "naam": "CSD-II",
+                                "week": 16,
+                                "points": 10,
+                                "cesuur": 70
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "WEB",
+                "volgorde": 5,
+                "modules": [
+                    {
+                        "module": "WDV-III & DBS-I",
+                        "version_number": 1,
+                        "version_id": 51,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 1,
+                        "week_eind": 11,
+                        "feedbackmomenten": [
+                            {
+                                "id": 93,
+                                "code": "FNJM",
+                                "naam": "Theorietoets over databases.",
+                                "week": 3,
+                                "points": 3,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 94,
+                                "code": "FQ4R",
+                                "naam": "Theorietoets over module DBS-I en WDV-III",
+                                "week": 7,
+                                "points": 3,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 95,
+                                "code": "FFAP",
+                                "naam": "Praktische toets CRUD \/ Inloggen-registreren",
+                                "week": 11,
+                                "points": 6,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "WDV-IV",
+                        "version_number": 1,
+                        "version_id": 52,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 12,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 96,
+                                "code": "F2QN",
+                                "naam": "Praktische toets WDV-III & WDV-IV",
+                                "week": 16,
+                                "points": 8,
+                                "cesuur": 70
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ALGO",
+                "volgorde": 7,
+                "modules": []
+            },
+            {
+                "vak": "NED",
+                "volgorde": 20,
+                "modules": [
+                    {
+                        "module": "NED-B",
+                        "version_number": 1,
+                        "version_id": 32,
+                        "leerlijn": "NED",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 57,
+                                "code": "FJE5",
+                                "naam": "Bouwstenen 5 en 6",
+                                "week": 4,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 58,
+                                "code": "FRQD",
+                                "naam": "Bouwstenen 6 en 7",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 59,
+                                "code": "FB7S",
+                                "naam": "Bouwstenen 7 en 8",
+                                "week": 12,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 60,
+                                "code": "FEAR",
+                                "naam": "Facet oefenexamen Nederlands 3F",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ENG",
+                "volgorde": 21,
+                "modules": [
+                    {
+                        "module": "ENG-B",
+                        "version_number": 1,
+                        "version_id": 65,
+                        "leerlijn": "ENG",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 136,
+                                "code": "FGEW",
+                                "naam": "Lessons A2 Chapter3, Reading and listening B1 chapter 3...Spelling and Grammar chapter 3",
+                                "week": 8,
+                                "points": 3,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 137,
+                                "code": "FEKN",
+                                "naam": "Afronden lessons A2 chapter 4 , afronden reading and listening B1 chapter 4 en afronden B1 spelling and grammar chapter 3",
+                                "week": 15,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "REK",
+                "volgorde": 22,
+                "modules": [
+                    {
+                        "module": "REK-B",
+                        "version_number": 1,
+                        "version_id": 17,
+                        "leerlijn": "REK",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 34,
+                                "code": "FKRB",
+                                "naam": "Thema Wonen - Taak 1 klaar",
+                                "week": 4,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 35,
+                                "code": "FDZG",
+                                "naam": "Thema Wonen - Taak 2 klaar",
+                                "week": 10,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 36,
+                                "code": "F2HW",
+                                "naam": "Thema Wonen - Taak 3 klaar + Slottaak",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "DIV",
+                "volgorde": 24,
+                "modules": [
+                    {
+                        "module": "DIV",
+                        "version_number": 1,
+                        "version_id": 56,
+                        "leerlijn": "DIV",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 142,
+                                "code": "FJWZ",
+                                "naam": "Voortgangsindicator 1",
+                                "week": 4,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 143,
+                                "code": "F3QH",
+                                "naam": "Voortgangsindicator 2",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 144,
+                                "code": "F375",
+                                "naam": "Voortgangsindicator 3",
+                                "week": 12,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 145,
+                                "code": "FK2D",
+                                "naam": "Eindpresentatie",
+                                "week": 16,
+                                "points": 5,
+                                "cesuur": 70
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": [
+                    {
+                        "module": "LOB-B",
+                        "version_number": 1,
+                        "version_id": 86,
+                        "leerlijn": "SLB ABC",
+                        "week_start": 4,
+                        "week_eind": 10,
+                        "feedbackmomenten": [
+                            {
+                                "id": 184,
+                                "code": "FWVX",
+                                "naam": "CR1: 360 graden feedback",
+                                "week": 5,
+                                "points": 1,
+                                "cesuur": 80
+                            },
+                            {
+                                "id": 185,
+                                "code": "FBWQ",
+                                "naam": "CR2: Zoek op internet of in de krant naar een vacature die bij je past.",
+                                "week": 7,
+                                "points": 1,
+                                "cesuur": 80
+                            },
+                            {
+                                "id": 186,
+                                "code": "FKFC",
+                                "naam": "Opdracht CR3: Elevator PITCH en eindverslag",
+                                "week": 10,
+                                "points": 2,
+                                "cesuur": 80
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "blok": "Blok C",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "PRA",
+                "volgorde": 1,
+                "modules": [
+                    {
+                        "module": "C1 Open dag website",
+                        "version_number": 1,
+                        "version_id": 29,
+                        "leerlijn": "PRA lj2",
+                        "week_start": 1,
+                        "week_eind": 3,
+                        "feedbackmomenten": [
+                            {
+                                "id": 54,
+                                "code": "F4CD",
+                                "naam": "C1 Open dag website",
+                                "week": 3,
+                                "points": 4,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "C2 Legacy app",
+                        "version_number": 1,
+                        "version_id": 30,
+                        "leerlijn": "PRA lj2",
+                        "week_start": 4,
+                        "week_eind": 8,
+                        "feedbackmomenten": [
+                            {
+                                "id": 55,
+                                "code": "FFPE",
+                                "naam": "C2 Legacy app",
+                                "week": 8,
+                                "points": 6,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "C3 Schoolvoetbal",
+                        "version_number": 1,
+                        "version_id": 31,
+                        "leerlijn": "PRA lj2",
+                        "week_start": 9,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 56,
+                                "code": "FE3X",
+                                "naam": "C3 Schoolvoetbal",
+                                "week": 16,
+                                "points": 10,
+                                "cesuur": 75
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "PRO",
+                "volgorde": 2,
+                "modules": [
+                    {
+                        "module": "WED-II",
+                        "version_number": 4,
+                        "version_id": 58,
+                        "leerlijn": "PRO lj2",
+                        "week_start": 1,
+                        "week_eind": 12,
+                        "feedbackmomenten": [
+                            {
+                                "id": 111,
+                                "code": "FESD",
+                                "naam": "Eerste casus",
+                                "week": 5,
+                                "points": 2,
+                                "cesuur": 80
+                            },
+                            {
+                                "id": 103,
+                                "code": "FYAK",
+                                "naam": "Scrumtoets",
+                                "week": 9,
+                                "points": 2,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 112,
+                                "code": "FSVE",
+                                "naam": "Tweede casus",
+                                "week": 10,
+                                "points": 2,
+                                "cesuur": 80
+                            },
+                            {
+                                "id": 114,
+                                "code": "FH3W",
+                                "naam": "Theorietoets Technisch Testen",
+                                "week": 12,
+                                "points": 1,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "WED-III",
+                        "version_number": 1,
+                        "version_id": 60,
+                        "leerlijn": "PRO lj2",
+                        "week_start": 13,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 113,
+                                "code": "FEJ5",
+                                "naam": "Keuzeopdracht",
+                                "week": 16,
+                                "points": 1,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "NAT",
+                "volgorde": 3,
+                "modules": [
+                    {
+                        "module": "CSD-III",
+                        "version_number": 1,
+                        "version_id": 83,
+                        "leerlijn": "NAT BC",
+                        "week_start": 1,
+                        "week_eind": 8,
+                        "feedbackmomenten": [
+                            {
+                                "id": 173,
+                                "code": "FN9P",
+                                "naam": "CSD-III",
+                                "week": 8,
+                                "points": 8,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 180,
+                                "code": "F2GB",
+                                "naam": "CSD-III",
+                                "week": 8,
+                                "points": 4,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "CSD-IV",
+                        "version_number": 1,
+                        "version_id": 84,
+                        "leerlijn": "NAT BC",
+                        "week_start": 9,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 174,
+                                "code": "F3S4",
+                                "naam": "CSD-IV",
+                                "week": 16,
+                                "points": 8,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 179,
+                                "code": "F35J",
+                                "naam": "CSD-IV",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 70
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "WEB",
+                "volgorde": 5,
+                "modules": [
+                    {
+                        "module": "WDV-V",
+                        "version_number": 1,
+                        "version_id": 53,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 1,
+                        "week_eind": 6,
+                        "feedbackmomenten": [
+                            {
+                                "id": 97,
+                                "code": "FGH2",
+                                "naam": "Theorietoets WDV-V",
+                                "week": 3,
+                                "points": 2,
+                                "cesuur": 75
+                            },
+                            {
+                                "id": 98,
+                                "code": "FQS9",
+                                "naam": "Basistoets Laravel WDV-V",
+                                "week": 6,
+                                "points": 5,
+                                "cesuur": 75
+                            }
+                        ]
+                    },
+                    {
+                        "module": "LAR-I",
+                        "version_number": 1,
+                        "version_id": 54,
+                        "leerlijn": "WEB ABC",
+                        "week_start": 7,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 99,
+                                "code": "FMQX",
+                                "naam": "Tussentijdse toets Laravel",
+                                "week": 12,
+                                "points": 7,
+                                "cesuur": 75
+                            },
+                            {
+                                "id": 100,
+                                "code": "F2KD",
+                                "naam": "Eindtoets Laravel",
+                                "week": 16,
+                                "points": 10,
+                                "cesuur": 75
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "NED",
+                "volgorde": 20,
+                "modules": [
+                    {
+                        "module": "NED-C",
+                        "version_number": 1,
+                        "version_id": 33,
+                        "leerlijn": "NED",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 61,
+                                "code": "FWTV",
+                                "naam": "Teksten opendagwebsite + Versie 1 CV met profielschets",
+                                "week": 4,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 62,
+                                "code": "FNVD",
+                                "naam": "Versie 1 sollicitatievoorbereidingen",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 63,
+                                "code": "FU6J",
+                                "naam": "Definitieve versie sollicitatievoorbereidingen + Schrijfportfolio versie 1",
+                                "week": 12,
+                                "points": 3,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 64,
+                                "code": "FPUS",
+                                "naam": "Schrijfportfolio definitief + eindopdracht\/oefenexamen",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ENG",
+                "volgorde": 21,
+                "modules": [
+                    {
+                        "module": "ENG-C",
+                        "version_number": 1,
+                        "version_id": 66,
+                        "leerlijn": "ENG",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 138,
+                                "code": "F64T",
+                                "naam": "Afronden lessons A2 chapter 5 , afronden reading and listening B1 chapter 5&6 en afronden B1 spelling and grammar wat nog niet af is.",
+                                "week": 8,
+                                "points": 3,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 139,
+                                "code": "F6EC",
+                                "naam": "Afronden lessons A2 chapter 6 , afronden reading and listening B1 chapter 6&7 en afronden B1 spelling and grammar wat nog niet af is.",
+                                "week": 15,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "REK",
+                "volgorde": 22,
+                "modules": [
+                    {
+                        "module": "REK-C",
+                        "version_number": 1,
+                        "version_id": 19,
+                        "leerlijn": "REK",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 37,
+                                "code": "F6TW",
+                                "naam": "Thema Studie en Werk - Taak 1 klaar",
+                                "week": 4,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 38,
+                                "code": "FTWA",
+                                "naam": "Thema Studie en Werk - Taak 2 klaar",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 40,
+                                "code": "FWED",
+                                "naam": "Thema Studie en Werk - Taak 3 klaar",
+                                "week": 12,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 41,
+                                "code": "FWEH",
+                                "naam": "Thema Studie en Werk - Taak 4 klaar + Slottaak",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": [
+                    {
+                        "module": "LOB-C",
+                        "version_number": 1,
+                        "version_id": 87,
+                        "leerlijn": "SLB ABC",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 187,
+                                "code": "FZKB",
+                                "naam": "BPV-certificaat deel 1",
+                                "week": 7,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 188,
+                                "code": "FGCU",
+                                "naam": "BPV-certificaat deel 2",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 28,
+        "blok": "Blok E",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "Project",
+                "volgorde": 1,
+                "modules": [
+                    {
+                        "module": "E1 Blokstart",
+                        "version_number": 1,
+                        "version_id": 71,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 1,
+                        "week_eind": 3,
+                        "feedbackmomenten": [
+                            {
+                                "id": 149,
+                                "code": "FK6P",
+                                "naam": "Checklist E1_1",
+                                "week": 3,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "E2 Ontwerpen",
+                        "version_number": 1,
+                        "version_id": 72,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 4,
+                        "week_eind": 6,
+                        "feedbackmomenten": [
+                            {
+                                "id": 150,
+                                "code": "FPVZ",
+                                "naam": "Checklist E2_1",
+                                "week": 6,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "E3 Barroc-IT",
+                        "version_number": 1,
+                        "version_id": 73,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 7,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 151,
+                                "code": "FDWH",
+                                "naam": "Checklist E3_1",
+                                "week": 9,
+                                "points": 8,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 152,
+                                "code": "FN6Z",
+                                "naam": "Checklist E3_2",
+                                "week": 12,
+                                "points": 12,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 153,
+                                "code": "FSWA",
+                                "naam": "Checklist E3_3",
+                                "week": 15,
+                                "points": 14,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "E4",
+                        "version_number": 1,
+                        "version_id": 74,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 17,
+                        "week_eind": 19,
+                        "feedbackmomenten": [
+                            {
+                                "id": 154,
+                                "code": "F7RZ",
+                                "naam": "Checklist E4_1",
+                                "week": 19,
+                                "points": 6,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "E5",
+                        "version_number": 1,
+                        "version_id": 75,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 21,
+                        "week_eind": 23,
+                        "feedbackmomenten": [
+                            {
+                                "id": 155,
+                                "code": "FXSM",
+                                "naam": "Checklist E5_1",
+                                "week": 23,
+                                "points": 6,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "PRO",
+                "volgorde": 2,
+                "modules": [
+                    {
+                        "module": "ONT II",
+                        "version_number": 1,
+                        "version_id": 78,
+                        "leerlijn": "PRO lj3",
+                        "week_start": 1,
+                        "week_eind": 14,
+                        "feedbackmomenten": [
+                            {
+                                "id": 169,
+                                "code": "FSVN",
+                                "naam": "ONT II Inleveropdrachten",
+                                "week": 12,
+                                "points": 4,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 170,
+                                "code": "FFPX",
+                                "naam": "ONT II Eindopdracht",
+                                "week": 14,
+                                "points": 1,
+                                "cesuur": 100
+                            }
+                        ]
+                    },
+                    {
+                        "module": "WED IV",
+                        "version_number": 1,
+                        "version_id": 80,
+                        "leerlijn": "PRO lj3",
+                        "week_start": 15,
+                        "week_eind": 24,
+                        "feedbackmomenten": [
+                            {
+                                "id": 171,
+                                "code": "FPYS",
+                                "naam": "WED IV inleveropdrachten",
+                                "week": 24,
+                                "points": 3,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "S_NAT",
+                "volgorde": 4,
+                "modules": [
+                    {
+                        "module": "FUT",
+                        "version_number": 1,
+                        "version_id": 82,
+                        "leerlijn": "NAT E",
+                        "week_start": 1,
+                        "week_eind": 24,
+                        "feedbackmomenten": []
+                    },
+                    {
+                        "module": "CSD-V",
+                        "version_number": 1,
+                        "version_id": 6,
+                        "leerlijn": "NAT E",
+                        "week_start": 1,
+                        "week_eind": 14,
+                        "feedbackmomenten": [
+                            {
+                                "id": 4,
+                                "code": "FIK0",
+                                "naam": "RPG Classes Inleveropdracht",
+                                "week": 3,
+                                "points": 1,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 5,
+                                "code": "FLPH",
+                                "naam": "ChatMeister Proof-of-Concept",
+                                "week": 6,
+                                "points": 3,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 39,
+                                "code": "FPX6",
+                                "naam": "GameBib CRUD",
+                                "week": 11,
+                                "points": 8,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "CSD-VI",
+                        "version_number": 1,
+                        "version_id": 7,
+                        "leerlijn": "NAT E",
+                        "week_start": 15,
+                        "week_eind": 21,
+                        "feedbackmomenten": [
+                            {
+                                "id": 17,
+                                "code": "FQJG",
+                                "naam": "API bouwen en consumeren",
+                                "week": 19,
+                                "points": 6,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "Oefenexamen project ",
+                        "version_number": 1,
+                        "version_id": 16,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 22,
+                        "week_eind": 24,
+                        "feedbackmomenten": [
+                            {
+                                "id": 31,
+                                "code": "FOTB",
+                                "naam": "Oefenexamen project",
+                                "week": 24,
+                                "points": 6,
+                                "cesuur": 70
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "S_WEB",
+                "volgorde": 6,
+                "modules": [
+                    {
+                        "module": "LAR-III",
+                        "version_number": 1,
+                        "version_id": 9,
+                        "leerlijn": "WEB E",
+                        "week_start": 1,
+                        "week_eind": 10,
+                        "feedbackmomenten": [
+                            {
+                                "id": 19,
+                                "code": "FGLB",
+                                "naam": "LAR - Basis Crud herhaling",
+                                "week": 5,
+                                "points": 3,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "JSX-I",
+                        "version_number": 1,
+                        "version_id": 11,
+                        "leerlijn": "WEB E",
+                        "week_start": 1,
+                        "week_eind": 10,
+                        "feedbackmomenten": [
+                            {
+                                "id": 25,
+                                "code": "FHWE",
+                                "naam": "JSX  - Basics + packages",
+                                "week": 7,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "DBS-III",
+                        "version_number": 1,
+                        "version_id": 13,
+                        "leerlijn": "WEB E",
+                        "week_start": 1,
+                        "week_eind": 10,
+                        "feedbackmomenten": [
+                            {
+                                "id": 27,
+                                "code": "FWYG",
+                                "naam": "DBS - SQL",
+                                "week": 10,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "LAR-IV",
+                        "version_number": 1,
+                        "version_id": 10,
+                        "leerlijn": "WEB E",
+                        "week_start": 11,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 24,
+                                "code": "FNXD",
+                                "naam": "REST API project",
+                                "week": 16,
+                                "points": 3,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "JSX-II",
+                        "version_number": 1,
+                        "version_id": 12,
+                        "leerlijn": "WEB E",
+                        "week_start": 11,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 26,
+                                "code": "FFJY",
+                                "naam": "REST API REACT client project",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "DBS-IV",
+                        "version_number": 1,
+                        "version_id": 14,
+                        "leerlijn": "WEB E",
+                        "week_start": 11,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 28,
+                                "code": "FUZO",
+                                "naam": "NoSQL",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "Finals",
+                        "version_number": 1,
+                        "version_id": 15,
+                        "leerlijn": "WEB E",
+                        "week_start": 17,
+                        "week_eind": 18,
+                        "feedbackmomenten": [
+                            {
+                                "id": 29,
+                                "code": "FSA0",
+                                "naam": "Backend",
+                                "week": 18,
+                                "points": 2,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 30,
+                                "code": "FVAU",
+                                "naam": "Frontend",
+                                "week": 18,
+                                "points": 2,
+                                "cesuur": 70
+                            }
+                        ]
+                    },
+                    {
+                        "module": "Oefenexamen project ",
+                        "version_number": 1,
+                        "version_id": 16,
+                        "leerlijn": "PRA lj3",
+                        "week_start": 22,
+                        "week_eind": 24,
+                        "feedbackmomenten": [
+                            {
+                                "id": 31,
+                                "code": "FOTB",
+                                "naam": "Oefenexamen project",
+                                "week": 24,
+                                "points": 6,
+                                "cesuur": 70
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ALGO",
+                "volgorde": 7,
+                "modules": [
+                    {
+                        "module": "ALGO",
+                        "version_number": 1,
+                        "version_id": 69,
+                        "leerlijn": "ALGO",
+                        "week_start": 1,
+                        "week_eind": 24,
+                        "feedbackmomenten": [
+                            {
+                                "id": 193,
+                                "code": "FU2C",
+                                "naam": "Advent of code oefenopdrachten",
+                                "week": 10,
+                                "points": 4,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 194,
+                                "code": "FMBY",
+                                "naam": "Advent of code 2023",
+                                "week": 14,
+                                "points": 7,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 195,
+                                "code": "FFCG",
+                                "naam": "Algemene theoretische kennis",
+                                "week": 14,
+                                "points": 1,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "K_NAT",
+                "volgorde": 12,
+                "modules": [
+                    {
+                        "module": "MAD",
+                        "version_number": 1,
+                        "version_id": 90,
+                        "leerlijn": "KZD MAD",
+                        "week_start": 1,
+                        "week_eind": 24,
+                        "feedbackmomenten": []
+                    }
+                ]
+            },
+            {
+                "vak": "K_WEB",
+                "volgorde": 13,
+                "modules": [
+                    {
+                        "module": "GOW",
+                        "version_number": 4,
+                        "version_id": 81,
+                        "leerlijn": "KZD GOW",
+                        "week_start": 1,
+                        "week_eind": 24,
+                        "feedbackmomenten": [
+                            {
+                                "id": 183,
+                                "code": "FKY4",
+                                "naam": "Project A",
+                                "week": 5,
+                                "points": 2,
+                                "cesuur": 70
+                            },
+                            {
+                                "id": 190,
+                                "code": "FRAS",
+                                "naam": "Project B",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 80
+                            },
+                            {
+                                "id": 199,
+                                "code": "FJT6",
+                                "naam": "Project E",
+                                "week": 12,
+                                "points": 4,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 182,
+                                "code": "FQ5U",
+                                "naam": "Portfolio K_WEB",
+                                "week": 17,
+                                "points": 6,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 181,
+                                "code": "FVJH",
+                                "naam": "Examen K_WEB",
+                                "week": 22,
+                                "points": 6,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "NED",
+                "volgorde": 20,
+                "modules": [
+                    {
+                        "module": "NED-E",
+                        "version_number": 1,
+                        "version_id": 35,
+                        "leerlijn": "NED",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 68,
+                                "code": "FGW9",
+                                "naam": "Centraal examen (lezen en luisteren)",
+                                "week": 4,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 69,
+                                "code": "FM6Q",
+                                "naam": "Instellingsexamen Schrijven",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 70,
+                                "code": "FG5B",
+                                "naam": "Instellingsexamens Spreken & Gesprek voeren",
+                                "week": 10,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 71,
+                                "code": "F4TM",
+                                "naam": "CE & IE NL Compleet",
+                                "week": 14,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ENG",
+                "volgorde": 21,
+                "modules": [
+                    {
+                        "module": "ENG-E",
+                        "version_number": 1,
+                        "version_id": 68,
+                        "leerlijn": "ENG",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 189,
+                                "code": "FVQ7",
+                                "naam": "Afronden resterende chapters in Taalblokken, de Assessments, placement tests en examentrainingen. Afronden oefen examens zodat je aangemeld kan worden voor de echte examens.",
+                                "week": 14,
+                                "points": 4,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "REK",
+                "volgorde": 22,
+                "modules": [
+                    {
+                        "module": "REK-E",
+                        "version_number": 1,
+                        "version_id": 23,
+                        "leerlijn": "REK",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 46,
+                                "code": "FVZ3",
+                                "naam": "Thema Vrije Tijd - Taak 3 klaar",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 47,
+                                "code": "F5QT",
+                                "naam": "Thema Vrije Tijd - Taak 4 klaar + Slottaak",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": [
+                    {
+                        "module": "LOB-E",
+                        "version_number": 1,
+                        "version_id": 22,
+                        "leerlijn": "SLB EFG",
+                        "week_start": 1,
+                        "week_eind": 24,
+                        "feedbackmomenten": [
+                            {
+                                "id": 44,
+                                "code": "FNES",
+                                "naam": "Loopbaansturing 1",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 45,
+                                "code": "FMTY",
+                                "naam": "Loopbaansturing 2",
+                                "week": 20,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "KZD",
+                "volgorde": 32,
+                "modules": [
+                    {
+                        "module": "KZD Collectief",
+                        "version_number": 1,
+                        "version_id": 27,
+                        "leerlijn": "KZD Col.",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 48,
+                                "code": "FNMT",
+                                "naam": "Keuzedeel vanuit het collectief - check 1",
+                                "week": 8,
+                                "points": 4,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 49,
+                                "code": "FKB5",
+                                "naam": "Keuzedeel vanuit het collectief - check 2",
+                                "week": 16,
+                                "points": 12,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 38,
+        "blok": "Blok G1",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "BUR",
+                "volgorde": 23,
+                "modules": [
+                    {
+                        "module": "BUR",
+                        "version_number": 1,
+                        "version_id": 91,
+                        "leerlijn": "BUR",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": []
+                    }
+                ]
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": [
+                    {
+                        "module": "LOB-G",
+                        "version_number": 1,
+                        "version_id": 92,
+                        "leerlijn": "SLB EFG",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 43,
+        "blok": "Blok D",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "WEB",
+                "volgorde": 5,
+                "modules": [
+                    {
+                        "module": "Wheely Good Cars",
+                        "version_number": 1,
+                        "version_id": 88,
+                        "leerlijn": "TECH",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 196,
+                                "code": "FFRM",
+                                "naam": "A-features",
+                                "week": 6,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 197,
+                                "code": "FRE7",
+                                "naam": "B\/F-features",
+                                "week": 11,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 198,
+                                "code": "FJVB",
+                                "naam": "B\/F-features",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "NED",
+                "volgorde": 20,
+                "modules": [
+                    {
+                        "module": "NED-D",
+                        "version_number": 1,
+                        "version_id": 34,
+                        "leerlijn": "NED",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 65,
+                                "code": "FGKC",
+                                "naam": "Voorbereiding mondelinge oefenexamens",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 66,
+                                "code": "FJWR",
+                                "naam": "Uitvoeren en reflectie mondelinge oefenexamens",
+                                "week": 12,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 67,
+                                "code": "FW62",
+                                "naam": "Examenvoortgang",
+                                "week": 16,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "ENG",
+                "volgorde": 21,
+                "modules": [
+                    {
+                        "module": "ENG-D",
+                        "version_number": 1,
+                        "version_id": 67,
+                        "leerlijn": "ENG",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 140,
+                                "code": "FKJN",
+                                "naam": "Afronden reading and listening B1 chapter 8&9 en afronden B1 spelling and grammar wat nog niet af is.",
+                                "week": 8,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 141,
+                                "code": "FHR2",
+                                "naam": "Afronden Placement Tests, Assessments,  Examentraining en oefen examenfacet B1. Afronden oefen examen spreken\/gesprek en schrijven.",
+                                "week": 15,
+                                "points": 2,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "REK",
+                "volgorde": 22,
+                "modules": [
+                    {
+                        "module": "REK-D",
+                        "version_number": 1,
+                        "version_id": 20,
+                        "leerlijn": "REK",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 42,
+                                "code": "F3FZ",
+                                "naam": "Thema Vrije Tijd - Taak 1 klaar",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 43,
+                                "code": "FGZU",
+                                "naam": "Thema Vrije Tijd - Taak 2 klaar",
+                                "week": 16,
+                                "points": 1,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": [
+                    {
+                        "module": "SLB- en PRO-D",
+                        "version_number": 1,
+                        "version_id": 8,
+                        "leerlijn": "PRO lj2",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 13,
+                                "code": "FKE0",
+                                "naam": "Tickets en SLA",
+                                "week": 6,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 167,
+                                "code": "FFD9",
+                                "naam": "Onderwerp presentatie",
+                                "week": 8,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 168,
+                                "code": "F9VP",
+                                "naam": "Tussenreflectie",
+                                "week": 9,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 14,
+                                "code": "FNQY",
+                                "naam": "Feedback stageportfolio",
+                                "week": 13,
+                                "points": 1,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 15,
+                                "code": "FKSB",
+                                "naam": "Presentatie stageopdracht",
+                                "week": 16,
+                                "points": 1,
+                                "cesuur": 80
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "vak": "BPV",
+                "volgorde": 31,
+                "modules": [
+                    {
+                        "module": "BPV-D",
+                        "version_number": 1,
+                        "version_id": 76,
+                        "leerlijn": "BPV",
+                        "week_start": 1,
+                        "week_eind": 16,
+                        "feedbackmomenten": [
+                            {
+                                "id": 156,
+                                "code": "FU9Q",
+                                "naam": "Praktijkwijzer",
+                                "week": 1,
+                                "points": 2,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 157,
+                                "code": "FMK4",
+                                "naam": "1e beoordeling AWV",
+                                "week": 8,
+                                "points": 4,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 161,
+                                "code": "FJCG",
+                                "naam": "Urenkaart: minstens 450u",
+                                "week": 14,
+                                "points": 5,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 158,
+                                "code": "F9DP",
+                                "naam": "2e beoordeling AWV",
+                                "week": 16,
+                                "points": 4,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 162,
+                                "code": "FECF",
+                                "naam": "Urenkaart: minstens 512u",
+                                "week": 16,
+                                "points": 5,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 163,
+                                "code": "FM4G",
+                                "naam": "Portfolio K1",
+                                "week": 16,
+                                "points": 5,
+                                "cesuur": 100
+                            },
+                            {
+                                "id": 164,
+                                "code": "FMVH",
+                                "naam": "Portfolio K2",
+                                "week": 16,
+                                "points": 5,
+                                "cesuur": 100
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": 52,
+        "blok": "Blok EG(versnel)",
+        "datum_start": "2023-09-01T00:00:00.000000Z",
+        "datum_eind": "2024-02-14T00:00:00.000000Z",
+        "vakken": [
+            {
+                "vak": "S_NAT",
+                "volgorde": 4,
+                "modules": []
+            },
+            {
+                "vak": "S_WEB",
+                "volgorde": 6,
+                "modules": []
+            },
+            {
+                "vak": "K_NAT",
+                "volgorde": 12,
+                "modules": []
+            },
+            {
+                "vak": "K_WEB",
+                "volgorde": 13,
+                "modules": []
+            },
+            {
+                "vak": "BUR",
+                "volgorde": 23,
+                "modules": []
+            },
+            {
+                "vak": "SLB\/LOB",
+                "volgorde": 30,
+                "modules": []
+            },
+            {
+                "vak": "BPV",
+                "volgorde": 31,
+                "modules": []
+            }
+        ]
+    }
+]

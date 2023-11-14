@@ -25,13 +25,34 @@ class StudyPointMatrix extends Component
 
     public function mount()
     {
-        $matrixes = json_decode(file_get_contents(config('app.currapp.api_url') . '/feedbackmomenten/active-sorted-by-module', false, stream_context_create([
-            'http' => [
-                'method' => 'GET',
-                'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
-            ]
-        ])));
+        // $matrixes = json_decode(file_get_contents(config('app.currapp.api_url') . '/feedbackmomenten/active-sorted-by-module', false, stream_context_create([
+        //     'http' => [
+        //         'method' => 'GET',
+        //         'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
+        //     ]
+        // ])));
+        $matrixes = json_decode(file_get_contents(resource_path('test-data/debug-api-result.json')));
         $matrixes = collect($matrixes);
+
+        // Filter the feedbackmomenten to those that happen within the bounds of the weeks of their module
+        $matrixes = $matrixes->map(function($blokMatrix) {
+            $blokMatrix->vakken = collect($blokMatrix->vakken)
+                ->map(function($vak) {
+                    $vak->modules = collect($vak->modules)
+                        ->map(function($module) {
+                            $module->feedbackmomenten = collect($module->feedbackmomenten)
+                                ->filter(function($fm) use ($module) {
+                                    return $fm->week >= $module->week_start && $fm->week <= $module->week_eind;
+                                })
+                                ->toArray();
+                            return $module;
+                        })
+                        ->toArray();
+                    return $vak;
+                })
+                ->toArray();
+            return $blokMatrix;
+        });
 
         // TODO: clean up spaghetti code
         $matrixes->each(function($blokMatrix) {
