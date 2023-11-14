@@ -31,12 +31,7 @@ class SchoolWeekManager extends Component
         $this->year_end = now()->year + 1;
         $this->week_number = 1;
         $this->date_of_monday = now()->startOfWeek()->toDateString();
-        $this->weeks = \App\Models\SchoolWeek::all()
-            ->map(function($week) {
-                $arr = $week->toArray();
-                $arr['date_of_monday'] = $week->date_of_monday->toDateString();
-                return $arr;
-            });
+        $this->weeks = self::getWeeks();
 
         if (!$silent) {
             $this->sendNotification(__('Reset'));
@@ -100,5 +95,16 @@ class SchoolWeekManager extends Component
             $property => $value,
         ]);
         $this->sendNotification(__('Updated'));
+    }
+
+    public static function getWeeks(){
+        return \App\Models\SchoolWeek::all()
+            ->map(function($week) {
+                $arr = $week->toArray();
+                $arr['date_of_monday'] = $week->date_of_monday->toDateString();
+                return $arr;
+            })
+            ->sortBy('week_number')
+            ->values();
     }
 }
