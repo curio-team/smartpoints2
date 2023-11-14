@@ -29,6 +29,7 @@
                     {{ \Carbon\Carbon::parse($matrix->datum_start)->format('d-m-Y') }}
                     -
                     {{ \Carbon\Carbon::parse($matrix->datum_eind)->format('d-m-Y') }}
+                    (@lang('current_week'): {{ $currentWeek }})
                 </span>
             </div>
             <div class="flex justify-end flex-row flex-grow gap-2 items-stretch">
@@ -105,7 +106,7 @@
                         @foreach ($vak->modules as $module)
                             @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
                                 <x-table.th x-bind:class="{
-                                    'outline outline-[2px] outline-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} >= {{ $feedbackmoment->week }} && {{ $currentWeek }} < {{ $module->feedbackmomenten[$fbmKey + 1]->week ?? '100' }},
+                                    'outline outline-[2px] outline-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} == {{ $feedbackmoment->week }},
                                 }">
                                     {{ $feedbackmoment->week }}
                                 </x-table.th>
@@ -150,7 +151,7 @@
                                         x-bind:class="{
                                             'bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                             'bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
-                                            'border-x-[2px] border-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} >= {{ $feedbackmoment->week }} && {{ $currentWeek }} < {{ $module->feedbackmomenten[$fbmKey + 1]->week ?? '100' }},
+                                            'outline outline-[2px] outline-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} == {{ $feedbackmoment->week }},
                                         }"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
