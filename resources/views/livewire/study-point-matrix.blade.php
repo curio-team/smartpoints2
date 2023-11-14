@@ -143,7 +143,7 @@
                             <small>({{ $student->id }})</small>
                         </x-table.td>
                         <x-table.td>
-                            <div class="flex flex-col">
+                            <div class="flex flex-col items-center">
                                 <span>{{ $student->totalPoints }}/{{ $student->totalPointsToGainUntilNow }}</span>
                                 <span class="text-xs italic">Total: {{ $student->totalPointsToGain }}</span>
                             </div>
