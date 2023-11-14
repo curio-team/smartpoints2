@@ -113,16 +113,20 @@ class StudyPointMatrix extends Component
 
         $students = collect($group['users']);
         $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $modules->pluck('version_id')->toArray())->get();
+        $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber();
 
-        $students = $students->map(function($user) use ($group, $scores, $modules) {
+        $students = $students->map(function($user) use ($group, $scores, $modules, $currentWeek) {
             $moments = $modules->map(
                     fn($m) => collect($m->feedbackmomenten)
                 )
                 ->flatten();
             $totalPointsToGain = $moments->sum('points');
+            $totalPointsToGainUntilNow = $moments
+                ->filter(fn($fm) => $fm->week <= $currentWeek)
+                ->sum('points');
 
             // The sum of all highest scores per feedbackmoment
-            $scoreSum = $modules->map(
+            $totalPoints = $modules->map(
                 fn($m) => collect($m->feedbackmomenten)
                     ->flatten()
                     ->map(fn($fm) => $scores->where('student_id', $user['id'])
@@ -133,12 +137,13 @@ class StudyPointMatrix extends Component
                     ->sum()
             )->sum();
 
-            $formattedTotal = $scoreSum . ' / ' . $totalPointsToGain;
             return (object) [
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'group' => $group['name'],
-                'total' => $formattedTotal,
+                'totalPoints' => $totalPoints,
+                'totalPointsToGain' => $totalPointsToGain,
+                'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
                 'feedbackmomenten' => $scores->where('student_id', $user['id'])->mapWithKeys(function($score) {
                     return [
                         $score['module_version_id'] . '-' . $score['feedbackmoment_id'] => $score['score']

@@ -85,7 +85,8 @@
                     <x-table.th disabled></x-table.th>
                     <x-table.th unimportant>Leerlijn:</x-table.th>
                     @foreach ($matrix->vakken as $vak)
-                        <x-table.th colspan="{{ collect($vak->modules)->pluck('feedbackmomenten')->map(fn($v) => collect($v)->toArray())->flatten()->count() }}">{{ $vak->vak }}</x-table.th>
+                        <x-table.th zebra="{{ $loop->even }}"
+                                    colspan="{{ collect($vak->modules)->pluck('feedbackmomenten')->map(fn($v) => collect($v)->toArray())->flatten()->count() }}">{{ $vak->vak }}</x-table.th>
                     @endforeach
                 </tr>
                 <tr>
@@ -142,7 +143,10 @@
                             <small>({{ $student->id }})</small>
                         </x-table.td>
                         <x-table.td>
-                            {{ $student->total }}
+                            <div class="flex flex-col">
+                                <span>{{ $student->totalPoints }}/{{ $student->totalPointsToGainUntilNow }}</span>
+                                <span class="text-xs italic">Total: {{ $student->totalPointsToGain }}</span>
+                            </div>
                         </x-table.td>
                         @foreach ($matrix->vakken as $vak)
                             @foreach ($vak->modules as $module)
