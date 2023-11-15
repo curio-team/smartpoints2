@@ -150,6 +150,7 @@ class StudyPointMatrix extends Component
             // The sum of all highest scores per feedbackmoment
             $totalPoints = $modules->map(
                 fn($m) => collect($m->feedbackmomenten)
+                    ->where('week', '<=', $currentWeek)
                     ->flatten()
                     ->map(fn($fm) => $scores->where('student_id', $user['id'])
                         ->where('module_version_id', $m->version_id)
