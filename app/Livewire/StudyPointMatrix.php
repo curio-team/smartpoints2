@@ -130,7 +130,10 @@ class StudyPointMatrix extends Component
             ->flatten();
         $group = AmoAPI::get('groups/'.$this->selectedGroupId);
 
-        $students = collect($group['users']);
+        $students = collect($group['users'])->sortBy(function ($student){
+            $parts = explode(" ", $student['name']);
+            return $parts[count($parts) - 1];
+        });
         $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $modules->pluck('version_id')->toArray())->get();
         $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber();
 
