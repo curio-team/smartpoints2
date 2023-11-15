@@ -78,10 +78,10 @@
             </div>
         </div>
     </div>
-    <div class="overflow-auto flex-grow">
+    <div class="flex-grow">
         <table class="table-auto border-collapse border border-gray-400"
-            style="min-width: {{ 5 * $matrix->totalFeedbackmomenten }}em">
-            <thead class="sticky top-0 bg-white shadow">
+            style="min-width: {{ 4 * $matrix->totalFeedbackmomenten }}em">
+            <thead class="sticky top-0 bg-white shadow z-10">
                 <tr>
                     <x-table.th disabled></x-table.th>
                     <x-table.th unimportant>Leerlijn:</x-table.th>
@@ -96,7 +96,7 @@
                     @foreach ($matrix->vakken as $vak)
                         @foreach ($vak->modules as $module)
                             @foreach ($module->feedbackmomenten as $feedbackmoment)
-                                <x-table.th>{{ $feedbackmoment->code }}</x-table.th>
+                                <x-table.th class="text-sm" zebra="{{ $loop->parent->parent->even }}">{{ $feedbackmoment->code }}</x-table.th>
                             @endforeach
                         @endforeach
                     @endforeach
@@ -107,9 +107,7 @@
                     @foreach ($matrix->vakken as $vak)
                         @foreach ($vak->modules as $module)
                             @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
-                                <x-table.th x-bind:class="{
-                                    'outline outline-[2px] outline-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} == {{ $feedbackmoment->week }},
-                                }">
+                                <x-table.th zebra="{{ $loop->parent->parent->even }}">
                                     {{ $feedbackmoment->week }}
                                 </x-table.th>
                             @endforeach
@@ -122,7 +120,7 @@
                     @foreach ($matrix->vakken as $vak)
                         @foreach ($vak->modules as $module)
                             @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
-                                <x-table.th>
+                                <x-table.th zebra="{{ $loop->parent->parent->even }}">
                                     {{ $feedbackmoment->points }}
                                 </x-table.th>
                             @endforeach
@@ -131,23 +129,17 @@
                 </tr>
             </thead>
             <tbody>
-                <tr class="border-y-2 border-gray-200">
-                    <x-table.th unimportant>Student</x-table.th>
-                    <x-table.th unimportant>Total</x-table.th>
-                    <x-table.th colspan="{{ $matrix->totalFeedbackmomenten }}">Feedback</x-table.th>
-                </tr>
                 @foreach ($students as $key => $student)
                     <?php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); ?>
+                    <?php $zebra = $loop->even; ?>
                     <x-table.tr zebra="{{ $loop->even }}"
                         wire:key="student-{{ $student->id }}">
-                        <x-table.td>
+                        <x-table.td class="whitespace-nowrap sticky left-0" zebra="{{ $loop->even }}" x-bind:class="{'!bg-emerald-200': hoverRow === '{{ $student->id }}'}">
                             {{ $student->name }}
-                            <small>({{ $student->id }})</small>
                         </x-table.td>
-                        <x-table.td>
+                        <x-table.td zebra="{{ $loop->even }}" x-bind:class="{'!bg-emerald-200': hoverRow === '{{ $student->id }}'}">
                             <div class="flex flex-col items-center">
                                 <span>{{ $student->totalPoints }}/{{ $student->totalPointsToGainUntilNow }}</span>
-                                <span class="text-xs italic">Total: {{ $student->totalPointsToGain }}</span>
                             </div>
                         </x-table.td>
                         <?php $columnIndex = 0; ?>
@@ -155,20 +147,19 @@
                             @foreach ($vak->modules as $module)
                                 @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
                                     <?php $columnIndex++; ?>
-                                    <x-table.td tight class="p-1"
-                                        x-bind:class="{
-                                            'bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
-                                            'bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
-                                            'outline outline-[2px] outline-pink-500 rounded border-offset-[-2px]': {{ $currentWeek }} == {{ $feedbackmoment->week }},
-                                        }"
+                                    <td class="p-0 relative"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
-                                        <x-input.text type="number" class="w-full h-full text-center" step="1" tabindex="{{ $columnIndex.$studentIndex }}"
+                                        <input type="number" class="nospin text-center absolute bottom-0 top-0 left-0 right-0 border @if($zebra) bg-gray-100 @else bg-white @endif" x-bind:class="{
+                                            '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
+                                            '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
+                                        }" step="1" tabindex="{{ $columnIndex.$studentIndex }}"
                                             wire:model="students.{{ $key }}.feedbackmomenten.{{ $module->version_id }}-{{ $feedbackmoment->id }}"
                                             min="0" max="{{ $feedbackmoment->points }}"
                                             x-on:input="changesMade['{{ $module->version_id }}-{{ $feedbackmoment->id }}'] = true"
+                                            x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                             x-bind:disabled="!editMode" />
-                                    </x-table.td>
+                                    </td>
                                 @endforeach
                             @endforeach
                         @endforeach

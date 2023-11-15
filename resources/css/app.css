@@ -5,3 +5,13 @@
 [x-cloak] {
   display: none;
 }
+
+input.nospin::-webkit-outer-spin-button,
+input.nospin::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input.nospin[type=number]{
+  -moz-appearance: textfield;
+}
