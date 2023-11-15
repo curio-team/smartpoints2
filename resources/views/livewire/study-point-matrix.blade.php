@@ -152,6 +152,7 @@
                                             x-bind:class="{
                                                 '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                                 '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
+                                                'text-red-400 font-semibold' : $el.value == 0 && $el.value.length == 1,
                                             }"
                                             step="1" min="0" max="{{ $feedbackmoment->points }}"
                                             tabindex="{{ $columnIndex.$studentIndex }}"
