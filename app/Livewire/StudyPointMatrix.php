@@ -18,6 +18,7 @@ class StudyPointMatrix extends Component
     public $students;
     public $selectedBlokKey;
     public $selectedGroupId = -1;
+    public $fbmsActive;
 
     public function render()
     {
@@ -133,15 +134,18 @@ class StudyPointMatrix extends Component
         $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $modules->pluck('version_id')->toArray())->get();
         $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber();
 
-        $students = $students->map(function($user) use ($group, $scores, $modules, $currentWeek) {
-            $moments = $modules->map(
-                    fn($m) => collect($m->feedbackmomenten)
-                )
-                ->flatten();
+        // Find the fbm's that have results for this group;
+        $moments = $modules->map(fn($m) => collect($m->feedbackmomenten))->flatten();
+        $studentIds = collect($group['users'])->pluck('id');
+        $fbmIds = StudentScore::whereIn('student_id', $studentIds)->distinct()->get()->pluck('feedbackmoment_id')->unique();        
+        $fbmsActive = $moments
+            ->filter(fn($fm) => $fm->week <= $currentWeek)
+            ->filter(fn($fm) => $fbmIds->contains($fm->id));
+
+        $students = $students->map(function($user) use ($group, $scores, $modules, $currentWeek, $moments, $fbmsActive) {
+           
             $totalPointsToGain = $moments->sum('points');
-            $totalPointsToGainUntilNow = $moments
-                ->filter(fn($fm) => $fm->week <= $currentWeek)
-                ->sum('points');
+            $totalPointsToGainUntilNow = $fbmsActive->sum('points');
 
             // The sum of all highest scores per feedbackmoment
             $totalPoints = $modules->map(
@@ -170,6 +174,7 @@ class StudyPointMatrix extends Component
             ];
         });
 
+        $this->fbmsActive = $fbmsActive;
         $this->students = $students;
     }
 
