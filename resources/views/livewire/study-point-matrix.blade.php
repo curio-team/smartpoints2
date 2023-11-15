@@ -136,6 +136,7 @@
                     <x-table.th colspan="{{ $matrix->totalFeedbackmomenten }}">Feedback</x-table.th>
                 </tr>
                 @foreach ($students as $key => $student)
+                    <?php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); ?>
                     <x-table.tr zebra="{{ $loop->even }}"
                         wire:key="student-{{ $student->id }}">
                         <x-table.td>
@@ -148,9 +149,11 @@
                                 <span class="text-xs italic">Total: {{ $student->totalPointsToGain }}</span>
                             </div>
                         </x-table.td>
+                        <?php $columnIndex = 0; ?>
                         @foreach ($matrix->vakken as $vak)
                             @foreach ($vak->modules as $module)
                                 @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
+                                    <?php $columnIndex++; ?>
                                     <x-table.td tight class="p-1"
                                         x-bind:class="{
                                             'bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
@@ -159,7 +162,7 @@
                                         }"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
-                                        <x-input.text type="number" class="w-full h-full text-center" step="1"
+                                        <x-input.text type="number" class="w-full h-full text-center" step="1" tabindex="{{ $columnIndex.$studentIndex }}"
                                             wire:model="students.{{ $key }}.feedbackmomenten.{{ $module->version_id }}-{{ $feedbackmoment->id }}"
                                             min="0" max="{{ $feedbackmoment->points }}"
                                             x-on:input="changesMade['{{ $module->version_id }}-{{ $feedbackmoment->id }}'] = true"
