@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', StudyPointMatrix::class)->middleware('auth')->name('home');
+Route::get('/group/{group}', StudyPointMatrix::class)->middleware('auth');
 Route::get('/school-weeks', SchoolWeekManager::class)->middleware('auth')->name('weeks.manage');
 
 Route::get('/login', function(){

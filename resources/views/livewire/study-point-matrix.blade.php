@@ -38,7 +38,8 @@
                     x-transition
                     class="self-end"
                     x-show="showFilters">
-                    <x-input.select wire:model.live="selectedGroupId">
+                    <x-input.select wire:model.live="selectedGroupId" id="groupChanger"
+                        x-on:change="history.pushState({groupId: document.getElementById('groupChanger').value}, '', '/group/' + document.getElementById('groupChanger').value)">
                         <option disabled value="-1">
                             @lang('Select a group')
                         </option>
@@ -191,6 +192,17 @@
         document.addEventListener('livewire:initialized', () => {
             const loading = document.getElementById('loadingIndicator');
             loading.setAttribute('wire:loading', '');
+
+            window.addEventListener("popstate", (event) => {
+                if(event.state)
+                {
+                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId}); 
+                }
+                else
+                {
+                    window.location = document.location;
+                }
+            });
         });
     </script>
 </form>

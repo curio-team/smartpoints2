@@ -6,6 +6,7 @@ use App\Models\StudentScore;
 use App\Traits\SendsNotifications;
 use Livewire\Component;
 use StudioKaa\Amoclient\Facades\AmoAPI;
+use Livewire\Attributes\On;
 
 class StudyPointMatrix extends Component
 {
@@ -23,7 +24,7 @@ class StudyPointMatrix extends Component
         return view('livewire.study-point-matrix');
     }
 
-    public function mount()
+    public function mount($group = null)
     {
         // $matrixes = json_decode(file_get_contents(config('app.currapp.api_url') . '/feedbackmomenten/active-sorted-by-module', false, stream_context_create([
         //     'http' => [
@@ -84,12 +85,29 @@ class StudyPointMatrix extends Component
         $this->selectedBlokKey = 0;
         $this->updatedSelectedBlokKey($this->selectedBlokKey);
 
+        if($group && is_numeric($group))
+        {
+            $this->selectedGroupId = $group;
+        }
+        elseif($group)
+        {
+            $result = AmoAPI::get('/groups/find/' . $group);
+            $this->selectedGroupId = $result['id'];
+        }
+
         $this->getStudentScoresForBlok();
     }
 
     public function updatedSelectedBlokKey($value)
     {
         $this->matrix = $this->matrixes[$value];
+        $this->getStudentScoresForBlok();
+    }
+
+    #[On('new-group-id-from-state')] 
+    public function updateGroup($id)
+    {
+        $this->selectedGroupId = $id;
         $this->getStudentScoresForBlok();
     }
 
