@@ -200,7 +200,7 @@ class StudyPointMatrix extends Component
                 'module_version_id' => $moduleVersionId,
                 'feedbackmoment_id' => $feedbackmomentId,
                 'teacher_id' => auth()->user()->id,
-                'score' => $value
+                'score' => $value ?: 0
             ],
         ];
 
