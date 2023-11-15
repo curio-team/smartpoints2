@@ -147,12 +147,13 @@
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
                                         <input type="number" class="nospin text-center absolute bottom-0 top-0 left-0 right-0 border
-                                            @if($zebra) bg-gray-100 @else bg-white @endif
-                                            @if($feedbackmoment->week > $currentWeek) text-gray-300 @endif"
+                                            @if($zebra) bg-gray-100 @else bg-white @endif"
                                             x-bind:class="{
                                                 '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                                 '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
-                                                'text-red-400 font-semibold' : $el.value == 0 && $el.value.length == 1,
+                                                '!text-gray-300' : {{ $feedbackmoment->week }} > {{ $currentWeek }},
+                                                'text-red-400 font-semibold' : $el.value < {{ $feedbackmoment->points }} && $el.value.length == 1,
+                                                'border-yellow-400' : !$el.value.length && {{ $feedbackmoment->week }} < {{ $currentWeek }},
                                             }"
                                             step="1" min="0" max="{{ $feedbackmoment->points }}"
                                             tabindex="{{ $columnIndex.$studentIndex }}"
