@@ -75,9 +75,9 @@ class StudyPointMatrix extends Component
 
         // List available groups
         $this->groups = collect(AmoAPI::get('groups'))
-            // ->filter(function($group) {
-            //     return strtotime($group['date_end']) > time();
-            // });
+            ->filter(function($group) {
+                return ($group['type'] == "class");
+            })
             ->map(fn($g) => (object)$g);
 
         // Pick the first block for testing now
