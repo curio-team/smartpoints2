@@ -22,7 +22,7 @@ class SchoolWeekManager extends Component
 
     public function mount()
     {
-        $this->resetFields(true);
+        $this->resetFields(silent: true);
     }
 
     public function resetFields(bool $silent = false)
@@ -64,14 +64,14 @@ class SchoolWeekManager extends Component
             'date_of_monday' => $this->date_of_monday,
         ]);
 
-        $this->resetFields(true);
+        $this->resetFields(silent: true);
         $this->sendNotification(__('Created'), 'success');
     }
 
     public function deleteWeek($id)
     {
         \App\Models\SchoolWeek::find($id)->delete();
-        $this->resetFields(true);
+        $this->resetFields(silent: true);
         $this->sendNotification(__('Deleted'), 'warning');
     }
 
@@ -98,13 +98,11 @@ class SchoolWeekManager extends Component
     }
 
     public static function getWeeks(){
-        return \App\Models\SchoolWeek::all()
-            ->map(function($week) {
+        return \App\Models\SchoolWeek::orderBy('year_start', 'desc')->orderBy('week_number', 'asc')->get()
+            ->mapWithKeys(function($week) {
                 $arr = $week->toArray();
                 $arr['date_of_monday'] = $week->date_of_monday->toDateString();
-                return $arr;
-            })
-            ->sortBy('week_number')
-            ->values();
+                return [$arr['id'] => $arr];
+            });
     }
 }

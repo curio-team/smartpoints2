@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\GroupManager;
 use App\Livewire\SchoolWeekManager;
 use App\Livewire\StudyPointMatrix;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', StudyPointMatrix::class)->middleware('auth')->name('home');
-Route::get('/group/{group}', StudyPointMatrix::class)->middleware('auth');
-Route::get('/school-weeks', SchoolWeekManager::class)->middleware('auth')->name('weeks.manage');
+Route::middleware('auth')->group(function () {
+	Route::get('/', StudyPointMatrix::class)->name('home');
+	Route::get('/school-weeks', SchoolWeekManager::class)->name('weeks.manage');
+	Route::get('/groups', GroupManager::class)->name('groups.manage');
+	Route::get('/groups/{group}', StudyPointMatrix::class)->name('groups.show');
+});
 
 Route::get('/login', function(){
 	return redirect('/amoclient/redirect');
