@@ -47,7 +47,15 @@
                             <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->week, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
                             <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-left truncate max-w-md font-normal text-sm">{{ $feedbackmoment->naam }}</x-table.thfbm>
                             <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->points, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
-                            <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
+                            @if(isset($student->feedbackmomenten[$feedbackmoment->id]))
+                                <x-table.th zebra="{{ $loop->parent->even }}" red="{{ $student->feedbackmomenten[$feedbackmoment->id] < $feedbackmoment->points }}">
+                                    {{ $student->feedbackmomenten[$feedbackmoment->id] }}
+                                </x-table.th>
+                            @elseif($fbmsActive->pluck('id')->contains($feedbackmoment->id))
+                                <x-table.th zebra="{{ $loop->parent->even }}" class="border-yellow-500 border-2"></x-table.th>
+                            @else
+                                <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
+                            @endif
                         @if(!$loop->first) </tr> @endif 
                     @endforeach
                 @if($loop->first) </tr> @endif
