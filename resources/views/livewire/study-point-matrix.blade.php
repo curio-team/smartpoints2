@@ -100,7 +100,7 @@
                             <x-table.td 
                                 style="width: 300px;" 
                                 class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
-                                zebra="{{ $loop->even }}"
+                                @if(!$color) zebra="{{ $loop->even }}" @endif
                                 @mouseenter="hoverRow = '{{ $student->id }}'"
                                 @mouseleave="hoverRow = null">
                                 <span class="truncate">{{ $student->name }}</span>
