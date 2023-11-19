@@ -97,7 +97,12 @@
                             }
                             ?>
 
-                            <x-table.td style="width: 300px;" class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}" zebra="{{ $loop->even }}">
+                            <x-table.td 
+                                style="width: 300px;" 
+                                class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
+                                zebra="{{ $loop->even }}"
+                                @mouseenter="hoverRow = '{{ $student->id }}'"
+                                @mouseleave="hoverRow = null">
                                 <span class="truncate">{{ $student->name }}</span>
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
                             </x-table.td>
