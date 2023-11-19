@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use App\Livewire\GroupManager;
 use App\Livewire\SchoolWeekManager;
 use App\Livewire\StudyPointMatrix;
@@ -16,11 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth')->group(function () {
+// Teacher routes:
+Route::middleware(['auth', 'teacher'])->group(function () {
 	Route::get('/', StudyPointMatrix::class)->name('home');
 	Route::get('/school-weeks', SchoolWeekManager::class)->name('weeks.manage');
 	Route::get('/groups', GroupManager::class)->name('groups.manage');
 	Route::get('/groups/{group}', StudyPointMatrix::class)->name('groups.show');
+});
+
+// Student routes:
+Route::middleware(['auth'])->prefix('student')->group(function () {
+	Route::get('/', [StudentController::class, 'show'])->name('student.home');
 });
 
 Route::get('/login', function(){
