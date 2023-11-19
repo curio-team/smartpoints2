@@ -87,7 +87,7 @@
                             wire:key="student-{{ $student->id }}">
 
                             <?php
-                            $color = "";
+                            $color = $loop->even ? 'bg-gray-100' : 'bg-white';
                             if($student->totalPointsToGainUntilNow > 0)
                             {
                                 $percentage = $student->totalPoints / $student->totalPointsToGainUntilNow * 100;
@@ -100,7 +100,6 @@
                             <x-table.td 
                                 style="width: 300px;" 
                                 class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
-                                @if(!$color) zebra="{{ $loop->even }}" @endif
                                 @mouseenter="hoverRow = '{{ $student->id }}'"
                                 @mouseleave="hoverRow = null">
                                 <span class="truncate">{{ $student->name }}</span>
