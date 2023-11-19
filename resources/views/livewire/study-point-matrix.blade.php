@@ -34,50 +34,50 @@
         </span>
     </div>
 
-    <div class="sticky top-[56px] z-50">
-        <div class="overflow-auto syncscroll" name="syncTable">
-            <table class="table-auto border-collapse border border-gray-400">
-                <thead class="bg-white shadow">
-                    <tr>
-                        <x-table.th disabled class="sticky left-0" style="min-width: 300px;"></x-table.th>
-                        @foreach ($blok->vakken as $vak)
-                            <x-table.th zebra="{{ $loop->even }}" colspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <x-table.th disabled class="sticky left-0"></x-table.th>
-                        @foreach ($blok->vakken as $vak)
-                            @foreach ($vak->feedbackmomenten as $feedbackmoment)
-                                <x-table.thfbm style="min-width: 50px;" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-sm">{{ $feedbackmoment->code }}</x-table.thfbm>
+    @if(isset($this->blok))
+        <div class="sticky top-[56px] z-50">
+            <div class="overflow-auto syncscroll" name="syncTable">
+                <table class="table-auto border-collapse border border-gray-400">
+                    <thead class="bg-white shadow">
+                        <tr>
+                            <x-table.th disabled class="sticky left-0" style="min-width: 300px;"></x-table.th>
+                            @foreach ($blok->vakken as $vak)
+                                <x-table.th zebra="{{ $loop->even }}" colspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
                             @endforeach
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">week:</x-table.th>
-                        @foreach ($blok->vakken as $vak)
-                            @foreach ($vak->feedbackmomenten as $feedbackmoment)
-                                <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->week }}</x-table.thfbm>
+                        </tr>
+                        <tr>
+                            <x-table.th disabled class="sticky left-0"></x-table.th>
+                            @foreach ($blok->vakken as $vak)
+                                @foreach ($vak->feedbackmomenten as $feedbackmoment)
+                                    <x-table.thfbm style="min-width: 50px;" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-sm">{{ $feedbackmoment->code }}</x-table.thfbm>
+                                @endforeach
                             @endforeach
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">punten:</x-table.th>
-                        @foreach ($blok->vakken as $vak)
-                            @foreach ($vak->feedbackmomenten as $fbmKey => $feedbackmoment)
-                                <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->points }}</x-table.thfbm>
+                        </tr>
+                        <tr>
+                            <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">week:</x-table.th>
+                            @foreach ($blok->vakken as $vak)
+                                @foreach ($vak->feedbackmomenten as $feedbackmoment)
+                                    <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->week }}</x-table.thfbm>
+                                @endforeach
                             @endforeach
-                        @endforeach
-                    </tr>
-                </thead>
-            </table>
+                        </tr>
+                        <tr>
+                            <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">punten:</x-table.th>
+                            @foreach ($blok->vakken as $vak)
+                                @foreach ($vak->feedbackmomenten as $fbmKey => $feedbackmoment)
+                                    <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->points }}</x-table.thfbm>
+                                @endforeach
+                            @endforeach
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <form class="overflow-auto z-0 syncscroll" name="syncTable" wire:submit="save">
-        {{-- This button is to make saving by enter key work: --}}
-        <input type="submit" style="display: none;">
-    
-        @if(isset($this->blok))
+        <form class="overflow-auto z-0 syncscroll" name="syncTable" wire:submit="save">
+            {{-- This button is to make saving by enter key work: --}}
+            <input type="submit" style="display: none;">
+        
             <table class="table-auto border-collapse border border-gray-400">
                 <tbody>
                     @foreach ($students as $key => $student)
@@ -87,14 +87,18 @@
                             wire:key="student-{{ $student->id }}">
 
                             <?php
-                            $percentage = $student->totalPoints / $student->totalPointsToGainUntilNow * 100;
-                            if($percentage >= 98) $color = 'bg-green-400';
-                            elseif($percentage >= 80) $color = 'bg-orange-400';
-                            else $color = 'bg-red-400';
+                            $color = "";
+                            if($student->totalPointsToGainUntilNow > 0)
+                            {
+                                $percentage = $student->totalPoints / $student->totalPointsToGainUntilNow * 100;
+                                if($percentage >= 98) $color = 'bg-green-400';
+                                elseif($percentage >= 80) $color = 'bg-orange-400';
+                                else $color = 'bg-red-400';
+                            }
                             ?>
 
                             <x-table.td style="width: 300px;" class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}" zebra="{{ $loop->even }}">
-                                {{ $student->name }}
+                                <span class="truncate">{{ $student->name }}</span>
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
                             </x-table.td>
                             <?php $columnIndex = 0; ?>
@@ -125,31 +129,31 @@
                     @endforeach
                 </tbody>
             </table>
-        @endif
+        </form>
+    @endif
 
-        <div id="loadingIndicator" wire:ignore>
-            <div class="absolute inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
-                <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
-            </div>
+    <div id="loadingIndicator" wire:ignore>
+        <div class="absolute inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
+            <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
         </div>
+    </div>
 
-        <script>
-            document.addEventListener('livewire:initialized', () => {
-                const loading = document.getElementById('loadingIndicator');
-                loading.setAttribute('wire:loading', '');
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            const loading = document.getElementById('loadingIndicator');
+            loading.setAttribute('wire:loading', '');
 
-                window.addEventListener("popstate", (event) => {
-                    if(event.state)
-                    {
-                        @this.dispatch('new-group-id-from-state', {id: event.state.groupId}); 
-                    }
-                    else
-                    {
-                        window.location = document.location;
-                    }
-                });
+            window.addEventListener("popstate", (event) => {
+                if(event.state)
+                {
+                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId}); 
+                }
+                else
+                {
+                    window.location = document.location;
+                }
             });
-        </script>
-        <script src="/js/syncscroll.js" />
-    </form>
+        });
+    </script>
+    <script src="/js/syncscroll.js" />
 </div>
