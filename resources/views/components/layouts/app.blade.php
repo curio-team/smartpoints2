@@ -9,6 +9,7 @@
             <title>SmartPoints 2.0</title>
         @endisset
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="icon" type="image/x-icon" href="/favicon.ico">
     </head>
     <body class="flex flex-col h-full w-full">
         <nav class="bg-gray-800 text-white shadow-lg">
