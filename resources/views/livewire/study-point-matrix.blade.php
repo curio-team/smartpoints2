@@ -85,7 +85,15 @@
                         <?php $zebra = $loop->even; ?>
                         <x-table.tr zebra="{{ $loop->even }}"
                             wire:key="student-{{ $student->id }}">
-                            <x-table.td style="width: 300px;" class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center" zebra="{{ $loop->even }}" x-bind:class="{'!bg-emerald-200': hoverRow === '{{ $student->id }}'}">
+
+                            <?php
+                            $percentage = $student->totalPoints / $student->totalPointsToGainUntilNow * 100;
+                            if($percentage >= 98) $color = 'bg-green-400';
+                            elseif($percentage >= 80) $color = 'bg-orange-400';
+                            else $color = 'bg-red-400';
+                            ?>
+
+                            <x-table.td style="width: 300px;" class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}" zebra="{{ $loop->even }}">
                                 {{ $student->name }}
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
                             </x-table.td>
