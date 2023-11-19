@@ -137,16 +137,23 @@ class StudyPointMatrix extends Component
         $feedbackmomentId = $parts[count($parts) - 1];
         $student = $this->students[$studentKey];
 
-        // Write the StudentScore to the database
-        $updatedScores = [
-            [
-                'student_id' => $student->id,
-                'feedbackmoment_id' => $feedbackmomentId,
-                'teacher_id' => auth()->user()->id,
-                'score' => $value ?: 0
-            ],
-        ];
-
-        StudentScore::updateFeedbackForStudents($updatedScores);
+        if($value == null)
+        {
+            $score = StudentScore::where('student_id', $student->id)->where('feedbackmoment_id', $feedbackmomentId)->first();
+            $score->delete();
+        }
+        else
+        {
+            // Write the StudentScore to the database
+            $updatedScores = [
+                [
+                    'student_id' => $student->id,
+                    'feedbackmoment_id' => $feedbackmomentId,
+                    'teacher_id' => auth()->user()->id,
+                    'score' => $value ?: 0
+                ],
+            ];
+            StudentScore::updateFeedbackForStudents($updatedScores);
+        }
     }
 }
