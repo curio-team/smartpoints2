@@ -147,6 +147,10 @@
             const loading = document.getElementById('loadingIndicator');
             loading.setAttribute('wire:loading', '');
 
+            Livewire.hook('morph.updated', ({ el, component }) => {
+                syncscroll.reset();
+            })
+
             window.addEventListener("popstate", (event) => {
                 if(event.state)
                 {
