@@ -90,9 +90,9 @@
                             $color = $loop->even ? 'bg-gray-100' : 'bg-white';
                             if($student->totalPointsToGainUntilNow > 0)
                             {
-                                $percentage = $student->totalPoints / $student->totalPointsToGainUntilNow * 100;
+                                $percentage = round($student->totalPoints / $student->totalPointsToGainUntilNow * 100);
                                 if($percentage >= 98) $color = 'bg-green-400';
-                                elseif($percentage >= 80) $color = 'bg-orange-400';
+                                elseif($percentage >= 80) $color = 'bg-orange-300';
                                 else $color = 'bg-red-400';
                             }
                             ?>
