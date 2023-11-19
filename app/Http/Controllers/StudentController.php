@@ -12,6 +12,26 @@ class StudentController extends Controller
 {
     public function show($id = null)
     {
+        $studentFromApi = $this->getStudent($id);
+        $groupId = collect($studentFromApi['groups'])->firstWhere('type', 'class')['id'];
+        $groupFromApi = AmoAPI::get('/groups/' . $groupId);
+        $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
+        
+        list($blok, $fbmsActive, $student) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
+
+        return view('student')
+                ->with('blok', $blok)
+                ->with('fbmsActive', $fbmsActive)
+                ->with('student', $student);
+    }
+
+    private function getStudent($id = null)
+    {
+        // For students always return self
+        if($id == null || Auth::user()->type == 'student') return collect(AmoAPI::get('/me'));
+
+        // Teachers is allowed to look up by id
+        return collect(AmoAPI::get('/users/' . $id));
     }
 
     public static function getStudentScoresForBlok($group, $cohortId, $onlyForUser = null)
