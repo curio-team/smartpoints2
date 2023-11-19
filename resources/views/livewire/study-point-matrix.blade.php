@@ -137,7 +137,7 @@
     @endif
 
     <div id="loadingIndicator" wire:ignore>
-        <div class="absolute inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
+        <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
             <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
         </div>
     </div>
