@@ -1,149 +1,99 @@
-<form class="relative h-full flex flex-col overflow-auto content-start"
-    x-data="{
-        editMode: {{ auth()->user()->type === 'teacher' ? 'true' : 'false' }},
-        showFilters: true,
+<div x-data="{
         hoverRow: null,
         hoverColumn: null,
         changesMade: {},
     }"
-    x-on:study-point-matrix-changed.window="changesMade = {}"
-    wire:submit="save">
-    @php
-    $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0;
-    @endphp
-    <div class="flex flex-col gap-2 bg-gray-100 shadow p-2 px-4">
-        <div class="flex flex-row items-center justify-between gap-2">
-            <div>
-                @teacher
-                    <x-input.select wire:model.live="selectedBlokKey">
-                        @foreach ($matrixes as $key => $otherMatrix)
-                            <option value="{{ $key }}">
-                                {{ $otherMatrix->blok }}
-                            </option>
-                        @endforeach
-                    </x-input.select>
-                @else
-                    <h2 class="font-bold capitalize">{{ $matrix->blok }}</h2>
-                @endteacher
-                <span class="text-sm italic">
-                    {{ \Carbon\Carbon::parse($matrix->datum_start)->format('d-m-Y') }}
-                    -
-                    {{ \Carbon\Carbon::parse($matrix->datum_eind)->format('d-m-Y') }}
-                    (@lang('current_week'): {{ $currentWeek }} | totaal is een optelling van alle zwarte fbm's)
-                </span>
-            </div>
-            <div class="flex justify-end flex-row flex-grow gap-2 items-stretch">
-                @teacher
-                <div x-cloak
-                    x-transition
-                    class="self-end"
-                    x-show="showFilters">
-                    <x-input.select wire:model.live="selectedGroupId" id="groupChanger"
-                        x-on:change="history.pushState({groupId: document.getElementById('groupChanger').value}, '', '/group/' + document.getElementById('groupChanger').value)">
-                        <option disabled value="-1">
-                            @lang('Select a group')
-                        </option>
-                        @foreach ($groups as $group)
-                            <option value="{{ $group->id }}"
-                                @if ($group->id === $this->selectedGroupId)
-                                    selected
-                                @endif>
-                                {{ $group->name }}
-                            </option>
-                        @endforeach
-                    </x-input.select>
-                </div>
-                @endteacher
-            </div>
-            <div class="flex flex-row gap-2 flex-none">
-                @teacher
-                    <x-button-icon icon="filter"
-                        @click="showFilters = !showFilters" />
-                    <x-button-icon icon="edit"
-                        @click="editMode = !editMode">
-                        @lang('Edit')
-                    </x-button-icon>
-                    <x-button-icon icon="save"
-                        type="submit"
-                        x-cloak
-                        class="relative"
-                        x-show="Object.keys(changesMade).length > 0">
-                        <x-badge color="bg-red-500"
-                            class="absolute -top-1 -left-1">
-                            <span x-text="Object.keys(changesMade).length"></span>
-                        </x-badge>
-                        @lang('Save')
-                    </x-button-icon>
-                @endteacher
-            </div>
+    x-on:study-point-matrix-changed.window="changesMade = {}">
+    <?php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; ?>
+
+    <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
+        <div class="flex flex-row items-center gap-3">
+            <x-input.select wire:model.live="selectedGroupId" id="groupChanger" class="h-9"
+                x-on:change="history.pushState({groupId: document.getElementById('groupChanger').value}, '', '/groups/' + document.getElementById('groupChanger').value)">
+                <option disabled value="-1">Selecteer een klas</option>
+                @foreach ($groups as $group)
+                    <option value="{{ $group['group_id'] }}">{{ $group['name'] }}</option>
+                @endforeach
+            </x-input.select>
+            <x-button-icon icon="save"
+                x-cloak
+                wire:click="save"
+                class="relative h-9"
+                x-show="Object.keys(changesMade).length > 0">
+                <x-badge color="bg-red-500"
+                    class="absolute -top-1 -right-1">
+                    <span x-text="Object.keys(changesMade).length"></span>
+                </x-badge>
+                @lang('Save')
+            </x-button-icon>
         </div>
+        <span class="ps-2 text-sm italic">
+            <span class="text-gray-300 font-bold">grijs:</span> dit fbm is in de toekomst
+            | <span class="text-red-400 font-bold">rood:</span> dit fbm is nog niet ingevuld maar de week is voorbij
+            | totaal bij studenten is een optelling van alle <span class="font-bold">zwarte</span> fbm's
+        </span>
     </div>
-    <div class="flex-grow">
-        <table class="table-auto border-collapse border border-gray-400"
-            style="min-width: {{ 4 * $matrix->totalFeedbackmomenten }}em">
-            <thead class="sticky top-0 bg-white shadow z-10">
-                <tr>
-                    <x-table.th disabled></x-table.th>
-                    <x-table.th unimportant></x-table.th>
-                    @foreach ($matrix->vakken as $vak)
-                        <x-table.th zebra="{{ $loop->even }}"
-                                    colspan="{{ collect($vak->modules)->pluck('feedbackmomenten')->map(fn($v) => collect($v)->toArray())->flatten()->count() }}">{{ $vak->vak }}</x-table.th>
-                    @endforeach
-                </tr>
-                <tr>
-                    <x-table.th disabled></x-table.th>
-                    <x-table.th unimportant>Code:</x-table.th>
-                    @foreach ($matrix->vakken as $vak)
-                        @foreach ($vak->modules as $module)
-                            @foreach ($module->feedbackmomenten as $feedbackmoment)
-                                <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-sm">{{ $feedbackmoment->code }}</x-table.thfbm>
+
+    <div class="sticky top-[56px] z-50">
+        <div class="overflow-auto syncscroll" name="syncTable">
+            <table class="table-auto border-collapse border border-gray-400">
+                <thead class="bg-white shadow">
+                    <tr>
+                        <x-table.th disabled class="sticky left-0" style="min-width: 300px;"></x-table.th>
+                        @foreach ($blok->vakken as $vak)
+                            <x-table.th zebra="{{ $loop->even }}" colspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        <x-table.th disabled class="sticky left-0"></x-table.th>
+                        @foreach ($blok->vakken as $vak)
+                            @foreach ($vak->feedbackmomenten as $feedbackmoment)
+                                <x-table.thfbm style="min-width: 50px;" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-sm">{{ $feedbackmoment->code }}</x-table.thfbm>
                             @endforeach
                         @endforeach
-                    @endforeach
-                </tr>
-                <tr>
-                    <x-table.th disabled></x-table.th>
-                    <x-table.th unimportant>Week:</x-table.th>
-                    @foreach ($matrix->vakken as $vak)
-                        @foreach ($vak->modules as $module)
-                            @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
+                    </tr>
+                    <tr>
+                        <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">week:</x-table.th>
+                        @foreach ($blok->vakken as $vak)
+                            @foreach ($vak->feedbackmomenten as $feedbackmoment)
                                 <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->week }}</x-table.thfbm>
                             @endforeach
                         @endforeach
-                    @endforeach
-                </tr>
-                <tr>
-                    <x-table.th disabled></x-table.th>
-                    <x-table.th unimportant>Points:</x-table.th>
-                    @foreach ($matrix->vakken as $vak)
-                        @foreach ($vak->modules as $module)
-                            @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
+                    </tr>
+                    <tr>
+                        <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">punten:</x-table.th>
+                        @foreach ($blok->vakken as $vak)
+                            @foreach ($vak->feedbackmomenten as $fbmKey => $feedbackmoment)
                                 <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->points }}</x-table.thfbm>
                             @endforeach
                         @endforeach
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($students as $key => $student)
-                    <?php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); ?>
-                    <?php $zebra = $loop->even; ?>
-                    <x-table.tr zebra="{{ $loop->even }}"
-                        wire:key="student-{{ $student->id }}">
-                        <x-table.td class="whitespace-nowrap sticky left-0" zebra="{{ $loop->even }}" x-bind:class="{'!bg-emerald-200': hoverRow === '{{ $student->id }}'}">
-                            {{ $student->name }}
-                        </x-table.td>
-                        <x-table.td zebra="{{ $loop->even }}" x-bind:class="{'!bg-emerald-200': hoverRow === '{{ $student->id }}'}">
-                            <div class="flex flex-col items-center">
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <form class="overflow-auto z-0 syncscroll" name="syncTable" wire:submit="save">
+        {{-- This button is to make saving by enter key work: --}}
+        <input type="submit" style="display: none;">
+    
+        @if(isset($this->blok))
+            <table class="table-auto border-collapse border border-gray-400">
+                <tbody>
+                    @foreach ($students as $key => $student)
+                        <?php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); ?>
+                        <?php $zebra = $loop->even; ?>
+                        <x-table.tr zebra="{{ $loop->even }}"
+                            wire:key="student-{{ $student->id }}">
+                            <x-table.td style="width: 300px;" class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center" zebra="{{ $loop->even }}" x-bind:class="{'!bg-emerald-200': hoverRow === '{{ $student->id }}'}">
+                                {{ $student->name }}
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
-                            </div>
-                        </x-table.td>
-                        <?php $columnIndex = 0; ?>
-                        @foreach ($matrix->vakken as $vak)
-                            @foreach ($vak->modules as $module)
-                                @foreach ($module->feedbackmomenten as $fbmKey => $feedbackmoment)
+                            </x-table.td>
+                            <?php $columnIndex = 0; ?>
+                            @foreach ($blok->vakken as $vak)
+                                @foreach ($vak->feedbackmomenten as $feedbackmoment)
                                     <?php $columnIndex++; ?>
-                                    <td class="p-0 relative"
+                                    <td class="p-0 relative z-0" style="min-width: 50px;"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
                                         <input type="number" class="nospin text-center absolute bottom-0 top-0 left-0 right-0 border
@@ -157,45 +107,41 @@
                                             }"
                                             step="1" min="0" max="{{ $feedbackmoment->points }}"
                                             tabindex="{{ $columnIndex.$studentIndex }}"
-                                            wire:model="students.{{ $key }}.feedbackmomenten.{{ $module->version_id }}-{{ $feedbackmoment->id }}"
-                                            x-on:input="changesMade['{{ $module->version_id }}-{{ $feedbackmoment->id }}'] = true"
-                                            x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
-                                            x-bind:disabled="!editMode" />
+                                            wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}"
+                                            x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true"
+                                            x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
                                     </td>
                                 @endforeach
                             @endforeach
-                        @endforeach
-                    </x-table.tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                        </x-table.tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
 
-    <div id="loadingIndicator" wire:ignore>
-        <div class="absolute inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
-            <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+        <div id="loadingIndicator" wire:ignore>
+            <div class="absolute inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
+                <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+            </div>
         </div>
-    </div>
 
-    {{-- Debug by outputting the matrix and students to console --}}
-    <script>
-        console.log(@json($matrix));
-        console.log(@json($students));
+        <script>
+            document.addEventListener('livewire:initialized', () => {
+                const loading = document.getElementById('loadingIndicator');
+                loading.setAttribute('wire:loading', '');
 
-        document.addEventListener('livewire:initialized', () => {
-            const loading = document.getElementById('loadingIndicator');
-            loading.setAttribute('wire:loading', '');
-
-            window.addEventListener("popstate", (event) => {
-                if(event.state)
-                {
-                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId}); 
-                }
-                else
-                {
-                    window.location = document.location;
-                }
+                window.addEventListener("popstate", (event) => {
+                    if(event.state)
+                    {
+                        @this.dispatch('new-group-id-from-state', {id: event.state.groupId}); 
+                    }
+                    else
+                    {
+                        window.location = document.location;
+                    }
+                });
             });
-        });
-    </script>
-</form>
+        </script>
+        <script src="/js/syncscroll.js" />
+    </form>
+</div>

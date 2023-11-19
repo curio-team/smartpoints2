@@ -19,7 +19,6 @@ return new class extends Migration
 
             // Which feedbackmoment is this score for?
             $table->unsignedBigInteger('feedbackmoment_id');
-            $table->unsignedBigInteger('module_version_id');
 
             // The score itself or if it's null the student is exempted
             $table->integer('score')->nullable();
@@ -33,7 +32,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['student_id', 'feedbackmoment_id', 'module_version_id', 'attempt'], 'student_scores_unique');
+            $table->unique(['student_id', 'feedbackmoment_id', 'attempt'], 'student_scores_unique');
         });
     }
 

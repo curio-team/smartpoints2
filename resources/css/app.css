@@ -6,6 +6,10 @@
   display: none;
 }
 
+.syncscroll::-webkit-scrollbar {
+  display: none;
+}
+
 input.nospin::-webkit-outer-spin-button,
 input.nospin::-webkit-inner-spin-button {
     -webkit-appearance: none;
