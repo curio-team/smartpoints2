@@ -91,9 +91,9 @@
                             if($student->totalPointsToGainUntilNow > 0)
                             {
                                 $percentage = $student->totalPoints / $student->totalPointsToGainUntilNow * 100;
-                                if($percentage >= 98) $color = 'bg-green-400';
-                                elseif($percentage >= 80) $color = 'bg-orange-400';
-                                else $color = 'bg-red-400';
+                                if($percentage >= 98) $color = '!bg-green-400';
+                                elseif($percentage >= 80) $color = '!bg-orange-400';
+                                else $color = '!bg-red-400';
                             }
                             ?>
 
