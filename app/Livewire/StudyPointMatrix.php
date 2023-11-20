@@ -33,7 +33,7 @@ class StudyPointMatrix extends Component
         $this->groups = Group::all()->map(function ($group) use($groupsFromApi) {
             $group->name = $groupsFromApi->firstWhere('id', $group->group_id)->name;
             return $group;
-        })->toArray();
+        })->sortBy('name')->toArray();
 
         if($group && is_numeric($group))
         {
