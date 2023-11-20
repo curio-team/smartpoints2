@@ -20,7 +20,8 @@
             </div>
         </div>
         <span class="ps-2 text-sm italic">
-            <span class="text-gray-300 font-bold">grijs:</span> dit fbm is in de toekomst
+            <span class="text-yellow-400">gele rand:</span> geen of niet alle punten gehaald
+            | <span class="text-gray-300 font-bold">grijs:</span> dit fbm is in de toekomst
             | <span class="text-red-400 font-bold">rood:</span> dit fbm is bij niemand ingevuld maar de week is voorbij
             | totaal is een optelling van alle <span class="font-bold">zwarte</span> fbm's
         </span>
@@ -52,7 +53,7 @@
                                     {{ $student->feedbackmomenten[$feedbackmoment->id] }}
                                 </x-table.th>
                             @elseif($fbmsActive->pluck('id')->contains($feedbackmoment->id))
-                                <x-table.th zebra="{{ $loop->parent->even }}" class="border-yellow-500 border-2"></x-table.th>
+                                <x-table.th zebra="{{ $loop->parent->even }}" class="border-yellow-400 border-2"></x-table.th>
                             @else
                                 <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
                             @endif
