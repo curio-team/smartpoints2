@@ -57,9 +57,8 @@
                             @else
                                 <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
                             @endif
-                        @if(!$loop->first) </tr> @endif 
+                         </tr>
                     @endforeach
-                @if($loop->first) </tr> @endif
             @endforeach
         </tbody>
     </table>
