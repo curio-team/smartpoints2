@@ -102,7 +102,7 @@
                                 class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
                                 @mouseenter="hoverRow = '{{ $student->id }}'"
                                 @mouseleave="hoverRow = null">
-                                <span class="truncate">{{ $student->name }}</span>
+                                <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
                             </x-table.td>
                             <?php $columnIndex = 0; ?>

@@ -23,11 +23,12 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 	Route::get('/school-weeks', SchoolWeekManager::class)->name('weeks.manage');
 	Route::get('/groups', GroupManager::class)->name('groups.manage');
 	Route::get('/groups/{group}', StudyPointMatrix::class)->name('groups.show');
+	Route::get('/student/{id}', [StudentController::class, 'show'])->name('student.show');
 });
 
 // Student routes:
-Route::middleware(['auth'])->prefix('student')->group(function () {
-	Route::get('/', [StudentController::class, 'show'])->name('student.home');
+Route::middleware(['auth'])->group(function () {
+	Route::get('/student', [StudentController::class, 'show'])->name('student.home');
 });
 
 Route::get('/login', function(){
