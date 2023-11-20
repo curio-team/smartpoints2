@@ -28,9 +28,9 @@
             </x-button-icon>
         </div>
         <span class="ps-2 text-sm italic">
-            <span class="text-gray-300 font-bold">grijs:</span> dit fbm is in de toekomst
-            | <span class="text-red-400 font-bold">rood:</span> dit fbm is nog niet ingevuld maar de week is voorbij
-            | totaal bij studenten is een optelling van alle <span class="font-bold">zwarte</span> fbm's
+            <span class="text-gray-300 font-bold">grijs:</span> fbm is in de toekomst
+            | <span class="text-red-400 font-bold">rood:</span> voor hele klas nog niet ingevuld
+            | totaal is een optelling van alle <span class="font-bold">zwarte</span> fbm's
         </span>
     </div>
 

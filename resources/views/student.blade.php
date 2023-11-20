@@ -20,10 +20,9 @@
             </div>
         </div>
         <span class="ps-2 text-sm italic">
-            <span class="text-yellow-400">gele rand:</span> geen of niet alle punten gehaald
-            | <span class="text-gray-300 font-bold">grijs:</span> dit fbm is in de toekomst
-            | <span class="text-red-400 font-bold">rood:</span> dit fbm is bij niemand ingevuld maar de week is voorbij
-            | totaal is een optelling van alle <span class="font-bold">zwarte</span> fbm's
+            <span class="text-gray-300 font-bold">grijs:</span> fbm is in de toekomst
+            | totaal is een optelling van <span class="font-bold">zwarte</span> fbm's
+            | <span class="text-yellow-400 font-bold">gele rand:</span> aandachtspunt voor jou
         </span>
     </div>
 
@@ -44,12 +43,16 @@
                     <x-table.th zebra="{{ $loop->even }}" rowspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
                     @foreach ($vak->feedbackmomenten as $feedbackmoment)
                         @if(!$loop->first) <tr> @endif 
-                            <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="font-mono">{{ $feedbackmoment->code }}</x-table.thfbm>
-                            <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->week, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
-                            <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-left truncate max-w-md font-normal text-sm">{{ $feedbackmoment->naam }}</x-table.thfbm>
-                            <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->points, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
-                            @if(isset($student->feedbackmomenten[$feedbackmoment->id]))
+                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="font-mono">{{ $feedbackmoment->code }}</x-table.thfbm>
+                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->week, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
+                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-left truncate max-w-md font-normal text-sm">{{ $feedbackmoment->naam }}</x-table.thfbm>
+                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->points, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
+                            @if(isset($student->feedbackmomenten[$feedbackmoment->id]) && $fbmsActive->pluck('id')->contains($feedbackmoment->id))
                                 <x-table.th zebra="{{ $loop->parent->even }}" red="{{ $student->feedbackmomenten[$feedbackmoment->id] < $feedbackmoment->points }}">
+                                    {{ $student->feedbackmomenten[$feedbackmoment->id] }}
+                                </x-table.th>
+                            @elseif(isset($student->feedbackmomenten[$feedbackmoment->id]))
+                                <x-table.th zebra="{{ $loop->parent->even }}" class="text-gray-300">
                                     {{ $student->feedbackmomenten[$feedbackmoment->id] }}
                                 </x-table.th>
                             @elseif($fbmsActive->pluck('id')->contains($feedbackmoment->id))
