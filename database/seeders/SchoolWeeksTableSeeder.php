@@ -15,7 +15,7 @@ class SchoolWeeksTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('school_weeks')->delete();
+        DB::table('school_weeks')->truncate();
 
         $weeks = [
 
