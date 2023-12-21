@@ -48,7 +48,7 @@ class StudyPointMatrix extends Component
         }
     }
 
-    #[On('new-group-id-from-state')] 
+    #[On('new-group-id-from-state')]
     public function updateGroup($id)
     {
         $this->selectedGroupId = $id;
@@ -61,6 +61,7 @@ class StudyPointMatrix extends Component
         $group = AmoAPI::get('groups/' . $value);
 
         list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $this->selectedCohortId);
+
     }
 
     public function save()

@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             SchoolWeeksTableSeeder::class,
             GroupsTableSeeder::class,
             StudentScoresTableSeeder::class,
+            B_PointsTableSeeder::class,
         ]);
     }
 }
