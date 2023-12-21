@@ -77,7 +77,7 @@
         <form class="overflow-auto z-0 syncscroll" name="syncTable" wire:submit="save">
             {{-- This button is to make saving by enter key work: --}}
             <input type="submit" style="display: none;">
-        
+
             <table class="table-auto border-collapse border border-gray-400">
                 <tbody>
                     @foreach ($students as $key => $student)
@@ -97,8 +97,8 @@
                             }
                             ?>
 
-                            <x-table.td 
-                                style="width: 300px;" 
+                            <x-table.td
+                                style="width: 300px;"
                                 class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
                                 @mouseenter="hoverRow = '{{ $student->id }}'"
                                 @mouseleave="hoverRow = null">
@@ -117,7 +117,7 @@
                                             x-bind:class="{
                                                 '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                                 '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
-                                                '!text-gray-300' : {{ $feedbackmoment->week }} > {{ $currentWeek }},
+                                                '!text-gray-400' : {{ $feedbackmoment->week }} > {{ $currentWeek }},
                                                 'text-red-400 font-semibold' : $el.value < {{ $feedbackmoment->points }} && $el.value.length == 1,
                                                 'border-yellow-400' : !$el.value.length && {{ $feedbackmoment->week }} < {{ $currentWeek }},
                                             }"
@@ -154,7 +154,7 @@
             window.addEventListener("popstate", (event) => {
                 if(event.state)
                 {
-                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId}); 
+                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId});
                 }
                 else
                 {
