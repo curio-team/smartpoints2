@@ -2,8 +2,7 @@
     <thead class="bg-white shadow">
         <tr>
             <x-table.th disabled class="sticky left-0" style="min-width: 300px;">
-                <label for="">Selecteer punt type</label>
-                <x-matrix.points-select></x-points-select>
+                <x-matrix.points-select type="a" />
             </x-table.th>
             @foreach ($blok->vakken as $vak)
                 <x-table.th zebra="{{ $loop->even }}" colspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
