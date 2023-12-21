@@ -48,7 +48,7 @@ class StudyPointMatrix extends Component
         }
     }
 
-    #[On('new-group-id-from-state')] 
+    #[On('new-group-id-from-state')]
     public function updateGroup($id)
     {
         $this->selectedGroupId = $id;
@@ -79,7 +79,7 @@ class StudyPointMatrix extends Component
         if($value == null)
         {
             $score = StudentScore::where('student_id', $student->id)->where('feedbackmoment_id', $feedbackmomentId)->first();
-            $score->delete();
+            $score?->delete();
         }
         else
         {
