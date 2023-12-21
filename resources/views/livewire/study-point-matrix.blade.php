@@ -117,7 +117,7 @@
                                             x-bind:class="{
                                                 '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                                 '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
-                                                '!text-gray-300' : {{ $feedbackmoment->week }} > {{ $currentWeek }},
+                                                '!text-gray-400' : {{ $feedbackmoment->week }} > {{ $currentWeek }},
                                                 'text-red-400 font-semibold' : $el.value < {{ $feedbackmoment->points }} && $el.value.length == 1,
                                                 'border-yellow-400' : !$el.value.length && {{ $feedbackmoment->week }} < {{ $currentWeek }},
                                             }"
