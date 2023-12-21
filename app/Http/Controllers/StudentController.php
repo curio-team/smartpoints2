@@ -36,12 +36,18 @@ class StudentController extends Controller
 
     public static function getStudentScoresForBlok($group, $cohortId, $onlyForUser = null, $blokId = -1)
     {
-        $blok = json_decode(file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $cohortId . '/uitvoer/' . $blokId, false, stream_context_create([
-            'http' => [
-                'method' => 'GET',
-                'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
-            ]
-        ])));
+        try {
+            $response = file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $cohortId . '/uitvoer/' . $blokId, false, stream_context_create([
+                'http' => [
+                    'method' => 'GET',
+                    'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
+                ]
+            ]));
+        } catch (\ErrorException) {
+            abort(404);
+        }
+
+        $blok = json_decode($response);
 
         $blok->vakken = collect($blok->vakken)->filter(function($vak) {
             return count($vak->feedbackmomenten); //remove vakken without feedbackmoment
