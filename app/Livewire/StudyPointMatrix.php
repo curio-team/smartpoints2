@@ -8,7 +8,7 @@ use App\Models\Group;
 use App\Traits\SendsNotifications;
 use Livewire\Component;
 use StudioKaa\Amoclient\Facades\AmoAPI;
-use Livewire\Attributes\On;
+use Livewire\Attributes\Url;
 
 class StudyPointMatrix extends Component
 {
@@ -16,56 +16,72 @@ class StudyPointMatrix extends Component
 
     public $blok;
     public $groups;
+    public $blokken = [];
     public $students;
+
+    #[Url(as: 'group', history: true)]
     public $selectedGroupId = -1;
+
+    #[Url(as: 'blok', history: true)]
+    public $selectedBlokId = -1;
+
     public $fbmsActive;
-    private $selectedCohortId;
 
     public function render()
     {
         return view('livewire.study-point-matrix');
     }
 
-    public function mount($group = null)
+    public function mount()
     {
         // List available groups
         $groupsFromApi = collect(AmoAPI::get('/groups'))->map(fn($g) => (object) $g);
-        $this->groups = Group::all()->map(function ($group) use($groupsFromApi) {
-            $group->name = $groupsFromApi->firstWhere('id', $group->group_id)->name;
-            return $group;
-        })->sortByDesc('name')->toArray();
 
-        if($group && is_numeric($group))
-        {
-            $this->selectedGroupId = $group;
-            $this->updatedSelectedGroupId($group);
-        }
-        elseif($group)
-        {
-            $result = AmoAPI::get('/groups/find/' . $group);
-            $this->selectedGroupId = $result['id'];
-            $this->updatedSelectedGroupId($result['id']);
+        $groups = Group::all()
+            ->map(function ($group) use ($groupsFromApi) {
+                $group->name = $groupsFromApi->firstWhere('id', $group->group_id)->name;
+                return $group;
+            })
+            ->sortByDesc('name');
+        // $activeGroup = $groups->firstWhere('group_id', $this->selectedGroupId);
+
+        $this->groups = $groups->toArray();
+
+        if ($this->selectedGroupId !== -1) {
+            $this->updateStudentScores();
         }
     }
 
-    #[On('new-group-id-from-state')]
-    public function updateGroup($id)
+    private function updateStudentScores()
     {
-        $this->selectedGroupId = $id;
-        $this->updatedSelectedGroupId($id);
+        $selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
+        $group = AmoAPI::get('groups/' . $this->selectedGroupId);
+
+        // List available blokken for this group
+        $this->blokken = json_decode(file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $selectedCohortId . '/uitvoeren', false, stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
+            ]
+        ])));
+
+        list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
     }
 
-    public function updatedSelectedGroupId($value)
+    public function updatedSelectedGroupId()
     {
-        $this->selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
-        $group = AmoAPI::get('groups/' . $value);
+        $this->selectedBlokId = -1;
+        $this->updateStudentScores();
+    }
 
-        list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $this->selectedCohortId);
+    public function updatedSelectedBlokId()
+    {
+        $this->updateStudentScores();
     }
 
     public function save()
     {
-        $this->updatedSelectedGroupId($this->selectedGroupId);
+        $this->updateStudentScores();
         $this->dispatch('study-point-matrix-changed');
     }
 

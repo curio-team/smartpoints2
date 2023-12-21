@@ -8,13 +8,26 @@
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
         <div class="flex flex-row items-center gap-3">
-            <x-input.select wire:model.live="selectedGroupId" id="groupChanger" class="h-9"
-                x-on:change="history.pushState({groupId: document.getElementById('groupChanger').value}, '', '/groups/' + document.getElementById('groupChanger').value)">
-                <option disabled value="-1">Selecteer een klas</option>
-                @foreach ($groups as $group)
-                    <option value="{{ $group['group_id'] }}">{{ $group['name'] }}</option>
-                @endforeach
-            </x-input.select>
+            <div>
+                <x-input.select wire:model.live="selectedGroupId" id="groupChanger" class="h-9">
+                    <option disabled value="-1">Selecteer een klas</option>
+                    @foreach ($groups as $group)
+                        <option value="{{ $group['group_id'] }}">
+                            {{ $group['name'] }}
+                        </option>
+                    @endforeach
+                </x-input.select>
+            </div>
+            <div>
+                <x-input.select wire:model.live="selectedBlokId" id="blokChanger" class="h-9">
+                    <option value="-1">Huidig blok</option>
+                    @foreach ($blokken as $blok)
+                        <option value="{{ $blok->id }}">
+                            {{ $blok->blok }}
+                        </option>
+                    @endforeach
+                </x-input.select>
+            </div>
             <x-button-icon icon="save"
                 x-cloak
                 wire:click="save"
@@ -41,13 +54,13 @@
                     <thead class="bg-white shadow">
                         <tr>
                             <x-table.th disabled class="sticky left-0" style="min-width: 300px;"></x-table.th>
-                            @foreach ($blok->vakken as $vak)
+                            @foreach ($this->blok->vakken as $vak)
                                 <x-table.th zebra="{{ $loop->even }}" colspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
                             @endforeach
                         </tr>
                         <tr>
                             <x-table.th disabled class="sticky left-0"></x-table.th>
-                            @foreach ($blok->vakken as $vak)
+                            @foreach ($this->blok->vakken as $vak)
                                 @foreach ($vak->feedbackmomenten as $feedbackmoment)
                                     <x-table.thfbm style="min-width: 50px;" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-sm">{{ $feedbackmoment->code }}</x-table.thfbm>
                                 @endforeach
@@ -55,7 +68,7 @@
                         </tr>
                         <tr>
                             <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">week:</x-table.th>
-                            @foreach ($blok->vakken as $vak)
+                            @foreach ($this->blok->vakken as $vak)
                                 @foreach ($vak->feedbackmomenten as $feedbackmoment)
                                     <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->week }}</x-table.thfbm>
                                 @endforeach
@@ -63,7 +76,7 @@
                         </tr>
                         <tr>
                             <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">punten:</x-table.th>
-                            @foreach ($blok->vakken as $vak)
+                            @foreach ($this->blok->vakken as $vak)
                                 @foreach ($vak->feedbackmomenten as $fbmKey => $feedbackmoment)
                                     <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ $feedbackmoment->points }}</x-table.thfbm>
                                 @endforeach
@@ -106,7 +119,7 @@
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
                             </x-table.td>
                             <?php $columnIndex = 0; ?>
-                            @foreach ($blok->vakken as $vak)
+                            @foreach ($this->blok->vakken as $vak)
                                 @foreach ($vak->feedbackmomenten as $feedbackmoment)
                                     <?php $columnIndex++; ?>
                                     <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
@@ -150,18 +163,7 @@
             Livewire.hook('morph.updated', ({ el, component }) => {
                 syncscroll.reset();
             })
-
-            window.addEventListener("popstate", (event) => {
-                if(event.state)
-                {
-                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId});
-                }
-                else
-                {
-                    window.location = document.location;
-                }
-            });
         });
     </script>
-    <script src="/js/syncscroll.js" />
+    <script src="/js/syncscroll.js"></script>
 </div>
