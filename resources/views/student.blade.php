@@ -27,23 +27,23 @@
     </div>
 
     <table class="table-fixed border-collapse border border-gray-400 max-w-full min-w-full tabular-nums text-base">
-        <thead class="bg-white shadow text-xs sm:text-lg">
+        <thead class="bg-white shadow text-xs sm:text-base">
             <tr>
                 <x-table.th>Vak</x-table.th>
-                <x-table.th class="hidden sm:block">Code</x-table.th>
+                <x-table.th class="hidden sm:table-cell">Code</x-table.th>
                 <x-table.th>Week</x-table.th>
                 <x-table.th class="w-1/4 sm:max-w-md text-left overflow:hidden text-ellipsis">Titel</x-table.th>
                 <x-table.th>Punten</x-table.th>
                 <x-table.th class="w-1/4">Behaald</x-table.th>
             </tr>
         </thead>
-        <tbody class="text-xs sm:text-lg">
+        <tbody class="text-xs sm:text-base">
             @foreach ($blok->vakken as $vak)
                 @if($loop->first) <tr> @endif
                     <x-table.th zebra="{{ $loop->even }}" rowspan="{{ count($vak->feedbackmomenten) }}">{{ $vak->vak }}</x-table.th>
                     @foreach ($vak->feedbackmomenten as $feedbackmoment)
                         @if(!$loop->first) <tr> @endif
-                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="font-mono hidden sm:block">{{ $feedbackmoment->code }}</x-table.thfbm>
+                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="font-mono hidden sm:table-cell">{{ $feedbackmoment->code }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->week, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-left overflow:hidden text-ellipsis sm:max-w-md font-normal text-xs sm:text-sm">{{ $feedbackmoment->naam }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->points, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
