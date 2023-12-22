@@ -22,7 +22,6 @@ class StudyPointMatrix extends Component
     #[Url(as: 'group', history: true)]
     public $selectedGroupId = -1;
 
-    #[Url(as: 'blok', history: true)]
     public $selectedBlokId = -1;
 
     public $fbmsActive;
@@ -64,6 +63,7 @@ class StudyPointMatrix extends Component
         ])));
 
         list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
+        $this->selectedBlokId = $this->blok->id;
     }
 
     public function updatedSelectedGroupId()

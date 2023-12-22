@@ -18,11 +18,11 @@
                     @endforeach
                 </x-input.select>
             </div>
-            <div>
+            <div x-show="$wire.selectedBlokId != -1">
                 <x-input.select wire:model.live="selectedBlokId" id="blokChanger" class="h-9">
                     <option value="-1">Huidig blok</option>
                     @foreach ($blokken as $blok)
-                        <option value="{{ $blok->id }}">
+                        <option value="{{ $blok->id }}" :selected="$wire.selectedBlokId == {{ $blok->id }}">
                             {{ $blok->blok }}
                         </option>
                     @endforeach
