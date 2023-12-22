@@ -1,10 +1,10 @@
 <div x-data="{
-        hoverRow: null,
-        hoverColumn: null,
-        changesMade: {},
-    }"
-    x-on:study-point-matrix-changed.window="changesMade = {}">
-    <?php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; ?>
+    hoverRow: null,
+    hoverColumn: null,
+    changesMade: {},
+}"
+x-on:study-point-matrix-changed.window="changesMade = {}">
+    @php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; @endphp
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
         <div class="flex flex-row items-center gap-3">
@@ -94,12 +94,12 @@
             <table class="table-auto border-collapse border border-gray-400">
                 <tbody>
                     @foreach ($students as $key => $student)
-                        <?php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); ?>
-                        <?php $zebra = $loop->even; ?>
+                        @php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); @endphp
+                        @php $zebra = $loop->even; @endphp
                         <x-table.tr zebra="{{ $loop->even }}"
                             wire:key="student-{{ $student->id }}-blok-{{ $blok->id }}">
 
-                            <?php
+                            @php
                             $color = $loop->even ? 'bg-gray-100' : 'bg-white';
                             if($student->totalPointsToGainUntilNow > 0)
                             {
@@ -108,7 +108,7 @@
                                 elseif($percentage >= 80) $color = 'bg-orange-300';
                                 else $color = 'bg-red-400';
                             }
-                            ?>
+                            @endphp
 
                             <x-table.td
                                 style="width: 300px;"
@@ -118,12 +118,12 @@
                                 <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
                                 <span>{{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}</span>
                             </x-table.td>
-                            <?php $columnIndex = 0; ?>
+                            @php $columnIndex = 0; @endphp
                             @foreach ($this->blok->vakken as $vak)
                                 @foreach ($vak->feedbackmomenten as $feedbackmoment)
-                                    <?php $columnIndex++; ?>
+                                    @php $columnIndex++; @endphp
                                     <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
-                                        wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}"
+                                        wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}-{{ time() }}"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
                                         <input type="number" class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
