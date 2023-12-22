@@ -26,7 +26,7 @@
 
                 @foreach ($this->blok->vakken as $vak)
                     <td class="p-0 relative z-0 h-auto" style="min-width: 80px;"
-                        wire:key="vak-{{ $vak->uitvoer_id }}-student-{{ $student->id }}-blok-{{ $this->blok->id }}-{{ time() }}"
+                        wire:key="vak-{{ $vak->uitvoer_id }}-student-{{ $student->id }}-blok-{{ $this->blok->id }}"
                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $vak->uitvoer_id }}'"
                         @mouseleave="hoverRow = null; hoverColumn = null">
 

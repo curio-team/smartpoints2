@@ -30,7 +30,7 @@
                     @foreach ($vak->feedbackmomenten as $feedbackmoment)
                         @php $columnIndex++; @endphp
                         <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
-                            wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}-{{ time() }}"
+                            wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}"
                             x-data="{ studentScore: @entangle('students.'. $key .'.feedbackmomenten.'. $feedbackmoment->id) }"
                             @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                             @mouseleave="hoverRow = null; hoverColumn = null">
