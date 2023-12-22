@@ -1,5 +1,5 @@
 <div x-data="{
-        showPoints: 'a',
+        showPoints: @entangle('showPoints').live,
         hoverRow: null,
         hoverColumn: null,
         changesMade: @entangle('changedStudents'),
@@ -37,6 +37,8 @@
             <x-button-icon icon="save"
                 x-cloak
                 wire:click="save"
+                wire:loading.attr="disabled"
+                wire:target="students"
                 class="relative h-9"
                 x-show="Object.keys(changesMade).length > 0">
                 <x-badge color="bg-red-500"
