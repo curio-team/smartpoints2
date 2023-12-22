@@ -1,5 +1,5 @@
 <div x-data="{
-        showPoints: 'b',
+        showPoints: 'a',
         hoverRow: null,
         hoverColumn: null,
         changesMade: {},
@@ -40,10 +40,10 @@
         <div class="sticky top-[56px] z-50">
             <div class="overflow-auto syncscroll" name="syncTable">
                 <div x-show="showPoints == 'a'">
-                    <x-matrix.a-points-table-head x-show="showPoints == 'a'" :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
+                    <x-matrix.a-points-table-head :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
                 </div>
                 <div x-show="showPoints == 'b'">
-                    <x-matrix.b-points-table-head x-show="showPoints == 'b'" :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
+                    <x-matrix.b-points-table-head :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
                 </div>
             </div>
         </div>
@@ -53,10 +53,10 @@
             <input type="submit" style="display: none;">
 
             <div x-show="showPoints == 'a'">
-                <x-matrix.a-points-table-body x-show="showPoints == 'a'" :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
+                <x-matrix.a-points-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
             </div>
             <div x-show="showPoints == 'b'">
-                <x-matrix.b-points-table-body x-show="showPoints == 'b'" :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
+                <x-matrix.b-points-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
             </div>
 
         </form>
