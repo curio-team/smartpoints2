@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Models\StudentScore;
 use App\Models\Group;
 use App\Traits\SendsNotifications;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use StudioKaa\Amoclient\Facades\AmoAPI;
 use Livewire\Attributes\On;
@@ -72,11 +73,46 @@ class StudyPointMatrix extends Component
 
     public function updatedStudents($value, $key)
     {
-        dd($value, $key);
+        // dd($value, $key);
         $parts = explode('.', $key);
         $studentKey = $parts[0];
-        $feedbackmomentId = $parts[count($parts) - 1];
         $student = $this->students[$studentKey];
+
+        // handle b points update
+        // todo: maybe make a model out of B points...
+        if($parts[1] == 'bPointsOverview') {
+            $subjectId = $parts[count($parts) - 1];
+            $row = DB::table('b_points')
+                ->where('student_id', $student->id)
+                ->where('subject_id', $subjectId)
+                ->first();
+
+            if (!$row) {
+                DB::table('b_points')->insert([
+                    'student_id' => $student->id,
+                    'subject_id' => $subjectId,
+                    'score' => $value ?: 0,
+                    'teacher_id' => auth()->user()->id,
+                ]);
+                return;
+            }
+            if ($value === null) {
+                // If $value is null, delete the row
+                DB::table('b_points')
+                    ->where('student_id', $student->id)
+                    ->where('subject_id', $subjectId)
+                    ->delete();
+            } else {
+                // If $value is not null, update the score
+                DB::table('b_points')
+                    ->where('student_id', $student->id)
+                    ->where('subject_id', $subjectId)
+                    ->update(['score' => $value]);
+            }
+            return;
+        }
+
+        $feedbackmomentId = $parts[count($parts) - 1];
 
         if($value == null)
         {
