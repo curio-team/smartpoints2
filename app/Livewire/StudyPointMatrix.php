@@ -43,17 +43,15 @@ class StudyPointMatrix extends Component
                 return $group;
             })
             ->sortByDesc('name');
-        // $activeGroup = $groups->firstWhere('group_id', $this->selectedGroupId);
 
         $this->groups = $groups->toArray();
-
-        if ($this->selectedGroupId !== -1) {
-            $this->updateStudentScores();
-        }
+        $this->updateStudentScores();
     }
 
     private function updateStudentScores()
     {
+        if ($this->selectedGroupId == -1) return;
+
         $selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
         $group = AmoAPI::get('groups/' . $this->selectedGroupId);
 
@@ -70,6 +68,7 @@ class StudyPointMatrix extends Component
 
     public function updatedSelectedGroupId()
     {
+        if ($this->selectedGroupId == -1) return redirect()->route('home');
         $this->selectedBlokId = -1;
         $this->updateStudentScores();
     }
