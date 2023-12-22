@@ -26,6 +26,12 @@ class StudyPointMatrix extends Component
 
     public $fbmsActive;
 
+    public $floodFillValue = -1;
+    public $floodFillCount;
+    public $floodFillSubject;
+
+    private $selectedCohortId;
+
     public function render()
     {
         return view('livewire.study-point-matrix');
@@ -84,6 +90,52 @@ class StudyPointMatrix extends Component
         $this->dispatch('study-point-matrix-changed');
     }
 
+    public function startFloodFill($feedbackmomentId)
+    {
+        $studentCount = count($this->students);
+        $feedbackmoment = $this->blok->vakken->pluck('feedbackmomenten')->flatten()->firstWhere('id', $feedbackmomentId);
+
+        // Count the students that have a score for this feedbackmoment and wont be affected by the floodfill
+        $studentsWithScore = 0;
+
+        foreach($this->students as $student)
+        {
+            if(isset($student->feedbackmomenten[$feedbackmomentId]))
+                $studentsWithScore++;
+        }
+
+        $count = $studentCount - $studentsWithScore;
+
+        // TODO: Nice message that tells the user nobody will be affected by the floodfill
+        if ($count == 0)
+            return;
+
+        $this->floodFillCount = $count;
+        $this->floodFillSubject = $feedbackmoment;
+        $this->floodFillValue = $feedbackmoment->points;
+    }
+
+    public function doFloodFill()
+    {
+        foreach($this->students as $key => $student)
+        {
+            if(!isset($student->feedbackmomenten[$this->floodFillSubject->id]))
+            {
+                $student->feedbackmomenten[$this->floodFillSubject->id] = $this->floodFillValue;
+                $this->updatedStudents($this->floodFillValue, $key . '.feedbackmomenten.' . $this->floodFillSubject->id);
+            }
+        }
+
+        $this->cancelFloodFill();
+    }
+
+    public function cancelFloodFill()
+    {
+        $this->floodFillValue = -1;
+        $this->floodFillSubject = null;
+        $this->floodFillCount = null;
+    }
+
     public function updatedStudents($value, $key)
     {
         $parts = explode('.', $key);
@@ -98,7 +150,6 @@ class StudyPointMatrix extends Component
         }
         else
         {
-            // Write the StudentScore to the database
             $updatedScores = [
                 [
                     'student_id' => $student->id,
