@@ -23,6 +23,7 @@ class StudyPointMatrix extends Component
     public $groups;
     public $blokken = [];
     public $students;
+    public $changedStudents;
 
     #[Url(as: 'group', history: true)]
     public $selectedGroupId = -1;
@@ -71,6 +72,7 @@ class StudyPointMatrix extends Component
 
         list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
         $this->selectedBlokId = $this->blok->id;
+        $this->changedStudents = [];
     }
 
     public function updatedSelectedGroupId()
@@ -85,81 +87,99 @@ class StudyPointMatrix extends Component
         $this->updateStudentScores();
     }
 
-    public function save()
-    {
-        $this->updateStudentScores();
-        $this->dispatch('study-point-matrix-changed');
-    }
-
     public function updatedStudents($value, $key)
     {
         $parts = explode('.', $key);
-        $studentKey = $parts[0];
-        $student = $this->students[$studentKey];
+        $studentId = $parts[0];
+        $type = $parts[1];
 
-        // handle b points update
-        // todo: maybe make a model out of B points...
-        if($parts[1] == 'bPointsOverview') {
+        if ($type === 'bPointsOverview') {
             $subjectId = $parts[count($parts) - 1];
-            $row = DB::table('student_scores_b')
-                ->where('student_id', $student->id)
-                ->where('subject_id', $subjectId)
-                ->first();
+        } elseif ($type === 'feedbackmomenten') {
+            $subjectId = $parts[count($parts) - 2];
+        }
 
-            if (!$row) {
-                DB::table('student_scores_b')->insert([
-                    'student_id' => $student->id,
-                    'subject_id' => $subjectId,
-                    'score' => $value ?: 0,
-                    'teacher_id' => auth()->user()->id,
-                    'created_at' =>  \Carbon\Carbon::now(), // Not using Eloquent, so need to handle this manually..
-                    'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
-                ]);
-                return;
-            }
-            if ($value === null) {
-                // If $value is null, delete the row
-                DB::table('student_scores_b')
+        $this->changedStudents[$studentId] = [
+            'type' => $type,
+            'subjectId' => $subjectId,
+            'score' => $value,
+        ];
+    }
+
+    public function save()
+    {
+        foreach($this->changedStudents as $studentKey => $change) {
+            $student = $this->students[$studentKey];
+            $subjectId = $change['subjectId'];
+            $value = $change['score'];
+
+            // handle b points update
+            // todo: maybe make a model out of B points...
+            if($change['type'] == 'bPointsOverview') {
+                $row = DB::table('student_scores_b')
                     ->where('student_id', $student->id)
                     ->where('subject_id', $subjectId)
-                    ->delete();
-            } else {
-                // If $value is not null, update the score
-                DB::table('student_scores_b')
-                    ->where('student_id', $student->id)
-                    ->where('subject_id', $subjectId)
-                    ->update([
-                        'score' => $value,
+                    ->first();
+
+                if (!$row) {
+                    DB::table('student_scores_b')->insert([
+                        'student_id' => $student->id,
+                        'subject_id' => $subjectId,
+                        'score' => $value ?? 0,
+                        'teacher_id' => auth()->user()->id,
+                        'created_at' =>  \Carbon\Carbon::now(), // Not using Eloquent, so need to handle this manually..
                         'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
                     ]);
+
+                    return;
+                }
+
+                if ($value === null) {
+                    // If $value is null, delete the row
+                    DB::table('student_scores_b')
+                        ->where('student_id', $student->id)
+                        ->where('subject_id', $subjectId)
+                        ->delete();
+                } else {
+                    // If $value is not null, update the score
+                    DB::table('student_scores_b')
+                        ->where('student_id', $student->id)
+                        ->where('subject_id', $subjectId)
+                        ->update([
+                            'score' => $value,
+                            'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
+                        ]);
+                }
+
+                return;
             }
-            return;
+
+            $attempt = $this->students[$studentKey]->feedbackmomenten[$subjectId]['attempt'];
+
+            if($value == null)
+            {
+                $score = StudentScore::where('student_id', $student->id)
+                    ->where('feedbackmoment_id', $subjectId)
+                    ->where('attempt', $attempt)
+                    ->first();
+                $score?->delete();
+            }
+            else
+            {
+                $updatedScores = [
+                    [
+                        'student_id' => $student->id,
+                        'feedbackmoment_id' => $subjectId,
+                        'teacher_id' => auth()->user()->id,
+                        'score' => $value ?: 0,
+                        'attempt' => $attempt ?? 1,
+                    ],
+                ];
+
+                StudentScore::updateFeedbackForStudents($updatedScores);
+            }
         }
 
-        $feedbackmomentId = $parts[count($parts) - 2];
-        $attempt = $this->students[$studentKey]->feedbackmomenten[$feedbackmomentId]['attempt'];
-
-        if($value == null)
-        {
-            $score = StudentScore::where('student_id', $student->id)
-                ->where('feedbackmoment_id', $feedbackmomentId)
-                ->where('attempt', $attempt)
-                ->first();
-            $score?->delete();
-        }
-        else
-        {
-            $updatedScores = [
-                [
-                    'student_id' => $student->id,
-                    'feedbackmoment_id' => $feedbackmomentId,
-                    'teacher_id' => auth()->user()->id,
-                    'score' => $value ?: 0,
-                    'attempt' => $attempt ?? 1,
-                ],
-            ];
-
-            StudentScore::updateFeedbackForStudents($updatedScores);
-        }
+        $this->changedStudents = [];
     }
 }

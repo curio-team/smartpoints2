@@ -45,9 +45,8 @@
                                 }"
                                 step="1" min="0" max="{{ $feedbackmoment->points }}"
                                 tabindex="{{ $columnIndex.$studentIndex }}"
-                                wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}.score"
+                                wire:model.live="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}.score"
                                 x-bind:title="studentScore.attempt ? 'Poging ' + studentScore.attempt : ''"
-                                x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true"
                                 x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
 
                             <x-button-icon icon="stack"

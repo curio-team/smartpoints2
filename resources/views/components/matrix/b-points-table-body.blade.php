@@ -40,8 +40,7 @@
                         }"
                         step="1" min="0" max="2"
                         tabindex="{{ $loop->iteration.$studentIndex }}"
-                        wire:model="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}"
-                        x-on:input="changesMade['{{ $student->id }} - b{{ $vak->uitvoer_id }}'] = true" --}}
+                        wire:model.live="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}"
                         x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $vak->uitvoer_id }}'" />
                     </td>
                 @endforeach

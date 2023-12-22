@@ -2,9 +2,8 @@
         showPoints: 'a',
         hoverRow: null,
         hoverColumn: null,
-        changesMade: {},
-    }"
-    x-on:study-point-matrix-changed.window="changesMade = {}">
+        changesMade: @entangle('changedStudents'),
+    }">
     @php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; @endphp
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
@@ -79,7 +78,7 @@
         </form>
     @endif
 
-    <div id="loadingIndicator" wire:ignore>
+    <div id="loadingIndicator" wire:target="save" wire:ignore>
         <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
             <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
         </div>
@@ -94,7 +93,6 @@
                 'feedbackmoment' => $floodFillSubject->naam,
                 'fb_code' => $floodFillSubject->code
             ]) }}</span> van de <span class="font-semibold">{{ $floodFillCount }}</span> studenten in deze klas wilt overschrijven met de waarde <span class="font-semibold">{{ $floodFillValue }}</span>?</p>
-            <p class="mt-4"><span class="font-semibold">Je kunt deze actie niet ongedaan maken!</span></p>
 
             <x-slot name="footer">
                 <x-button-icon icon="close" wire:click="cancelFloodFill" wire:loading.attr="disabled">Annuleren</x-button-icon>

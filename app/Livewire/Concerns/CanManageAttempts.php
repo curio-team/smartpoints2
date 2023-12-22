@@ -36,8 +36,6 @@ trait CanManageAttempts
     {
         StudentScore::find($scoreId)->delete();
         unset($this->manageAttempts[$scoreId]);
-        $this->updateStudentScores();
-        $this->dispatch('study-point-matrix-changed');
     }
 
     public function doManageAttempts()
@@ -70,8 +68,6 @@ trait CanManageAttempts
         }
 
         $this->cancelManageAttempts();
-        $this->updateStudentScores();
-        $this->dispatch('study-point-matrix-changed');
     }
 
     public function cancelManageAttempts()
