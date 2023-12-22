@@ -7,6 +7,7 @@ use App\Models\StudentScore;
 trait CanManageAttempts
 {
     public $manageAttempts = [];
+    public $manageAttemptsNew = -1;
     public $manageAttemptsStudent;
     public $manageAttemptsFeedbackmoment;
 
@@ -34,19 +35,38 @@ trait CanManageAttempts
     public function removeAttempt($scoreId)
     {
         StudentScore::find($scoreId)->delete();
-        $this->cancelManageAttempts();
+        unset($this->manageAttempts[$scoreId]);
         $this->updateStudentScores();
         $this->dispatch('study-point-matrix-changed');
     }
 
     public function doManageAttempts()
     {
-        // Go through $this->manageAttempts and update the scores
+        $highestAttempt = 1;
         foreach ($this->manageAttempts as $id => $attempt) {
             StudentScore::find($id)->update([
                 'attempt' => $attempt['attempt'],
                 'score' => $attempt['score'],
             ]);
+
+            if ($highestAttempt < $attempt['attempt']) {
+                $highestAttempt = $attempt['attempt'];
+            }
+        }
+
+        if ($this->manageAttemptsNew > -1) {
+            $updatedScores = [
+                [
+                    'student_id' => $this->manageAttemptsStudent->id,
+                    'feedbackmoment_id' => $this->manageAttemptsFeedbackmoment->id,
+                    'teacher_id' => auth()->user()->id,
+                    'score' => $this->manageAttemptsNew ?: 0,
+                    'attempt' => $highestAttempt + 1,
+                ],
+            ];
+
+            StudentScore::updateFeedbackForStudents($updatedScores);
+            $this->manageAttemptsNew = -1;
         }
 
         $this->cancelManageAttempts();
@@ -59,5 +79,16 @@ trait CanManageAttempts
         $this->manageAttempts = [];
         $this->manageAttemptsStudent = null;
         $this->manageAttemptsFeedbackmoment = null;
+        $this->manageAttemptsNew = -1;
+    }
+
+    public function addNewAttempt()
+    {
+        $this->manageAttemptsNew = 0;
+    }
+
+    public function removeNewAttempt()
+    {
+        $this->manageAttemptsNew = -1;
     }
 }

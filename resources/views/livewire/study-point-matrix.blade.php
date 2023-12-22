@@ -118,9 +118,22 @@
                         wire:key="manageAttempts-{{ $studentScoreId }}">
                         <span class="font-semibold shrink-0">Poging {{ $studentScore['attempt'] }}:</span>
                         <x-input.text wire:model="manageAttempts.{{ $studentScoreId }}.score" class="grow w-full" />
-                        <x-button-icon icon="close" compact wire:click="removeAttempt({{ $studentScoreId }})" class="bg-red-300 hover:bg-red-400" wire:loading.attr="disabled">Verwijderen</x-button-icon>
+                        @if ($loop->last)
+                            <x-button-icon icon="close" compact wire:click="removeAttempt({{ $studentScoreId }})" class="bg-red-300 hover:bg-red-400" wire:loading.attr="disabled">Verwijderen</x-button-icon>
+                        @endif
                     </div>
                 @endforeach
+                @if ($manageAttemptsNew > -1)
+                    <div class="flex flex-row items-center gap-4">
+                        <span class="font-semibold shrink-0">Nieuwe poging:</span>
+                        <x-input.text wire:model="manageAttemptsNew" class="grow w-full" autofocus x-init="$el.select()" />
+                        <x-button-icon icon="close" compact wire:click="removeNewAttempt" class="bg-red-300 hover:bg-red-400" wire:loading.attr="disabled">Verwijderen</x-button-icon>
+                    </div>
+                @else
+                    <div class="flex justify-center">
+                        <x-button-icon icon="tag" compact wire:click="addNewAttempt" class="bg-green-300 hover:bg-green-400" wire:loading.attr="disabled">Nieuwe Poging Toevoegen</x-button-icon>
+                    </div>
+                @endif
             </div>
 
             <x-slot name="footer">
