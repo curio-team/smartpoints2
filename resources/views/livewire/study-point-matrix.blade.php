@@ -29,6 +29,12 @@
                     @endforeach
                 </x-input.select>
             </div>
+            <div x-show="$wire.selectedBlokId != -1">
+                <x-input.select x-model="showPoints" id="pointsChanger" class="h-9">
+                    <option value="a">A-punten</option>
+                    <option value="b">B-punten</option>
+                </x-input.select>
+            </div>
             <x-button-icon icon="save"
                 x-cloak
                 wire:click="save"
