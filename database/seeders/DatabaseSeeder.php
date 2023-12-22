@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             SchoolWeeksTableSeeder::class,
             GroupsTableSeeder::class,
-            StudentScoresTableSeeder::class,
-            B_PointsTableSeeder::class,
+            StudentScoresATableSeeder::class,
+            StudentScoresBTableSeeder::class,
         ]);
     }
 }

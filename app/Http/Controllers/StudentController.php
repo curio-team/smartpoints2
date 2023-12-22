@@ -107,13 +107,13 @@ class StudentController extends Controller
                 return [$fmId => $scores[$user['id']] ?? null];
             });
 
-            $totalBpoints = DB::table('b_points')->where('student_id', $user['id'])->sum('score');
+            $totalBpoints = DB::table('student_scores_b')->where('student_id', $user['id'])->sum('score');
 
             // new array from totalBPoints with key uitvoer_id from $blok->vakken and value
-            // score from b_points when uitvoer_id is equal to subject_id
+            // score from student_scores_b when uitvoer_id is equal to subject_id
             $totalBpointsOverview = $blok->vakken->mapWithKeys(function($vak) use ($user) {
                 return [
-                    $vak->uitvoer_id => DB::table('b_points')
+                    $vak->uitvoer_id => DB::table('student_scores_b')
                                             ->where('student_id', $user['id'])
                                             ->where('subject_id', $vak->uitvoer_id)
                                             ->first()->score ?? ''

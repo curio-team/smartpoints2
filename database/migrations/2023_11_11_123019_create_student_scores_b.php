@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('b_points', function(Blueprint $table) {
+        Schema::create('student_scores_b', function(Blueprint $table) {
             $table->id();
             $table->string('student_id')->references('id')->on('users');
             $table->string('teacher_id')->references('id')->on('users');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('score')->nullable();
             $table->string('feedback')->nullable();
 
-            $table->unique(['student_id', 'subject_id'], 'b_points_unique');
+            $table->unique(['student_id', 'subject_id'], 'student_scores_b_unique');
 
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('b_points');
+        Schema::dropIfExists('student_scores_b');
     }
 };
