@@ -116,7 +116,7 @@ class StudentController extends Controller
                     $vak->uitvoer_id => DB::table('b_points')
                                             ->where('student_id', $user['id'])
                                             ->where('subject_id', $vak->uitvoer_id)
-                                            ->first()->score ?? 0
+                                            ->first()->score ?? ''
                 ];
             });
 
