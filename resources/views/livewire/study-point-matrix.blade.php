@@ -98,7 +98,33 @@
 
             <x-slot name="footer">
                 <x-button-icon icon="close" wire:click="cancelFloodFill" wire:loading.attr="disabled">Annuleren</x-button-icon>
-                <x-button-icon icon="save" wire:click="doFloodFill" class="bg-red-500 hover:bg-red-600" wire:loading.attr="disabled">Vullen</x-button-icon>
+                <x-button-icon icon="save" wire:click="doFloodFill" class="bg-orange-500 hover:bg-orange-600" wire:loading.attr="disabled">Vullen</x-button-icon>
+            </x-slot>
+        </x-modal.confirmation>
+        @endif
+
+        @if (!empty($manageAttempts))
+        <x-modal.confirmation cancel="$wire.cancelManageAttempts()">
+            <x-slot name="title">Pogingen van {{ $manageAttemptsStudent->name }}</x-slot>
+
+            <p>Dit @if (count($manageAttempts) == 1) is de poging @else zijn de pogingen @endif van {{ $manageAttemptsStudent->name }} bij <span class="font-semibold">{{ __('":feedbackmoment (:fb_code)"', [
+                'feedbackmoment' => $manageAttemptsFeedbackmoment->naam,
+                'fb_code' => $manageAttemptsFeedbackmoment->code
+            ]) }}</span>:</p>
+
+            <div class="mt-4 space-y-2">
+                @foreach ($manageAttempts as $studentScoreId => $studentScore)
+                    <div class="flex flex-row items-center gap-2"
+                        wire:key="manageAttempts-{{ $studentScoreId }}">
+                        <span class="font-semibold">Poging {{ $studentScore['attempt'] }}:</span>
+                        <x-input.text wire:model="manageAttempts.{{ $studentScoreId }}.score" class="max-w-[2em]" />
+                    </div>
+                @endforeach
+            </div>
+
+            <x-slot name="footer">
+                <x-button-icon icon="close" wire:click="cancelManageAttempts" wire:loading.attr="disabled">Annuleren</x-button-icon>
+                <x-button-icon icon="save" wire:click="doManageAttempts" class="bg-orange-500 hover:bg-orange-600" wire:loading.attr="disabled">Opslaan</x-button-icon>
             </x-slot>
         </x-modal.confirmation>
         @endif

@@ -44,9 +44,20 @@
                                 }"
                                 step="1" min="0" max="{{ $feedbackmoment->points }}"
                                 tabindex="{{ $columnIndex.$studentIndex }}"
-                                wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}"
+                                wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}.score"
+                                x-data="{ attempt: @entangle('students.'. $key .'.feedbackmomenten.'. $feedbackmoment->id .'.attempt') }"
+                                x-bind:title="attempt ? 'Poging ' + attempt : ''"
                                 x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true"
                                 x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
+
+                            <x-button-icon icon="stack"
+                                x-cloak
+                                x-show="hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}'"
+                                class="absolute top-0 right-0"
+                                compact
+                                title="Beheer alle pogingen"
+                                wire:click="startManageAttempts('{{ $student->id }}', {{ $feedbackmoment->id }})">
+                            </x-button-icon>
                         </td>
                     @endforeach
                 @endforeach

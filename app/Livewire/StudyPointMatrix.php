@@ -3,6 +3,8 @@
 namespace App\Livewire;
 
 use App\Http\Controllers\StudentController;
+use App\Livewire\Concerns\CanFloodFill;
+use App\Livewire\Concerns\CanManageAttempts;
 use App\Models\StudentScore;
 use App\Models\Group;
 use App\Traits\SendsNotifications;
@@ -14,6 +16,8 @@ use Livewire\Attributes\Url;
 class StudyPointMatrix extends Component
 {
     use SendsNotifications;
+    use CanFloodFill;
+    use CanManageAttempts;
 
     public $blok;
     public $groups;
@@ -26,10 +30,6 @@ class StudyPointMatrix extends Component
     public $selectedBlokId = -1;
 
     public $fbmsActive;
-
-    public $floodFillValue = -1;
-    public $floodFillCount;
-    public $floodFillSubject;
 
     private $selectedCohortId;
 
@@ -91,52 +91,6 @@ class StudyPointMatrix extends Component
         $this->dispatch('study-point-matrix-changed');
     }
 
-    public function startFloodFill($feedbackmomentId)
-    {
-        $studentCount = count($this->students);
-        $feedbackmoment = $this->blok->vakken->pluck('feedbackmomenten')->flatten()->firstWhere('id', $feedbackmomentId);
-
-        // Count the students that have a score for this feedbackmoment and wont be affected by the floodfill
-        $studentsWithScore = 0;
-
-        foreach($this->students as $student)
-        {
-            if(isset($student->feedbackmomenten[$feedbackmomentId]))
-                $studentsWithScore++;
-        }
-
-        $count = $studentCount - $studentsWithScore;
-
-        // TODO: Nice message that tells the user nobody will be affected by the floodfill
-        if ($count == 0)
-            return;
-
-        $this->floodFillCount = $count;
-        $this->floodFillSubject = $feedbackmoment;
-        $this->floodFillValue = $feedbackmoment->points;
-    }
-
-    public function doFloodFill()
-    {
-        foreach($this->students as $key => $student)
-        {
-            if(!isset($student->feedbackmomenten[$this->floodFillSubject->id]))
-            {
-                $student->feedbackmomenten[$this->floodFillSubject->id] = $this->floodFillValue;
-                $this->updatedStudents($this->floodFillValue, $key . '.feedbackmomenten.' . $this->floodFillSubject->id);
-            }
-        }
-
-        $this->cancelFloodFill();
-    }
-
-    public function cancelFloodFill()
-    {
-        $this->floodFillValue = -1;
-        $this->floodFillSubject = null;
-        $this->floodFillCount = null;
-    }
-
     public function updatedStudents($value, $key)
     {
         $parts = explode('.', $key);
@@ -182,11 +136,15 @@ class StudyPointMatrix extends Component
             return;
         }
 
-        $feedbackmomentId = $parts[count($parts) - 1];
+        $feedbackmomentId = $parts[count($parts) - 2];
+        $attempt = $this->students[$studentKey]->feedbackmomenten[$feedbackmomentId]['attempt'];
 
         if($value == null)
         {
-            $score = StudentScore::where('student_id', $student->id)->where('feedbackmoment_id', $feedbackmomentId)->first();
+            $score = StudentScore::where('student_id', $student->id)
+                ->where('feedbackmoment_id', $feedbackmomentId)
+                ->where('attempt', $attempt)
+                ->first();
             $score?->delete();
         }
         else
@@ -196,9 +154,11 @@ class StudyPointMatrix extends Component
                     'student_id' => $student->id,
                     'feedbackmoment_id' => $feedbackmomentId,
                     'teacher_id' => auth()->user()->id,
-                    'score' => $value ?: 0
+                    'score' => $value ?: 0,
+                    'attempt' => $attempt ?? 1,
                 ],
             ];
+
             StudentScore::updateFeedbackForStudents($updatedScores);
         }
     }
