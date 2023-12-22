@@ -18,7 +18,7 @@ trait CanFloodFill
 
         foreach($this->students as $student)
         {
-            if(isset($student->feedbackmomenten[$feedbackmomentId]))
+            if(isset($student->feedbackmomenten[$feedbackmomentId]['score']))
                 $studentsWithScore++;
         }
 
@@ -37,10 +37,13 @@ trait CanFloodFill
     {
         foreach($this->students as $key => $student)
         {
-            if(!isset($student->feedbackmomenten[$this->floodFillSubject->id]))
+            if(!isset($student->feedbackmomenten[$this->floodFillSubject->id]['score']))
             {
-                $student->feedbackmomenten[$this->floodFillSubject->id] = $this->floodFillValue;
-                $this->updatedStudents($this->floodFillValue, $key . '.feedbackmomenten.' . $this->floodFillSubject->id);
+                $student->feedbackmomenten[$this->floodFillSubject->id] = [
+                    'attempt' => 1,
+                    'score' => $this->floodFillValue,
+                ];
+                $this->updatedStudents($this->floodFillValue, $key . '.feedbackmomenten.' . $this->floodFillSubject->id . '.score');
             }
         }
 
