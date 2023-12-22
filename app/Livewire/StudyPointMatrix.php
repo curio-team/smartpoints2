@@ -79,7 +79,22 @@ class StudyPointMatrix extends Component
         $studentCount = count($this->students);
         $feedbackmoment = $this->blok->vakken->pluck('feedbackmomenten')->flatten()->firstWhere('id', $feedbackmomentId);
 
-        $this->floodFillCount = $studentCount;
+        // Count the students that have a score for this feedbackmoment and wont be affected by the floodfill
+        $studentsWithScore = 0;
+
+        foreach($this->students as $student)
+        {
+            if(isset($student->feedbackmomenten[$feedbackmomentId]))
+                $studentsWithScore++;
+        }
+
+        $count = $studentCount - $studentsWithScore;
+
+        // TODO: Nice message that tells the user nobody will be affected by the floodfill
+        if ($count == 0)
+            return;
+
+        $this->floodFillCount = $count;
         $this->floodFillSubject = $feedbackmoment;
         $this->floodFillValue = $feedbackmoment->points;
     }
