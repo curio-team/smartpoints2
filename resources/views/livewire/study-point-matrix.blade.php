@@ -80,9 +80,15 @@
         </form>
     @endif
 
-    <div id="loadingIndicator" wire:target="save" wire:ignore>
-        <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
-            <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+    {{--
+        We want to show a loading indicator for everything, except for changes on students, so we use this technique:
+        https://github.com/livewire/livewire/discussions/3855#discussioncomment-6337044
+    --}}
+    <div wire:loading.remove wire:target="students">
+        <div id="loadingIndicator" wire:loading>
+            <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
+                <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+            </div>
         </div>
     </div>
 
@@ -107,6 +113,10 @@
         <x-modal.confirmation cancel="$wire.cancelManageAttempts()">
             <x-slot name="title">Pogingen van {{ $manageAttemptsStudent->name }}</x-slot>
 
+            <p class="mb-4 font-semibold rounded bg-orange-300 p-2">
+                Let op! Deze wijzigingen (ook verwijderen) worden direct opgeslagen.
+            </p>
+
             <p>Dit @if (count($manageAttempts) == 1) is de poging @else zijn de pogingen @endif van {{ $manageAttemptsStudent->name }} bij <span class="font-semibold">{{ __('":feedbackmoment (:fb_code)"', [
                 'feedbackmoment' => $manageAttemptsFeedbackmoment->naam,
                 'fb_code' => $manageAttemptsFeedbackmoment->code
@@ -123,6 +133,7 @@
                         @endif
                     </div>
                 @endforeach
+
                 @if ($manageAttemptsNew > -1)
                     <div class="flex flex-row items-center gap-4">
                         <span class="font-semibold shrink-0">Nieuwe poging:</span>
@@ -138,7 +149,7 @@
 
             <x-slot name="footer">
                 <x-button-icon icon="close" wire:click="cancelManageAttempts" wire:loading.attr="disabled">Annuleren</x-button-icon>
-                <x-button-icon icon="save" wire:click="doManageAttempts" class="bg-orange-500 hover:bg-orange-600" wire:loading.attr="disabled">Opslaan</x-button-icon>
+                <x-button-icon icon="save" wire:click="doManageAttempts" class="bg-orange-500 hover:bg-orange-600" wire:loading.attr="disabled">Direct opslaan</x-button-icon>
             </x-slot>
         </x-modal.confirmation>
         @endif

@@ -140,17 +140,19 @@ class StudyPointMatrix extends Component
         }
         else
         {
+            $attempt = $attempt ?? 1;
             $updatedScores = [
                 [
                     'student_id' => $student->id,
                     'feedbackmoment_id' => $feedbackmomentId,
                     'teacher_id' => auth()->user()->id,
                     'score' => $value ?: 0,
-                    'attempt' => $attempt ?? 1,
+                    'attempt' => $attempt,
                 ],
             ];
 
             StudentScore::updateFeedbackForStudents($updatedScores);
+            $student->feedbackmomenten[$feedbackmomentId]['attempt'] = $attempt;
         }
     }
 

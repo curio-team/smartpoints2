@@ -36,6 +36,7 @@ trait CanManageAttempts
     {
         StudentScore::find($scoreId)->delete();
         unset($this->manageAttempts[$scoreId]);
+        $this->updateStudentScores();
     }
 
     public function doManageAttempts()
