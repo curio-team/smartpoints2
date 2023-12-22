@@ -76,7 +76,7 @@ class StudentController extends Controller
         // Only looking op for one user, so now replace list with this one user;
         if($onlyForUser) $students = collect([$onlyForUser]);
 
-        $students = $students->map(function($user) use ($group, $scores, $currentWeek, $feedbackmomenten, $totalPointsToGainUntilNow) {
+        $students = $students->map(function($user) use ($blok, $group, $scores, $currentWeek, $feedbackmomenten, $totalPointsToGainUntilNow) {
 
             // The sum of all highest scores per feedbackmoment
             $totalPoints = $feedbackmomenten
@@ -88,12 +88,25 @@ class StudentController extends Controller
 
             $totalBpoints = DB::table('b_points')->where('student_id', $user['id'])->sum('score');
 
+            // new array from totalBPoints with key uitvoer_id from $blok->vakken and value
+            // score from b_points when uitvoer_id is equal to subject_id
+            $totalBpointsOverview = $blok->vakken->mapWithKeys(function($vak) use ($user) {
+                return [
+                    $vak->uitvoer_id => DB::table('b_points')
+                                            ->where('student_id', $user['id'])
+                                            ->where('subject_id', $vak->uitvoer_id)
+                                            ->first()->score ?? 0
+                ];
+            });
+
+
             return (object) [
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'group' => $group['name'],
                 'totalPoints' => $totalPoints,
                 'totalBpoints' => $totalBpoints,
+                'bPointsOverview' => $totalBpointsOverview,
                 'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
                 'feedbackmomenten' => $scores->where('student_id', $user['id'])->mapWithKeys(function($score) {
                     return [
@@ -103,6 +116,8 @@ class StudentController extends Controller
             ];
         });
         if($onlyForUser) $students = $students[0];
+
         return [$blok, $fbmsActive, $students];
+
     }
 }

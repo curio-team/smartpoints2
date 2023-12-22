@@ -27,13 +27,23 @@
                     <span> {{$student->totalBpoints}} / {{$blok->totalBpoints}} </span>
                 </x-table.td>
                 <?php $columnIndex = 0; ?>
-                @foreach ($blok->vakken as $vak)
-                        <td class="p-0 relative z-0 h-auto" style="min-width: 80px; text-align: center">
-                            <input type="number" class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
-                            @if($zebra) bg-gray-100 @else bg-white @endif"
 
-                            tabindex="{{ $columnIndex.$studentIndex }}" />
-                        </td>
+                @foreach ($blok->vakken as $vak)
+                    <td class="p-0 relative z-0 h-auto" style="min-width: 80px;"
+                    @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $vak->uitvoer_id }}'"
+                    @mouseleave="hoverRow = null; hoverColumn = null">
+
+                        <input type="number" class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
+                        @if($zebra) bg-gray-100 @else bg-white @endif"
+                        x-bind:class="{
+                        }"
+                        step="1" min="0" max="2"
+                        tabindex="{{ $columnIndex.$studentIndex }}"
+                        wire:model="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}">
+                        {{-- x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true" --}}
+                        {{-- x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" /> --}}
+
+                    </td>
                 @endforeach
             </x-table.tr>
         @endforeach

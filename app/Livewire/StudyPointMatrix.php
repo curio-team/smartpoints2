@@ -72,6 +72,7 @@ class StudyPointMatrix extends Component
 
     public function updatedStudents($value, $key)
     {
+        dd($value, $key);
         $parts = explode('.', $key);
         $studentKey = $parts[0];
         $feedbackmomentId = $parts[count($parts) - 1];
