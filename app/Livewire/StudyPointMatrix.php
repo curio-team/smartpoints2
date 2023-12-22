@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Models\StudentScore;
 use App\Models\Group;
 use App\Traits\SendsNotifications;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use StudioKaa\Amoclient\Facades\AmoAPI;
 use Livewire\Attributes\Url;
@@ -140,8 +141,48 @@ class StudyPointMatrix extends Component
     {
         $parts = explode('.', $key);
         $studentKey = $parts[0];
-        $feedbackmomentId = $parts[count($parts) - 1];
         $student = $this->students[$studentKey];
+
+        // handle b points update
+        // todo: maybe make a model out of B points...
+        if($parts[1] == 'bPointsOverview') {
+            $subjectId = $parts[count($parts) - 1];
+            $row = DB::table('student_scores_b')
+                ->where('student_id', $student->id)
+                ->where('subject_id', $subjectId)
+                ->first();
+
+            if (!$row) {
+                DB::table('student_scores_b')->insert([
+                    'student_id' => $student->id,
+                    'subject_id' => $subjectId,
+                    'score' => $value ?: 0,
+                    'teacher_id' => auth()->user()->id,
+                    'created_at' =>  \Carbon\Carbon::now(), // Not using Eloquent, so need to handle this manually..
+                    'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
+                ]);
+                return;
+            }
+            if ($value === null) {
+                // If $value is null, delete the row
+                DB::table('student_scores_b')
+                    ->where('student_id', $student->id)
+                    ->where('subject_id', $subjectId)
+                    ->delete();
+            } else {
+                // If $value is not null, update the score
+                DB::table('student_scores_b')
+                    ->where('student_id', $student->id)
+                    ->where('subject_id', $subjectId)
+                    ->update([
+                        'score' => $value,
+                        'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
+                    ]);
+            }
+            return;
+        }
+
+        $feedbackmomentId = $parts[count($parts) - 1];
 
         if($value == null)
         {
