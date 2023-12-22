@@ -31,6 +31,7 @@
                         @php $columnIndex++; @endphp
                         <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
                             wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}-{{ time() }}"
+                            x-data="{ studentScore: @entangle('students.'. $key .'.feedbackmomenten.'. $feedbackmoment->id) }"
                             @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                             @mouseleave="hoverRow = null; hoverColumn = null">
                             <input type="number" class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
@@ -45,14 +46,13 @@
                                 step="1" min="0" max="{{ $feedbackmoment->points }}"
                                 tabindex="{{ $columnIndex.$studentIndex }}"
                                 wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}.score"
-                                x-data="{ attempt: @entangle('students.'. $key .'.feedbackmomenten.'. $feedbackmoment->id .'.attempt') }"
-                                x-bind:title="attempt ? 'Poging ' + attempt : ''"
+                                x-bind:title="studentScore.attempt ? 'Poging ' + studentScore.attempt : ''"
                                 x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true"
                                 x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
 
                             <x-button-icon icon="stack"
                                 x-cloak
-                                x-show="hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}'"
+                                x-show="studentScore.attempt && hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}'"
                                 class="absolute top-0 right-0"
                                 compact
                                 title="Beheer alle pogingen"
