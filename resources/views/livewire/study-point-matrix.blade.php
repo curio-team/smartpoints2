@@ -97,7 +97,7 @@
                         <?php $studentIndex = str_pad($loop->index, 3, "0", STR_PAD_LEFT); ?>
                         <?php $zebra = $loop->even; ?>
                         <x-table.tr zebra="{{ $loop->even }}"
-                            wire:key="student-{{ $student->id }}">
+                            wire:key="student-{{ $student->id }}-blok-{{ $blok->id }}">
 
                             <?php
                             $color = $loop->even ? 'bg-gray-100' : 'bg-white';
@@ -123,6 +123,7 @@
                                 @foreach ($vak->feedbackmomenten as $feedbackmoment)
                                     <?php $columnIndex++; ?>
                                     <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
+                                        wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}"
                                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                                         @mouseleave="hoverRow = null; hoverColumn = null">
                                         <input type="number" class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
