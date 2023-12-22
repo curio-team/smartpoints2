@@ -31,6 +31,14 @@ trait CanManageAttempts
         $this->manageAttemptsFeedbackmoment = $feedbackmoment;
     }
 
+    public function removeAttempt($scoreId)
+    {
+        StudentScore::find($scoreId)->delete();
+        $this->cancelManageAttempts();
+        $this->updateStudentScores();
+        $this->dispatch('study-point-matrix-changed');
+    }
+
     public function doManageAttempts()
     {
         // Go through $this->manageAttempts and update the scores

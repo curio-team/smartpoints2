@@ -7,6 +7,6 @@
 }}>
     <x-dynamic-component :component="'icon.'.$icon" :compact="$compact" />
     @if ($slot->isNotEmpty())
-        <span class="font-semibold">{{ $slot }}</span>
+        <span class="font-semibold @if($compact) text-sm @endif">{{ $slot }}</span>
     @endif
 </button>

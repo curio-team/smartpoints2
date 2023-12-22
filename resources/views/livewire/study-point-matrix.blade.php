@@ -114,10 +114,11 @@
 
             <div class="mt-4 space-y-2">
                 @foreach ($manageAttempts as $studentScoreId => $studentScore)
-                    <div class="flex flex-row items-center gap-2"
+                    <div class="flex flex-row items-center gap-4"
                         wire:key="manageAttempts-{{ $studentScoreId }}">
-                        <span class="font-semibold">Poging {{ $studentScore['attempt'] }}:</span>
-                        <x-input.text wire:model="manageAttempts.{{ $studentScoreId }}.score" class="max-w-[2em]" />
+                        <span class="font-semibold shrink-0">Poging {{ $studentScore['attempt'] }}:</span>
+                        <x-input.text wire:model="manageAttempts.{{ $studentScoreId }}.score" class="grow w-full" />
+                        <x-button-icon icon="close" compact wire:click="removeAttempt({{ $studentScoreId }})" class="bg-red-300 hover:bg-red-400" wire:loading.attr="disabled">Verwijderen</x-button-icon>
                     </div>
                 @endforeach
             </div>
