@@ -24,7 +24,7 @@
                     @mouseenter="hoverRow = '{{ $student->id }}'"
                     @mouseleave="hoverRow = null">
                     <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
-                    <span> 0 / 16 </span>
+                    <span> {{$student->totalBpoints}} / {{$blok->totalBpoints}} </span>
                 </x-table.td>
                 <?php $columnIndex = 0; ?>
                 @foreach ($blok->vakken as $vak)

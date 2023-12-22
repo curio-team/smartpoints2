@@ -6,6 +6,7 @@ use App\Models\Group;
 use App\Models\StudentScore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use StudioKaa\Amoclient\Facades\AmoAPI;
 
 class StudentController extends Controller
@@ -16,7 +17,7 @@ class StudentController extends Controller
         $groupId = collect($studentFromApi['groups'])->firstWhere('type', 'class')['id'];
         $groupFromApi = AmoAPI::get('/groups/' . $groupId);
         $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
-        
+
         list($blok, $fbmsActive, $student) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
 
         return view('student')
@@ -42,12 +43,15 @@ class StudentController extends Controller
                 'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
             ]
         ])));
-        
+
         $blok->vakken = collect($blok->vakken)->filter(function($vak) {
             return count($vak->feedbackmomenten); //remove vakken without feedbackmoment
         });
         $feedbackmomenten = $blok->vakken->pluck('feedbackmomenten')->flatten();
         $blok->totalFeedbackmomenten = $feedbackmomenten->count();
+        // b points are always 2 points per vak
+        $blok->totalBpoints = $blok->vakken->count() * 2;
+
 
         $students = collect($group['users']);
         if(isset($group['users'][0]['name']))
@@ -62,7 +66,7 @@ class StudentController extends Controller
 
         // Find the fbm's that have results for this group;
         $studentIds = collect($group['users'])->pluck('id');
-        $fbmIds = StudentScore::whereIn('student_id', $studentIds)->distinct()->get()->pluck('feedbackmoment_id')->unique();        
+        $fbmIds = StudentScore::whereIn('student_id', $studentIds)->distinct()->get()->pluck('feedbackmoment_id')->unique();
         $fbmsActive = $feedbackmomenten
             ->filter(fn($fm) => $fm->week <= $currentWeek)
             ->filter(fn($fm) => $fbmIds->contains($fm->id));
@@ -73,7 +77,7 @@ class StudentController extends Controller
         if($onlyForUser) $students = collect([$onlyForUser]);
 
         $students = $students->map(function($user) use ($group, $scores, $currentWeek, $feedbackmomenten, $totalPointsToGainUntilNow) {
-            
+
             // The sum of all highest scores per feedbackmoment
             $totalPoints = $feedbackmomenten
                     ->where('week', '<=', $currentWeek)
@@ -82,11 +86,14 @@ class StudentController extends Controller
                                             ->max('score'))
                     ->sum();
 
+            $totalBpoints = DB::table('b_points')->where('student_id', $user['id'])->sum('score');
+
             return (object) [
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'group' => $group['name'],
                 'totalPoints' => $totalPoints,
+                'totalBpoints' => $totalBpoints,
                 'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
                 'feedbackmomenten' => $scores->where('student_id', $user['id'])->mapWithKeys(function($score) {
                     return [
@@ -95,7 +102,6 @@ class StudentController extends Controller
                 })->toArray()
             ];
         });
-
         if($onlyForUser) $students = $students[0];
         return [$blok, $fbmsActive, $students];
     }
