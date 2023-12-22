@@ -23,7 +23,7 @@ class StudyPointMatrix extends Component
     public $groups;
     public $blokken = [];
     public $students;
-    public $changedStudents;
+    public $changedStudents = [];
 
     #[Url(as: 'points', history: true)]
     public $showPoints = 'a';

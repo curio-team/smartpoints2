@@ -3,7 +3,47 @@
         hoverRow: null,
         hoverColumn: null,
         changesMade: @entangle('changedStudents'),
-    }">
+        lastChangeCount: 0,
+
+        {{-- Warn the user if the page unloads, do the same if they try go back (popstate) --}}
+        onbeforeunload: (event) => {
+            event.preventDefault();
+            event.returnValue = '';
+
+            return 'Je hebt nog niet opgeslagen! Als je nu weg gaat gaan alle wijzigingen verloren.';
+        },
+        onpopstate: (event) => {
+            event.preventDefault();
+            event.returnValue = '';
+            alert('Je hebt nog niet opgeslagen! Als je nu verder terug gaat gaan alle wijzigingen verloren.');
+        },
+    }"
+    x-effect="() => {
+        const changes = Object.keys(changesMade).length;
+        if(changes > 0 && changes != lastChangeCount)
+        {
+            document.title = `(${changes}) {{ config('app.name') }}`;
+
+            if (lastChangeCount === 0) {
+                {{-- We add the same page so we can warn before the user goes back --}}
+                history.pushState({}, '', window.location.href);
+                history.pushState({}, '', window.location.href); {{-- If we only push once Livewire overrides it? --}}
+                window.addEventListener('beforeunload', onbeforeunload);
+                window.addEventListener('popstate', onpopstate);
+            }
+
+            lastChangeCount = changes;
+        }
+        else if(changes == 0)
+        {
+            document.title = `{{ config('app.name') }}`;
+            window.removeEventListener('beforeunload', onbeforeunload);
+            window.removeEventListener('popstate', onpopstate);
+        }
+    }"
+    {{-- Ctrl + S --}}
+    x-on:keydown.window="if(Object.keys(changesMade).length > 0 && event.ctrlKey && event.key == 's') { event.preventDefault(); $wire.save(); }"
+    >
     @php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; @endphp
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
