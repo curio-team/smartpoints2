@@ -92,19 +92,33 @@ class StudentController extends Controller
 
         // Pre-compute the scores for each feedback moment up to the current week.
         $feedbackScores = $feedbackmomenten->mapWithKeys(function($fm) use ($scores) {
-            return [$fm->id => $scores->where('feedbackmoment_id', $fm->id)->pluck('score', 'student_id')];
+            // Note that because this plucks the key to the student_id, it will overwrite any duplicate student_id's with
+            // the last one. This is fine, because we only want the last score for each student.
+            // TODO: Or do we want the highest score for each student?
+            return [
+                $fm->id => $scores->where('feedbackmoment_id', $fm->id)->mapWithKeys(function($score) {
+                    return [
+                        $score->student_id => [
+                            'score' => $score->score,
+                            'attempt' => $score->attempt
+                        ]
+                    ];
+                })->toArray()
+            ];
         });
 
         $students = $students->map(function($user) use ($blok, $group, $feedbackScores, $totalPointsToGainUntilNow) {
-
             // Calculate total points by summing the highest scores for each feedback moment.
             $totalPoints = collect($feedbackScores)->map(function ($scores, $fmId) use ($user) {
-                return $scores[$user['id']] ?? 0;
+                return $scores[$user['id']]['score'] ?? 0;
             })->sum();
 
             // Prepare the scores per feedback moment for the student.
             $feedbackmomentenScores = collect($feedbackScores)->mapWithKeys(function ($scores, $fmId) use ($user) {
-                return [$fmId => $scores[$user['id']] ?? null];
+                return [$fmId => $scores[$user['id']] ?? [
+                    'score' => null,
+                    'attempt' => null
+                ]];
             });
 
             $totalBpoints = DB::table('student_scores_b')->where('student_id', $user['id'])->sum('score');
