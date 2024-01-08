@@ -9,6 +9,8 @@ class StudentScore extends Model
 {
     use HasFactory;
 
+    protected $table = 'student_scores_a';
+
     protected $fillable = [
         'student_id',
         'feedbackmoment_id',

@@ -5,18 +5,36 @@
         changesMade: {},
     }"
     x-on:study-point-matrix-changed.window="changesMade = {}">
-    <?php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; ?>
+    @php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; @endphp
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
         <div class="flex flex-row items-center gap-3">
-            <x-input.select wire:model.live="selectedGroupId" id="groupChanger" class="h-9"
-                x-on:change="history.pushState({groupId: document.getElementById('groupChanger').value}, '', '/groups/' + document.getElementById('groupChanger').value)">
-                <option disabled value="-1">Selecteer een klas</option>
-                @foreach ($groups as $group)
-                    <option value="{{ $group['group_id'] }}">{{ $group['name'] }}</option>
-                @endforeach
-            </x-input.select>
-
+            <div>
+                <x-input.select wire:model.live="selectedGroupId" id="groupChanger" class="h-9">
+                    <option disabled value="-1">Selecteer een klas</option>
+                    @foreach ($groups as $group)
+                        <option value="{{ $group['group_id'] }}">
+                            {{ $group['name'] }}
+                        </option>
+                    @endforeach
+                </x-input.select>
+            </div>
+            <div x-show="$wire.selectedBlokId != -1">
+                <x-input.select wire:model.live="selectedBlokId" id="blokChanger" class="h-9">
+                    <option value="-1">Huidig blok</option>
+                    @foreach ($blokken as $blok)
+                        <option value="{{ $blok->id }}" :selected="$wire.selectedBlokId == {{ $blok->id }}">
+                            {{ $blok->blok }}
+                        </option>
+                    @endforeach
+                </x-input.select>
+            </div>
+            <div x-show="$wire.selectedBlokId != -1">
+                <x-input.select x-model="showPoints" id="pointsChanger" class="h-9">
+                    <option value="a">A-punten</option>
+                    <option value="b">B-punten</option>
+                </x-input.select>
+            </div>
             <x-button-icon icon="save"
                 x-cloak
                 wire:click="save"
@@ -58,7 +76,6 @@
             <div x-show="showPoints == 'b'">
                 <x-matrix.b-points-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
             </div>
-
         </form>
     @endif
 
@@ -66,6 +83,25 @@
         <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
             <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
         </div>
+    </div>
+
+    <div class="modals">
+        @if ($floodFillValue > -1)
+        <x-modal.confirmation cancel="$wire.cancelFloodFill()">
+            <x-slot name="title">Alles vullen</x-slot>
+
+            <p>Weet je zeker dat je alle niet gevulde waardes bij <span class="font-semibold">{{ __(':feedbackmoment (:fb_code)', [
+                'feedbackmoment' => $floodFillSubject->naam,
+                'fb_code' => $floodFillSubject->code
+            ]) }}</span> van de <span class="font-semibold">{{ $floodFillCount }}</span> studenten in deze klas wilt overschrijven met de waarde <span class="font-semibold">{{ $floodFillValue }}</span>?</p>
+            <p class="mt-4"><span class="font-semibold">Je kunt deze actie niet ongedaan maken!</span></p>
+
+            <x-slot name="footer">
+                <x-button-icon icon="close" wire:click="cancelFloodFill" wire:loading.attr="disabled">Annuleren</x-button-icon>
+                <x-button-icon icon="save" wire:click="doFloodFill" class="bg-red-500 hover:bg-red-600" wire:loading.attr="disabled">Vullen</x-button-icon>
+            </x-slot>
+        </x-modal.confirmation>
+        @endif
     </div>
 
     <script>
@@ -76,18 +112,7 @@
             Livewire.hook('morph.updated', ({ el, component }) => {
                 syncscroll.reset();
             })
-
-            window.addEventListener("popstate", (event) => {
-                if(event.state)
-                {
-                    @this.dispatch('new-group-id-from-state', {id: event.state.groupId});
-                }
-                else
-                {
-                    window.location = document.location;
-                }
-            });
         });
     </script>
-    <script src="/js/syncscroll.js" />
+    <script src="/js/syncscroll.js"></script>
 </div>

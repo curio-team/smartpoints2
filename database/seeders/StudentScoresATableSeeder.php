@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class StudentScoresTableSeeder extends Seeder
+class StudentScoresATableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,7 +15,7 @@ class StudentScoresTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('student_scores')->truncate();
+        DB::table('student_scores_a')->truncate();
 
         $student_scores = array(
             array('student_id' => 'i273050','feedbackmoment_id' => '54','score' => '4','teacher_id' => 'br10'),
@@ -445,7 +445,7 @@ class StudentScoresTableSeeder extends Seeder
             array('student_id' => 'i294326','feedbackmoment_id' => '99','score' => '7','teacher_id' => 'br10')
         );
 
-        DB::table('student_scores')->insert($student_scores);
+        DB::table('student_scores_a')->insert($student_scores);
 
     }
 }

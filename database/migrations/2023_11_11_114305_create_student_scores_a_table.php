@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_scores', function (Blueprint $table) {
+        Schema::create('student_scores_a', function (Blueprint $table) {
             $table->id();
 
             // The student who received the score
@@ -32,7 +32,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['student_id', 'feedbackmoment_id', 'attempt'], 'student_scores_unique');
+            $table->unique(['student_id', 'feedbackmoment_id', 'attempt'], 'student_scores_a_unique');
         });
     }
 
@@ -41,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('student_scores');
+        Schema::dropIfExists('student_scores_a');
     }
 };

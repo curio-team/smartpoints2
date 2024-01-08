@@ -12,6 +12,7 @@
         'bg-gray-100' => $loop->parent->even,
         'text-gray-400' => !$fbmsActive->pluck('id')->contains($feedbackmoment->id),
         'text-red-400' => (!$fbmsActive->pluck('id')->contains($feedbackmoment->id) && ($feedbackmoment->week < $currentWeek) && !$studentView),
+        'cursor-pointer' => $attributes->has('wire:click'),
     ]) }}
 
     @mouseenter="hoverColumn = '{{ $feedbackmoment->code }}'"
