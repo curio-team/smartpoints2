@@ -73,7 +73,7 @@ class StudyPointMatrix extends Component
 
     public function updatedStudents($value, $key)
     {
-        // dd($value, $key);
+
         $parts = explode('.', $key);
         $studentKey = $parts[0];
         $student = $this->students[$studentKey];
@@ -91,7 +91,7 @@ class StudyPointMatrix extends Component
                 DB::table('b_points')->insert([
                     'student_id' => $student->id,
                     'subject_id' => $subjectId,
-                    'score' => $value ?: 0,
+                    'score' => $value ?: null,
                     'teacher_id' => auth()->user()->id,
                 ]);
                 return;
@@ -107,11 +107,12 @@ class StudyPointMatrix extends Component
                 DB::table('b_points')
                     ->where('student_id', $student->id)
                     ->where('subject_id', $subjectId)
-                    ->update(['score' => $value]);
+                    ->update(['score' => $value ]);
             }
             return;
         }
 
+        // a points
         $feedbackmomentId = $parts[count($parts) - 1];
 
         if($value == null)
