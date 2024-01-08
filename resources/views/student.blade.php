@@ -19,7 +19,7 @@
             if($currentWeek >= 12) {
                 if ($student->totalBpoints >= count($blok->vakken) * 2) {
                     $colorB = 'bg-green-400';
-                } elseif ($student->totalBpoints >= count($blok->vakken) * 1) {
+                } elseif ($student->totalBpoints >= count($blok->vakken)) {
                     $colorB = 'bg-orange-300';
                 } else {
                     $colorB = 'bg-red-400';
