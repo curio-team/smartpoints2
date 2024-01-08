@@ -39,10 +39,10 @@
                         }"
                         step="1" min="0" max="2"
                         tabindex="{{ $columnIndex.$studentIndex }}"
-                        wire:model="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}">
-                        {{-- x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true" --}}
+                        wire:model="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}"
+                        x-on:input="changesMade['{{ $student->id }} - {{ $vak->uitvoer_id }}'] = true"
                         {{-- x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" /> --}}
-
+                        >
                     </td>
                 @endforeach
             </x-table.tr>
