@@ -3,8 +3,8 @@
     <?php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; ?>
     <div class="flex flex-col sm:flex-row items-center justify:center sm:justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 sm:h-14 ">
         <div class="flex gap-2">
-            <div class="flex flex-row items-center gap-3 font-bold text-xs sm:text-xl">{{ $student->name }}</div>
 
+            <div class="flex flex-row items-center gap-3 font-bold text-xs sm:text-xl">{{ $student->name }}</div>
             <?php
             $color = 'bg-gray-200';
             if($student->totalPointsToGainUntilNow > 0)
@@ -16,7 +16,10 @@
             }
             ?>
             <div class="flex flex-row items-center text-xs sm:text-lg px-2 py-1 sm:h-full sm:px-2 sm:py-1 gap-1 rounded  {{ $color }}">
-                {{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}
+               A: {{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}
+            </div>
+            <div class="flex flex-row items-center text-xs sm:text-lg px-2 py-1 sm:h-full sm:px-2 sm:py-1 gap-1 rounded  {{ $color }}">
+               B: {{ $student->totalBpoints }} / {{ count($blok->vakken) * 2 }}
             </div>
         </div>
         <span class="ps-2 text-sm italic text-xs sm:text-sm text-clip overflow-hidden hidden sm:block">
@@ -60,9 +63,28 @@
                             @else
                                 <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
                             @endif
+
                          </tr>
+                        @if($loop->last)
+                            <tr style="background: rgb(201, 232, 201);">
+                                <x-table.th>B punten {{$vak->vak}}</x-table.th>
+                                <x-table.th></x-table.th>
+                                <x-table.th >> 12</x-table.th>
+                                <x-table.th></x-table.th>
+                                <x-table.th>
+                                    02
+                                </x-table.th>
+                                <x-table.th>
+                                    {{$student->bPointsOverview[$vak->uitvoer_id]}}
+                                </x-table.th>
+                            </tr>
+                        @endif
                     @endforeach
+
+
+
             @endforeach
+
         </tbody>
     </table>
 

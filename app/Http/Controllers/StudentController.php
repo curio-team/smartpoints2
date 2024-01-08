@@ -13,14 +13,17 @@ class StudentController extends Controller
     public function show($id = null)
     {
         $studentFromApi = $this->getStudent($id);
+        // dd($studentFromApi);
         $groupId = collect($studentFromApi['groups'])->firstWhere('type', 'class')['id'];
         $groupFromApi = AmoAPI::get('/groups/' . $groupId);
         $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
 
         list($blok, $fbmsActive, $student) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
+        $bPoints = DB::table('student_scores_b')->where('student_id', $studentFromApi['id'])->get();
 
         return view('student')
             ->with('blok', $blok)
+            ->with('bPoints', $bPoints)
             ->with('fbmsActive', $fbmsActive)
             ->with('student', $student);
     }
