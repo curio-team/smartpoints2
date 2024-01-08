@@ -20,7 +20,7 @@
 
                 <x-table.td
                     style="width: 300px;"
-                    class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
+                    class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center @if($currentWeek > 12) {{ $color }} @endif"
                     @mouseenter="hoverRow = '{{ $student->id }}'"
                     @mouseleave="hoverRow = null">
                     <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
