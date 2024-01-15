@@ -60,13 +60,13 @@
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->week, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-left overflow:hidden text-ellipsis sm:truncate sm:max-w-md font-normal text-xs sm:text-sm" title="{{ $feedbackmoment->naam }}">{{ $feedbackmoment->naam }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->points, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
-                            @if(isset($student->feedbackmomenten[$feedbackmoment->id]) && $fbmsActive->pluck('id')->contains($feedbackmoment->id))
-                                <x-table.th zebra="{{ $loop->parent->even }}" red="{{ $student->feedbackmomenten[$feedbackmoment->id] < $feedbackmoment->points }}">
-                                    {{ $student->feedbackmomenten[$feedbackmoment->id] }}
+                            @if(isset($student->feedbackmomenten[$feedbackmoment->id]['score']) && $fbmsActive->pluck('id')->contains($feedbackmoment->id))
+                                <x-table.th zebra="{{ $loop->parent->even }}" red="{{ $student->feedbackmomenten[$feedbackmoment->id]['score'] < $feedbackmoment->points }}">
+                                    {{ $student->feedbackmomenten[$feedbackmoment->id]['score'] }}
                                 </x-table.th>
                             @elseif(isset($student->feedbackmomenten[$feedbackmoment->id]))
                                 <x-table.th zebra="{{ $loop->parent->even }}" class="text-gray-300">
-                                    {{ $student->feedbackmomenten[$feedbackmoment->id] }}
+                                    {{ $student->feedbackmomenten[$feedbackmoment->id]['score'] }}
                                 </x-table.th>
                             @elseif($fbmsActive->pluck('id')->contains($feedbackmoment->id))
                                 <x-table.th zebra="{{ $loop->parent->even }}" class="border-yellow-400 border-2"></x-table.th>
