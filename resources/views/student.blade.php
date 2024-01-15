@@ -15,7 +15,7 @@
                 else $colorA = 'bg-red-400';
             }
 
-            if($currentWeek >= 12) {
+            if($currentWeek >= 12 && $student->totalBpointsToGainUntilNow > 0) {
                 $percentage = round($student->totalBpoints / $student->totalBpointsToGainUntilNow * 100);
                 if ($percentage >= 98) $colorB = 'bg-green-400';
                 elseif ($percentage >= 80) $colorB = 'bg-orange-300';
