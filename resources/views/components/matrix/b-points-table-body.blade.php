@@ -8,7 +8,7 @@
                     $color = $loop->even ? 'bg-gray-100' : 'bg-white';
                     if($currentWeek >= 12)
                     {
-                        $percentage = round($student->totalBpoints / $this->blok->totalBpoints * 100);
+                        $percentage = round($student->totalBpoints / $student->totalBpointsToGainUntilNow * 100);
                         if($percentage >= 98) $color = 'bg-green-400';
                         elseif($percentage >= 80) $color = 'bg-orange-300';
                         else $color = 'bg-red-400';
@@ -21,7 +21,7 @@
                     @mouseenter="hoverRow = '{{ $student->id }}'"
                     @mouseleave="hoverRow = null">
                     <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
-                    <span> {{$student->totalBpoints}} / {{$this->blok->totalBpoints}} </span>
+                    <span> {{$student->totalBpoints}} / {{$student->totalBpointsToGainUntilNow}} </span>
                 </x-table.td>
 
                 @foreach ($this->blok->vakken as $vak)

@@ -17,13 +17,14 @@ class StudentController extends Controller
         $groupFromApi = AmoAPI::get('/groups/' . $groupId);
         $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
 
-        list($blok, $fbmsActive, $student) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
+        list($blok, $fbmsActive, $student, $vakkenActiveB) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
         $bPoints = DB::table('student_scores_b')->where('student_id', $studentFromApi['id'])->get();
 
         return view('student')
             ->with('blok', $blok)
             ->with('bPoints', $bPoints)
             ->with('fbmsActive', $fbmsActive)
+            ->with('vakkenActiveB', $vakkenActiveB)
             ->with('student', $student);
     }
 
@@ -85,8 +86,10 @@ class StudentController extends Controller
         $fbmsActive = $feedbackmomenten
             ->filter(fn($fm) => $fm->week <= $currentWeek)
             ->filter(fn($fm) => $fbmIds->contains($fm->id));
-
         $totalPointsToGainUntilNow = $fbmsActive->sum('points');
+
+        $vakkenActiveB = DB::table('student_scores_b')->whereIn('student_id', $studentIds)->whereIn('subject_id', $blok->vakken->pluck('uitvoer_id'))->select('subject_id')->distinct()->get()->pluck('subject_id');
+        $totalBpointsToGainUntilNow = $vakkenActiveB->count() * 2;
 
         // Only looking op for one user, so now replace list with this one user;
         if($onlyForUser)
@@ -97,7 +100,7 @@ class StudentController extends Controller
             return [$fm->id => $scores->where('feedbackmoment_id', $fm->id)->pluck('score', 'student_id')];
         });
 
-        $students = $students->map(function($user) use ($blok, $group, $feedbackScores, $totalPointsToGainUntilNow) {
+        $students = $students->map(function($user) use ($blok, $group, $feedbackScores, $totalPointsToGainUntilNow, $totalBpointsToGainUntilNow) {
 
             // Calculate total points by summing the highest scores for each feedback moment.
             $totalPoints = collect($feedbackScores)->map(function ($scores, $fmId) use ($user) {
@@ -130,12 +133,13 @@ class StudentController extends Controller
                 'totalBpoints' => $totalBpoints,
                 'bPointsOverview' => $totalBpointsOverview,
                 'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
+                'totalBpointsToGainUntilNow' => $totalBpointsToGainUntilNow,
                 'feedbackmomenten' => $feedbackmomentenScores->toArray()
             ];
         });
         if($onlyForUser) $students = $students[0];
 
-        return [$blok, $fbmsActive, $students];
+        return [$blok, $fbmsActive, $students, $vakkenActiveB];
 
     }
 }

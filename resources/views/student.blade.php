@@ -16,7 +16,7 @@
             }
 
             if($currentWeek >= 12) {
-                $percentage = round($student->totalBpoints / (count($blok->vakken) * 2) * 100);
+                $percentage = round($student->totalBpoints / $student->totalBpointsToGainUntilNow * 100);
                 if ($percentage >= 98) $colorB = 'bg-green-400';
                 elseif ($percentage >= 80) $colorB = 'bg-orange-300';
                 else $colorB = 'bg-red-400';
@@ -47,7 +47,7 @@
                 </x-table.th>
                 <x-table.th class="{{ $colorB }}">
                     <span class="font-normal">B-punten</span><br>
-                    {{ $student->totalBpoints }} / {{ count($blok->vakken) * 2 }}
+                    {{ $student->totalBpoints }} / {{ $student->totalBpointsToGainUntilNow }}
                 </x-table.th>
             </tr>
         </thead>
@@ -76,8 +76,11 @@
                             @endif
                             
                             @if($loop->first)
-                                <?php $border = ($currentWeek >= 12 && $student->bPointsOverview[$vak->uitvoer_id] < 2 && is_numeric($student->bPointsOverview[$vak->uitvoer_id])) ? "border-yellow-400 border-2" : "" ; ?>
-                                <x-table.th zebra="{{ $loop->parent->even }}" rowspan="{{ count($vak->feedbackmomenten) }}" class="{{ $border }}" red="{{ $student->bPointsOverview[$vak->uitvoer_id] < 2 }}">
+                                <?php
+                                    $border = ($currentWeek >= 12 && $student->bPointsOverview[$vak->uitvoer_id] < 2 && $vakkenActiveB->contains($vak->uitvoer_id)) ? "border-yellow-400 border-2" : "" ;
+                                    $text   = ($student->bPointsOverview[$vak->uitvoer_id] < 2) ? "text-red-500" : "";
+                                ?>
+                                <x-table.th zebra="{{ $loop->parent->even }}" rowspan="{{ count($vak->feedbackmomenten) }}" class="{{ $border }} {{ $text }}">
                                     {{ $student->bPointsOverview[$vak->uitvoer_id] }}
                                 </x-table.th>
                             @endif

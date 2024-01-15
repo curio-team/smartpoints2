@@ -26,6 +26,7 @@ class StudyPointMatrix extends Component
     public $selectedBlokId = -1;
 
     public $fbmsActive;
+    public $vakkenActiveB;
 
     public $floodFillValue = -1;
     public $floodFillCount;
@@ -69,7 +70,7 @@ class StudyPointMatrix extends Component
             ]
         ])));
 
-        list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
+        list($this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
         $this->selectedBlokId = $this->blok->id;
     }
 
