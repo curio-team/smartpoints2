@@ -13,7 +13,6 @@ class StudentController extends Controller
     public function show($id = null)
     {
         $studentFromApi = $this->getStudent($id);
-        // dd($studentFromApi);
         $groupId = collect($studentFromApi['groups'])->firstWhere('type', 'class')['id'];
         $groupFromApi = AmoAPI::get('/groups/' . $groupId);
         $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
