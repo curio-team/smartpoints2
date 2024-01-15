@@ -34,6 +34,7 @@ class StudyPointMatrix extends Component
     public $selectedBlokId = -1;
 
     public $fbmsActive;
+    public $vakkenActiveB;
 
     private $selectedCohortId;
 
@@ -73,7 +74,7 @@ class StudyPointMatrix extends Component
             ]
         ])));
 
-        list($this->blok, $this->fbmsActive, $this->students) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
+        list($this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
         $this->selectedBlokId = $this->blok->id;
         $this->changedStudents = [];
     }
@@ -168,7 +169,7 @@ class StudyPointMatrix extends Component
             DB::table('student_scores_b')->insert([
                 'student_id' => $student->id,
                 'subject_id' => $subjectId,
-                'score' => $value ?? 0,
+                'score' => $value ?: 0,
                 'teacher_id' => auth()->user()->id,
                 'created_at' =>  \Carbon\Carbon::now(), // Not using Eloquent, so need to handle this manually..
                 'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
@@ -177,7 +178,7 @@ class StudyPointMatrix extends Component
             return;
         }
 
-        if ($value === null) {
+        if ($value == null) {
             // If $value is null, delete the row
             DB::table('student_scores_b')
                 ->where('student_id', $student->id)
