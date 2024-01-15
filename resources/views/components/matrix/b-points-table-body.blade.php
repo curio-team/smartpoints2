@@ -6,7 +6,7 @@
             <x-table.tr zebra="{{ $loop->even }}" wire:key="student-{{ $student->id }}">
                 <?php
                     $color = $loop->even ? 'bg-gray-100' : 'bg-white';
-                    if($currentWeek >= 12)
+                    if($currentWeek >= 12 && $student->totalBpointsToGainUntilNow > 0)
                     {
                         $percentage = round($student->totalBpoints / $student->totalBpointsToGainUntilNow * 100);
                         if($percentage >= 98) $color = 'bg-green-400';
