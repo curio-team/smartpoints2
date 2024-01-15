@@ -6,8 +6,7 @@
             <div class="flex flex-row items-center gap-3 font-bold text-xs sm:text-xl">{{ $student->name }}</div>
 
             <?php
-            $colorA = 'bg-gray-200';
-            $colorB = 'bg-gray-200';
+            $colorA = $colorB = 'bg-white';
             if($student->totalPointsToGainUntilNow > 0)
             {
                 $percentage = round($student->totalPoints / $student->totalPointsToGainUntilNow * 100);
@@ -17,20 +16,13 @@
             }
 
             if($currentWeek >= 12) {
-                if ($student->totalBpoints >= count($blok->vakken) * 2) {
-                    $colorB = 'bg-green-400';
-                } elseif ($student->totalBpoints >= count($blok->vakken)) {
-                    $colorB = 'bg-orange-300';
-                } else {
-                    $colorB = 'bg-red-400';
-                }
+                if ($student->totalBpoints >= count($blok->vakken) * 2) $colorB = 'bg-green-400';
+                elseif ($student->totalBpoints >= count($blok->vakken)) $colorB = 'bg-orange-300';
+                else $colorB = 'bg-red-400';
             }
             ?>
-            <div class="flex flex-row items-center text-xs sm:text-lg px-2 py-1 sm:h-full sm:px-2 sm:py-1 gap-1 rounded  {{ $colorA }}">
-               A: {{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}
-            </div>
-            <div class="flex flex-row items-center text-xs sm:text-lg px-2 py-1 sm:h-full sm:px-2 sm:py-1 gap-1 rounded  {{ $colorB }}">
-               B: {{ $student->totalBpoints }} / {{ count($blok->vakken) * 2 }}
+            <div class="flex flex-row items-center text-xs sm:text-base px-2 py-1 gap-1 rounded bg-gray-200">
+               Week {{$currentWeek}}
             </div>
         </div>
 
@@ -40,9 +32,6 @@
             | <span class="text-yellow-400 font-bold">gele rand:</span> aandachtspunt voor jou
         </span>
     </div>
-    <div class="ps-4 font-italic">
-        week: <b>{{$currentWeek}}</b>
-    </div>
     <table class="table-fixed border-collapse border border-gray-400 max-w-full min-w-full tabular-nums text-base">
         <thead class="bg-white shadow text-xs sm:text-base">
             <tr>
@@ -51,7 +40,14 @@
                 <x-table.th>Week</x-table.th>
                 <x-table.th class="w-1/4 sm:max-w-md text-left overflow:hidden text-ellipsis">Titel</x-table.th>
                 <x-table.th>Punten</x-table.th>
-                <x-table.th class="w-1/4">Behaald</x-table.th>
+                <x-table.th class="{{ $colorA }}">
+                    <span class="font-normal">A-punten</span><br>
+                    {{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}
+                </x-table.th>
+                <x-table.th class="{{ $colorB }}">
+                    <span class="font-normal">B-punten</span><br>
+                    {{ $student->totalBpoints }} / {{ count($blok->vakken) * 2 }}
+                </x-table.th>
             </tr>
         </thead>
         <tbody class="text-xs sm:text-base">
@@ -77,36 +73,16 @@
                             @else
                                 <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
                             @endif
-
-                         </tr>
-                         @if($loop->last)
-                            <tr style="background: rgb(201, 232, 201);">
-                                <x-table.th>B punten {{$vak->vak}}</x-table.th>
-                                <x-table.th></x-table.th>
-                                <x-table.th> > 12</x-table.th>
-                                <x-table.th></x-table.th>
-                                <x-table.th>
-                                    02
+                            
+                            @if($loop->first)
+                                <?php $border = ($currentWeek >= 12 && $student->bPointsOverview[$vak->uitvoer_id] < 2 && is_numeric($student->bPointsOverview[$vak->uitvoer_id])) ? "border-yellow-400 border-2" : "" ; ?>
+                                <x-table.th zebra="{{ $loop->parent->even }}" rowspan="{{ count($vak->feedbackmomenten) }}" class="{{ $border }}">
+                                    {{ $student->bPointsOverview[$vak->uitvoer_id] }}
                                 </x-table.th>
-                                {{-- cant put @if directives in these th components? --}}
-                                @if($currentWeek >= 12 && $student->bPointsOverview[$vak->uitvoer_id] < 2)
-                                <x-table.th class="border-yellow-400 border-2">
-                                    {{$student->bPointsOverview[$vak->uitvoer_id]}}
-                                </x-table.th>
-                                @else
-                                <x-table.th>
-                                    {{$student->bPointsOverview[$vak->uitvoer_id]}}
-                                </x-table.th>
-                                @endif
-                            </tr>
                             @endif
+                         </tr>
                     @endforeach
-
-
-
             @endforeach
-
         </tbody>
     </table>
-
 </x-layouts.app>
