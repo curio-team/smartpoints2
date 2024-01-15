@@ -163,7 +163,7 @@ class StudyPointMatrix extends Component
                 ]);
                 return;
             }
-            if ($value === null) {
+            if ($value == null) {
                 // If $value is null, delete the row
                 DB::table('student_scores_b')
                     ->where('student_id', $student->id)
