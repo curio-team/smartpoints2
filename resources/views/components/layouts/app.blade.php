@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        @if(App::environment() == "staging") TESTOMGEVING @endif
         @isset($title)
             <title>{{ $title }} - SmartPoints 2.0</title>
         @else
@@ -12,6 +13,9 @@
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
     </head>
     <body class="flex flex-col h-full w-full">
+        @if(App::environment() == "staging")
+            <div style="position: sticky; top: 0; width: 100%; padding: 4px; font-size: 12px; text-align: center; background: darkorange; z-index: 100;">TESTOMGEVING: data wordt iedere nacht overschreven door kopie uit live-omgeving</div>
+        @endif
         <nav class="bg-gray-800 text-white shadow-lg">
             <div class="flex flex-wrap items-center justify-between p-2 md:p-4">
                 <div class="flex-grow text-center md:text-start">
