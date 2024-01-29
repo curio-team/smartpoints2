@@ -1,10 +1,49 @@
 <div x-data="{
-        showPoints: 'a',
+        showPoints: @entangle('showPoints').live,
         hoverRow: null,
         hoverColumn: null,
-        changesMade: {},
+        changesMade: @entangle('changedStudents'),
+        lastChangeCount: 0,
+
+        {{-- Warn the user if the page unloads, do the same if they try go back (popstate) --}}
+        onbeforeunload: (event) => {
+            event.preventDefault();
+            event.returnValue = '';
+
+            return 'Je hebt nog niet opgeslagen! Als je nu weg gaat gaan alle wijzigingen verloren.';
+        },
+        onpopstate: (event) => {
+            event.preventDefault();
+            event.returnValue = '';
+            alert('Je hebt nog niet opgeslagen! Als je nu verder terug gaat gaan alle wijzigingen verloren.');
+        },
     }"
-    x-on:study-point-matrix-changed.window="changesMade = {}">
+    x-effect="() => {
+        const changes = Object.keys(changesMade).length;
+        if(changes > 0 && changes != lastChangeCount)
+        {
+            document.title = `(${changes}) {{ config('app.name') }}`;
+
+            if (lastChangeCount === 0) {
+                {{-- We add the same page so we can warn before the user goes back --}}
+                history.pushState({}, '', window.location.href);
+                history.pushState({}, '', window.location.href); {{-- If we only push once Livewire overrides it? --}}
+                window.addEventListener('beforeunload', onbeforeunload);
+                window.addEventListener('popstate', onpopstate);
+            }
+
+            lastChangeCount = changes;
+        }
+        else if(changes == 0)
+        {
+            document.title = `{{ config('app.name') }}`;
+            window.removeEventListener('beforeunload', onbeforeunload);
+            window.removeEventListener('popstate', onpopstate);
+        }
+    }"
+    {{-- Ctrl + S --}}
+    x-on:keydown.window="if(Object.keys(changesMade).length > 0 && event.ctrlKey && event.key == 's') { event.preventDefault(); $wire.save(); }"
+    >
     @php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; @endphp
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
@@ -38,6 +77,8 @@
             <x-button-icon icon="save"
                 x-cloak
                 wire:click="save"
+                wire:loading.attr="disabled"
+                wire:target="students"
                 class="relative h-9"
                 x-show="Object.keys(changesMade).length > 0">
                 <x-badge color="bg-red-500"
@@ -79,9 +120,15 @@
         </form>
     @endif
 
-    <div id="loadingIndicator" wire:ignore>
-        <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
-            <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+    {{--
+        We want to show a loading indicator for everything, except for changes on students, so we use this technique:
+        https://github.com/livewire/livewire/discussions/3855#discussioncomment-6337044
+    --}}
+    <div wire:loading.remove wire:target="students">
+        <div id="loadingIndicator" wire:loading>
+            <div class="fixed z-[100] inset-0 grid place-content-center bg-gray-100 bg-opacity-75">
+                <x-icon.loading class="w-10 h-10 text-gray-600 animate-spin" />
+            </div>
         </div>
     </div>
 
@@ -94,11 +141,55 @@
                 'feedbackmoment' => $floodFillSubject->naam,
                 'fb_code' => $floodFillSubject->code
             ]) }}</span> van de <span class="font-semibold">{{ $floodFillCount }}</span> studenten in deze klas wilt overschrijven met de waarde <span class="font-semibold">{{ $floodFillValue }}</span>?</p>
-            <p class="mt-4"><span class="font-semibold">Je kunt deze actie niet ongedaan maken!</span></p>
 
             <x-slot name="footer">
                 <x-button-icon icon="close" wire:click="cancelFloodFill" wire:loading.attr="disabled">Annuleren</x-button-icon>
-                <x-button-icon icon="save" wire:click="doFloodFill" class="bg-red-500 hover:bg-red-600" wire:loading.attr="disabled">Vullen</x-button-icon>
+                <x-button-icon icon="save" wire:click="doFloodFill" class="bg-orange-500 hover:bg-orange-600" wire:loading.attr="disabled">Vullen</x-button-icon>
+            </x-slot>
+        </x-modal.confirmation>
+        @endif
+
+        @if (!empty($manageAttempts))
+        <x-modal.confirmation cancel="$wire.cancelManageAttempts()">
+            <x-slot name="title">Pogingen van {{ $manageAttemptsStudent->name }}</x-slot>
+
+            <p class="mb-4 font-semibold rounded bg-orange-300 p-2">
+                Let op! Deze wijzigingen (ook verwijderen) worden direct opgeslagen.
+            </p>
+
+            <p>Dit @if (count($manageAttempts) == 1) is de poging @else zijn de pogingen @endif van {{ $manageAttemptsStudent->name }} bij <span class="font-semibold">{{ __('":feedbackmoment (:fb_code)"', [
+                'feedbackmoment' => $manageAttemptsFeedbackmoment->naam,
+                'fb_code' => $manageAttemptsFeedbackmoment->code
+            ]) }}</span>:</p>
+
+            <div class="mt-4 space-y-2">
+                @foreach ($manageAttempts as $studentScoreId => $studentScore)
+                    <div class="flex flex-row items-center gap-4"
+                        wire:key="manageAttempts-{{ $studentScoreId }}">
+                        <span class="font-semibold shrink-0">Poging {{ $studentScore['attempt'] }}:</span>
+                        <x-input.text wire:model="manageAttempts.{{ $studentScoreId }}.score" class="grow w-full" />
+                        @if ($loop->last)
+                            <x-button-icon icon="close" compact wire:click="removeAttempt({{ $studentScoreId }})" class="bg-red-300 hover:bg-red-400" wire:loading.attr="disabled">Verwijderen</x-button-icon>
+                        @endif
+                    </div>
+                @endforeach
+
+                @if ($manageAttemptsNew > -1)
+                    <div class="flex flex-row items-center gap-4">
+                        <span class="font-semibold shrink-0">Nieuwe poging:</span>
+                        <x-input.text wire:model="manageAttemptsNew" class="grow w-full" autofocus x-init="$el.select()" />
+                        <x-button-icon icon="close" compact wire:click="removeNewAttempt" class="bg-red-300 hover:bg-red-400" wire:loading.attr="disabled">Verwijderen</x-button-icon>
+                    </div>
+                @else
+                    <div class="flex justify-center">
+                        <x-button-icon icon="tag" compact wire:click="addNewAttempt" class="bg-green-300 hover:bg-green-400" wire:loading.attr="disabled">Nieuwe Poging Toevoegen</x-button-icon>
+                    </div>
+                @endif
+            </div>
+
+            <x-slot name="footer">
+                <x-button-icon icon="close" wire:click="cancelManageAttempts" wire:loading.attr="disabled">Annuleren</x-button-icon>
+                <x-button-icon icon="save" wire:click="doManageAttempts" class="bg-orange-500 hover:bg-orange-600" wire:loading.attr="disabled">Direct opslaan</x-button-icon>
             </x-slot>
         </x-modal.confirmation>
         @endif

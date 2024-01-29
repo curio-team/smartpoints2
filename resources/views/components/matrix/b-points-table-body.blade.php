@@ -26,7 +26,7 @@
 
                 @foreach ($this->blok->vakken as $vak)
                     <td class="p-0 relative z-0 h-auto" style="min-width: 80px;"
-                        wire:key="vak-{{ $vak->uitvoer_id }}-student-{{ $student->id }}-blok-{{ $this->blok->id }}-{{ time() }}"
+                        wire:key="vak-{{ $vak->uitvoer_id }}-student-{{ $student->id }}-blok-{{ $this->blok->id }}"
                         @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $vak->uitvoer_id }}'"
                         @mouseleave="hoverRow = null; hoverColumn = null">
 
@@ -40,8 +40,7 @@
                         }"
                         step="1" min="0" max="2"
                         tabindex="{{ $loop->iteration.$studentIndex }}"
-                        wire:model="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}"
-                        x-on:input="changesMade['{{ $student->id }} - b{{ $vak->uitvoer_id }}'] = true" --}}
+                        wire:model.live="students.{{ $key }}.bPointsOverview.{{$vak->uitvoer_id}}"
                         x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $vak->uitvoer_id }}'" />
                     </td>
                 @endforeach
