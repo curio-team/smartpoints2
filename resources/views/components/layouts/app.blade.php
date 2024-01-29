@@ -3,12 +3,14 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        @if(App::environment() == "staging") TESTOMGEVING @endif
-        @isset($title)
-            <title>{{ $title }} - SmartPoints 2.0</title>
-        @else
-            <title>SmartPoints 2.0</title>
-        @endisset
+        <title>
+            @if(App::environment() == "staging") TESTOMGEVING @endif
+            @isset($title)
+                {{ $title }} - SmartPoints 2.0
+            @else
+                SmartPoints 2.0
+            @endisset
+        </title>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
     </head>
