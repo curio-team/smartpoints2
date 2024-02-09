@@ -20,7 +20,6 @@ use Illuminate\Support\Facades\Route;
 // Teacher routes:
 Route::middleware(['auth', 'teacher'])->group(function () {
 	Route::get('/', StudyPointMatrix::class)->name('home');
-	Route::get('/school-weeks', SchoolWeekManager::class)->name('weeks.manage');
 	Route::get('/groups', GroupManager::class)->name('groups.manage');
 	Route::get('/groups/{group}', StudyPointMatrix::class)->name('groups.show');
 	Route::get('/student/{id}', [StudentController::class, 'show'])->name('student.show');

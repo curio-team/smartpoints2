@@ -27,7 +27,6 @@
                     <ul class="hidden md:flex flex-col md:flex-row list-none md:ml-auto items-center">
                         @auth
                             <li class="nav-item text-sm px-2"><em>Basisdata:</em></li>
-                            <li class="nav-item"><x-link href="{{ route('weeks.manage') }}">weken</x-link></li>
                             <li class="nav-item"><x-link href="{{ route('groups.manage') }}">groepen</x-link></li>
                         @else
                             <li class="nav-item"><x-link href="{{ route('login') }}">Login</x-link></li>
