@@ -78,13 +78,12 @@ class StudentController extends Controller
         }
 
         $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $feedbackmomenten->pluck('id')->toArray())->get();
-        $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber();
 
         // Find the fbm's that have results for this group;
         $studentIds = collect($group['users'])->pluck('id');
         $fbmIds = StudentScore::whereIn('student_id', $studentIds)->distinct()->get()->pluck('feedbackmoment_id')->unique();
         $fbmsActive = $feedbackmomenten
-            ->filter(fn($fm) => $fm->week <= $currentWeek)
+            ->filter(fn($fm) => $fm->week <= $blok->currentWeek)
             ->filter(fn($fm) => $fbmIds->contains($fm->id));
         $totalPointsToGainUntilNow = $fbmsActive->sum('points');
 

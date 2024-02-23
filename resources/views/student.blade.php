@@ -1,6 +1,6 @@
 <x-layouts.app class="text-base" :title="$student->name">
 
-    <?php $currentWeek = \App\Models\SchoolWeek::getCurrentWeekNumber() ?? 0; ?>
+    <?php $currentWeek = $blok->currentWeek ?? 0; ?>
     <div class="flex flex-col sm:flex-row items-center justify:center sm:justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 sm:h-14 ">
         <div class="flex gap-2">
             <div class="flex flex-row items-center gap-3 font-bold text-xs sm:text-xl">{{ $student->name }}</div>
