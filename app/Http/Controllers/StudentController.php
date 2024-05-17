@@ -110,7 +110,6 @@ class StudentController extends Controller
                 return [$fmId => $scores[$user['id']] ?? null];
             });
 
-            // $totalBpoints = DB::table('student_scores_b')->where('student_id', $user['id'])->sum('score');
             $totalBpoints = DB::table('student_scores_b')->where('student_id', $user['id'])->whereIn('subject_id', $blok->vakken->pluck('uitvoer_id'))->sum('score');
 
             // new array from totalBPoints with key uitvoer_id from $blok->vakken and value
