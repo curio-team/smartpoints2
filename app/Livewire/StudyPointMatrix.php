@@ -8,7 +8,7 @@ use App\Models\Group;
 use App\Traits\SendsNotifications;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
-use StudioKaa\Amoclient\Facades\AmoAPI;
+use Curio\SdClient\Facades\SdApi;
 use Livewire\Attributes\Url;
 
 class StudyPointMatrix extends Component
@@ -42,7 +42,7 @@ class StudyPointMatrix extends Component
     public function mount()
     {
         // List available groups
-        $groupsFromApi = collect(AmoAPI::get('/groups'))->map(fn($g) => (object) $g);
+        $groupsFromApi = collect(SdApi::get('/groups'))->map(fn($g) => (object) $g);
 
         $groups = Group::all()
             ->map(function ($group) use ($groupsFromApi) {
@@ -60,7 +60,7 @@ class StudyPointMatrix extends Component
         if ($this->selectedGroupId == -1) return;
 
         $selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
-        $group = AmoAPI::get('groups/' . $this->selectedGroupId);
+        $group = SdApi::get('groups/' . $this->selectedGroupId);
 
         // List available blokken for this group
         $this->blokken = json_decode(file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $selectedCohortId . '/uitvoeren', false, stream_context_create([

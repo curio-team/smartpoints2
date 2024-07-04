@@ -6,7 +6,7 @@ use App\Models\Group;
 use App\Models\StudentScore;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use StudioKaa\Amoclient\Facades\AmoAPI;
+use Curio\SdClient\Facades\SdApi;
 
 class StudentController extends Controller
 {
@@ -14,7 +14,7 @@ class StudentController extends Controller
     {
         $studentFromApi = $this->getStudent($id);
         $groupId = collect($studentFromApi['groups'])->firstWhere('type', 'class')['id'];
-        $groupFromApi = AmoAPI::get('/groups/' . $groupId);
+        $groupFromApi = SdApi::get('/groups/' . $groupId);
         $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
 
         list($blok, $fbmsActive, $student, $vakkenActiveB) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
@@ -31,10 +31,10 @@ class StudentController extends Controller
     private function getStudent($id = null)
     {
         // For students always return self
-        if ($id == null || Auth::user()->type == 'student') return collect(AmoAPI::get('/me'));
+        if ($id == null || Auth::user()->type == 'student') return collect(SdApi::get('/me'));
 
         // Teachers is allowed to look up by id
-        return collect(AmoAPI::get('/users/' . $id));
+        return collect(SdApi::get('/users/' . $id));
     }
 
     public static function getStudentScoresForBlok($group, $cohortId, $onlyForUser = null, $blokId = -1)

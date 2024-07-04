@@ -30,10 +30,18 @@ Route::middleware(['auth'])->group(function () {
 	Route::get('/student', [StudentController::class, 'show'])->name('student.home');
 });
 
+// Auth routes for SdClient
 Route::get('/login', function(){
-	return redirect('/amoclient/redirect');
+	return redirect('/sdclient/redirect');
 })->name('login');
 
-Route::get('/amoclient/ready', function(){
+Route::get('/sdclient/ready', function(){
 	return redirect('/');
+});
+
+Route::get('/sdclient/error', function() {
+    $error = session('sdclient.error');
+    $error_description = session('sdclient.error_description');
+
+    return 'There was an error signing in: ' . $error_description . ' (' . $error . ')<br><a href="/login">Try again</a>';
 });

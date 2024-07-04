@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Group;
 use Livewire\Component;
-use StudioKaa\Amoclient\Facades\AmoAPI;
+use Curio\SdClient\Facades\SdApi;
 
 class GroupManager extends Component
 {
@@ -14,7 +14,7 @@ class GroupManager extends Component
 
     public function mount()
     {
-        $this->groups = collect(AmoAPI::get('groups'))
+        $this->groups = collect(SdApi::get('groups'))
             ->filter(function($group) {
                 return ($group['type'] == "class");
             });
