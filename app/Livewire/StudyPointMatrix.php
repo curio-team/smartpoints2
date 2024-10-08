@@ -45,6 +45,7 @@ class StudyPointMatrix extends Component
         $groupsFromApi = collect(SdApi::get('/groups'))->map(fn($g) => (object) $g);
 
         $groups = Group::all()
+            ->filter(fn($group) => $groupsFromApi->firstWhere('id', $group->group_id) !== null)
             ->map(function ($group) use ($groupsFromApi) {
                 $group->name = $groupsFromApi->firstWhere('id', $group->group_id)->name;
                 return $group;
