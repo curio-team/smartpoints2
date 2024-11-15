@@ -13,7 +13,13 @@ class StudentController extends Controller
     public function show($id = null)
     {
         $studentFromApi = $this->getStudent($id);
-        $groupId = collect($studentFromApi['groups'])->firstWhere('type', 'class')['id'];
+        $group = collect($studentFromApi['groups'])->firstWhere('type', 'class');
+
+        if (!$group) {
+            return 'Fout! Je bent niet ingedeeld in een klas. Vraag dat jouw mentor dit voor je regelt.';
+        }
+
+        $groupId = $group['id'];
         $groupFromApi = SdApi::get('/groups/' . $groupId);
         $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
 
