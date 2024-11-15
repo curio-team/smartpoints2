@@ -29,7 +29,19 @@ class StudentController extends Controller
 
         $cohortId = $groupData->cohort_id;
 
-        list($blok, $fbmsActive, $student, $vakkenActiveB) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
+        $vakkenToHide = [];
+
+        // If the user has the specialisatie filter query parameter, we need to hide some vakken.
+        if (request()->has('specialisatie')) {
+            $vakkenToHide = self::getSpecialisatieVakkenToHide(request()->get('specialisatie'));
+        }
+
+        list($blok, $fbmsActive, $student, $vakkenActiveB) = self::getStudentScoresForBlok(
+            $groupFromApi,
+            $cohortId,
+            onlyForUser: $studentFromApi,
+            vakkenToHide: $vakkenToHide
+        );
         $bPoints = DB::table('student_scores_b')->where('student_id', $studentFromApi['id'])->get();
 
         return view('student')
@@ -49,7 +61,27 @@ class StudentController extends Controller
         return collect(SdApi::get('/users/' . $id));
     }
 
-    public static function getStudentScoresForBlok($group, $cohortId, $onlyForUser = null, $blokId = -1)
+    public static function getSpecialisatieVakkenToHide($specialisatieFilter)
+    {
+        switch ($specialisatieFilter) {
+            case 'web':
+                // For WEB we hide:
+                return [
+                    'K_NAT',
+                    'S_NAT',
+                ];
+            case 'native':
+                // For NATIVE we hide:
+                return [
+                    'K_WEB',
+                    'S_WEB',
+                ];
+            default:
+                return [];
+        }
+    }
+
+    public static function getStudentScoresForBlok($group, $cohortId, $onlyForUser = null, $blokId = -1, $vakkenToHide = [])
     {
         try {
             $response = file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $cohortId . '/uitvoer/' . $blokId, false, stream_context_create([
@@ -66,6 +98,8 @@ class StudentController extends Controller
 
         $blok->vakken = collect($blok->vakken)->filter(function ($vak) {
             return count($vak->feedbackmomenten); //remove vakken without feedbackmoment
+        })->filter(function ($vak) use ($vakkenToHide) {
+            return !in_array($vak->vak, $vakkenToHide);
         });
 
         $feedbackmomenten = $blok->vakken->pluck('feedbackmomenten')->flatten();

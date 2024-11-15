@@ -35,6 +35,13 @@
                     <option value="b">B-punten</option>
                 </x-input.select>
             </div>
+            <div x-show="$wire.isSpecialisatieBlok">
+                <x-input.select wire:model.live="specialisatieFilter" id="specialisatieFilterChanger" class="h-9">
+                    <option value="">Toon Alle Modules</option>
+                    <option value="native">Toon geen WEB-modules</option>
+                    <option value="web">Toon geen NATIVE-modules</option>
+                </x-input.select>
+            </div>
             <x-button-icon icon="save"
                 x-cloak
                 wire:click="save"

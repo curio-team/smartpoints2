@@ -1,8 +1,16 @@
 <x-layouts.app class="text-base" :title="$student->name">
+    {{-- Livewire handles injecting alpine for us, but in this Laravel controller we must handle it ourselves --}}
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <?php $currentWeek = $blok->currentWeek ?? 0; ?>
     <div class="flex flex-col sm:flex-row items-center justify:center sm:justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 sm:h-14 ">
-        <div class="flex gap-2">
+        <div class="flex gap-2" x-data="{
+            specialisatieFilter: $persist('{{ request()->get('specialisatie') }}'),
+            goToFilter() {
+                window.location = `${window.location.pathname}?specialisatie=${this.specialisatieFilter}`;
+            }
+        }" x-effect="if (specialisatieFilter && specialisatieFilter !== '' && !window.location.search.includes('specialisatie=' + specialisatieFilter)) goToFilter();">
             <div class="flex flex-row items-center gap-3 font-bold text-xs sm:text-xl">{{ $student->name }}</div>
 
             <?php
@@ -25,6 +33,12 @@
             <div class="flex flex-row items-center text-xs sm:text-base px-2 py-1 gap-1 rounded bg-gray-200">
                Week {{$currentWeek}}
             </div>
+            <x-input.select x-model="specialisatieFilter"
+                x-on:change="goToFilter();">
+                <option value="">Toon Alle Modules</option>
+                <option value="native">Toon geen WEB-modules</option>
+                <option value="web">Toon geen NATIVE-modules</option>
+            </x-input.select>
         </div>
 
         <span class="ps-2 text-sm italic text-xs sm:text-sm text-clip overflow-hidden hidden sm:block">
@@ -74,7 +88,7 @@
                             @else
                                 <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
                             @endif
-                            
+
                             @if($loop->first)
                                 <?php
                                     $border = ($currentWeek >= 12 && $student->bPointsOverview[$vak->uitvoer_id] < 2 && $vakkenActiveB->contains($vak->uitvoer_id)) ? "border-yellow-400 border-2" : "" ;

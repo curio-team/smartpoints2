@@ -24,6 +24,10 @@ class StudyPointMatrix extends Component
     public $selectedGroupId = -1;
 
     public $selectedBlokId = -1;
+    public $isSpecialisatieBlok = false;
+
+    #[Url(as: 'specialisatie')]
+    public $specialisatieFilter = null;
 
     public $fbmsActive;
     public $vakkenActiveB;
@@ -71,8 +75,26 @@ class StudyPointMatrix extends Component
             ]
         ])));
 
-        list($this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB) = StudentController::getStudentScoresForBlok($group, $selectedCohortId, blokId: $this->selectedBlokId);
+        list($this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB) =
+            StudentController::getStudentScoresForBlok(
+                $group,
+                $selectedCohortId,
+                blokId: $this->selectedBlokId,
+                vakkenToHide: StudentController::getSpecialisatieVakkenToHide($this->specialisatieFilter)
+            );
+
         $this->selectedBlokId = $this->blok->id;
+
+        // Specialisatie filter hack
+        if ($this->selectedBlokId == -1) {
+            $this->isSpecialisatieBlok = false;
+            return;
+        }
+
+        $blokName = $this->blok->blok;
+
+        // Starting from blok E we have specialisatie blokken
+        $this->isSpecialisatieBlok = preg_match('/^Blok [E-Z]/', $blokName);
     }
 
     public function updatedSelectedGroupId()
@@ -83,6 +105,11 @@ class StudyPointMatrix extends Component
     }
 
     public function updatedSelectedBlokId()
+    {
+        $this->updateStudentScores();
+    }
+
+    public function updatedSpecialisatieFilter()
     {
         $this->updateStudentScores();
     }
