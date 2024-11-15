@@ -21,7 +21,13 @@ class StudentController extends Controller
 
         $groupId = $group['id'];
         $groupFromApi = SdApi::get('/groups/' . $groupId);
-        $cohortId = Group::firstWhere('group_id', $groupId)->cohort_id;
+        $groupData = Group::firstWhere('group_id', $groupId);
+
+        if (!$groupData) {
+            return 'Fout! De klas waarin je bent ingedeeld is nog niet aan een cohort gekoppeld. Vraag dat jouw mentor dit voor je regelt.';
+        }
+
+        $cohortId = $groupData->cohort_id;
 
         list($blok, $fbmsActive, $student, $vakkenActiveB) = self::getStudentScoresForBlok($groupFromApi, $cohortId, onlyForUser: $studentFromApi);
         $bPoints = DB::table('student_scores_b')->where('student_id', $studentFromApi['id'])->get();
