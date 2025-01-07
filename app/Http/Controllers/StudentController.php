@@ -96,6 +96,12 @@ class StudentController extends Controller
 
         $blok = json_decode($response);
 
+        // If this blok ended, force the week to the last week so we get the proper total points when we look back.
+        // Without this the current week of the new blok would be used and the total points would be incorrect.
+        if (strtotime($blok->datum_eind) < time()) {
+            $blok->currentWeek = 16;
+        }
+
         $blok->vakken = collect($blok->vakken)->filter(function ($vak) {
             return count($vak->feedbackmomenten); //remove vakken without feedbackmoment
         })->filter(function ($vak) use ($vakkenToHide) {
@@ -106,7 +112,6 @@ class StudentController extends Controller
         $blok->totalFeedbackmomenten = $feedbackmomenten->count();
         // b points are always 2 points per vak
         $blok->totalBpoints = $blok->vakken->count() * 2;
-
 
         $students = collect($group['users']);
 
