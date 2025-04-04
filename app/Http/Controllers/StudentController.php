@@ -81,17 +81,32 @@ class StudentController extends Controller
         }
     }
 
+    private static function fetchBlok($cohortId, $blokId)
+    {
+        return file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $cohortId . '/uitvoer/' . $blokId, false, stream_context_create([
+            'http' => [
+                'method' => 'GET',
+                'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
+            ]
+        ]));
+    }
+
     public static function getStudentScoresForBlok($group, $cohortId, $onlyForUser = null, $blokId = -1, $vakkenToHide = [])
     {
         try {
-            $response = file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $cohortId . '/uitvoer/' . $blokId, false, stream_context_create([
-                'http' => [
-                    'method' => 'GET',
-                    'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
-                ]
-            ]));
-        } catch (\ErrorException) {
-            abort(404);
+            $response = self::fetchBlok($cohortId, $blokId);
+        } catch (\ErrorException $ex) {
+            if (config('app.debug') == false) {
+                abort(404);
+            } else {
+                dd([
+                    'error' => 'Blok not found',
+                    'message' => $ex->getMessage(),
+                    'code' => $ex->getCode(),
+                    'file' => $ex->getFile(),
+                    'line' => $ex->getLine(),
+                ]);
+            }
         }
 
         $blok = json_decode($response);
