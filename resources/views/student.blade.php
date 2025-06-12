@@ -22,13 +22,6 @@
                 elseif($percentage >= 80) $colorA = 'bg-orange-300';
                 else $colorA = 'bg-red-400';
             }
-
-            if($currentWeek >= 12 && $student->totalBpointsToGainUntilNow > 0) {
-                $percentage = round($student->totalBpoints / $student->totalBpointsToGainUntilNow * 100);
-                if ($percentage >= 98) $colorB = 'bg-green-400';
-                elseif ($percentage >= 80) $colorB = 'bg-orange-300';
-                else $colorB = 'bg-red-400';
-            }
             ?>
             <div class="flex flex-row items-center text-xs sm:text-base px-2 py-1 gap-1 rounded bg-gray-200">
                Week {{$currentWeek}}
@@ -56,12 +49,8 @@
                 <x-table.th class="w-1/4 sm:max-w-md text-left overflow:hidden text-ellipsis">Titel</x-table.th>
                 <x-table.th>Punten</x-table.th>
                 <x-table.th class="{{ $colorA }}">
-                    <span class="font-normal">A-punten</span><br>
+                    <span class="font-normal">Punten</span><br>
                     {{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}
-                </x-table.th>
-                <x-table.th class="{{ $colorB }}">
-                    <span class="font-normal">B-punten</span><br>
-                    {{ $student->totalBpoints }} / {{ $student->totalBpointsToGainUntilNow }}
                 </x-table.th>
             </tr>
         </thead>
@@ -87,16 +76,6 @@
                                 <x-table.th zebra="{{ $loop->parent->even }}" class="border-yellow-400 border-2"></x-table.th>
                             @else
                                 <x-table.th zebra="{{ $loop->parent->even }}"></x-table.th>
-                            @endif
-
-                            @if($loop->first)
-                                <?php
-                                    $border = ($currentWeek >= 12 && $student->bPointsOverview[$vak->uitvoer_id] < 2 && $vakkenActiveB->contains($vak->uitvoer_id)) ? "border-yellow-400 border-2" : "" ;
-                                    $text   = ($student->bPointsOverview[$vak->uitvoer_id] < 2) ? "text-red-500" : "";
-                                ?>
-                                <x-table.th zebra="{{ $loop->parent->even }}" rowspan="{{ count($vak->feedbackmomenten) }}" class="{{ $border }} {{ $text }}">
-                                    {{ $student->bPointsOverview[$vak->uitvoer_id] }}
-                                </x-table.th>
                             @endif
                          </tr>
                     @endforeach
