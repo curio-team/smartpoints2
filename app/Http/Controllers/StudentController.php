@@ -160,8 +160,7 @@ class StudentController extends Controller
         });
 
         $students = $students->map(function ($user) use ($blok, $group, $feedbackScores, $totalPointsToGainUntilNow) {
-
-            // Calculate total points by summing the highest scores for each feedback moment.
+            // Calculate total points by summing the highest scores for each feedback moment attempt.
             $totalPoints = collect($feedbackScores)->map(function ($scores, $fmId) use ($user) {
                 return $scores[$user['id']] ?? 0;
             })->sum();
@@ -177,6 +176,7 @@ class StudentController extends Controller
                 'group' => $group['name'],
                 'totalPoints' => $totalPoints,
                 'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
+                'totalAverage' => locale_number_format(($totalPoints / $totalPointsToGainUntilNow) * 10, 1),
                 'feedbackmomenten' => $feedbackmomentenScores->toArray()
             ];
         });
