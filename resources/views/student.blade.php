@@ -15,12 +15,11 @@
 
             <?php
             $colorA = $colorB = 'bg-white';
-            if($student->totalPointsToGainUntilNow > 0)
-            {
-                $percentage = round($student->totalPoints / $student->totalPointsToGainUntilNow * 100);
-                if($percentage >= 98) $colorA = 'bg-green-400';
-                elseif($percentage >= 80) $colorA = 'bg-orange-300';
-                else $colorA = 'bg-red-400';
+
+            if($student->totalAverage >= 5.5) {
+                $colorA = 'bg-green-100';
+            } else {
+                $colorA = 'bg-red-100';
             }
             ?>
             <div class="flex flex-row items-center text-xs sm:text-base px-2 py-1 gap-1 rounded bg-gray-200">
@@ -36,7 +35,6 @@
 
         <span class="ps-2 text-sm italic text-xs sm:text-sm text-clip overflow-hidden hidden sm:block">
             <span class="text-gray-300 font-bold">grijs:</span> fbm is in de toekomst
-            | totaal is een optelling van <span class="font-bold">zwarte</span> fbm's
             | <span class="text-yellow-400 font-bold">gele rand:</span> aandachtspunt voor jou
         </span>
     </div>
@@ -47,10 +45,8 @@
                 <x-table.th class="hidden sm:table-cell">Code</x-table.th>
                 <x-table.th>Week</x-table.th>
                 <x-table.th class="w-1/4 sm:max-w-md text-left overflow:hidden text-ellipsis">Titel</x-table.th>
-                <x-table.th>Punten</x-table.th>
                 <x-table.th class="{{ $colorA }}">
-                    <span class="font-normal">Punten</span><br>
-                    {{ $student->totalPoints }} / {{ $student->totalPointsToGainUntilNow }}
+                    <span>{{ locale_number_format($student->totalAverage, 1) }}</span>
                 </x-table.th>
             </tr>
         </thead>
@@ -63,9 +59,8 @@
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="font-mono hidden sm:table-cell">{{ $feedbackmoment->code }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->week, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
                             <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" class="text-left overflow:hidden text-ellipsis sm:truncate sm:max-w-md font-normal text-xs sm:text-sm" title="{{ $feedbackmoment->naam }}">{{ $feedbackmoment->naam }}</x-table.thfbm>
-                            <x-table.thfbm studentView="true" :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment">{{ str_pad($feedbackmoment->points, 2, "0", STR_PAD_LEFT) }}</x-table.thfbm>
                             @if(isset($student->feedbackmomenten[$feedbackmoment->id]) && $fbmsActive->pluck('id')->contains($feedbackmoment->id))
-                                <x-table.th zebra="{{ $loop->parent->even }}" red="{{ $student->feedbackmomenten[$feedbackmoment->id] < $feedbackmoment->points }}">
+                                <x-table.th zebra="{{ $loop->parent->even }}" red="{{ $student->feedbackmomenten[$feedbackmoment->id] < 5.5 }}">
                                     {{ $student->feedbackmomenten[$feedbackmoment->id] }}
                                 </x-table.th>
                             @elseif(isset($student->feedbackmomenten[$feedbackmoment->id]))

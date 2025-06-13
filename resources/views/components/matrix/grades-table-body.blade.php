@@ -9,14 +9,11 @@
                 @php
                 $color = $loop->even ? 'bg-gray-100' : 'bg-white';
 
-                // TODO: Check if any module has an average below 55%
-                // if($student->totalPointsToGainUntilNow > 0)
-                // {
-                //     $percentage = round($student->totalPoints / $student->totalPointsToGainUntilNow * 100);
-                //     if($percentage >= 98) $color = 'bg-green-400';
-                //     elseif($percentage >= 80) $color = 'bg-orange-300';
-                //     else $color = 'bg-red-400';
-                // }
+                if($student->totalAverage >= 5.5) {
+                    $color = $loop->even ? 'bg-green-100' : 'bg-green-200';
+                } else {
+                    $color = $loop->even ? 'bg-red-100' : 'bg-red-200';
+                }
                 @endphp
 
                 <x-table.td
@@ -25,7 +22,7 @@
                     @mouseenter="hoverRow = '{{ $student->id }}'"
                     @mouseleave="hoverRow = null">
                     <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
-                    <span>{{ $student->totalAverage }}</span>
+                    <span>{{ locale_number_format($student->totalAverage, 1) }}</span>
                 </x-table.td>
                 @php $columnIndex = 0; @endphp
                 @foreach ($this->blok->vakken as $vak)

@@ -140,6 +140,12 @@ class StudentController extends Controller
 
         $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $feedbackmomenten->pluck('id')->toArray())->get();
 
+        // Converting study points to grades
+        $scores = $scores->map(function ($score) {
+            $score->score = $score->score / 10;
+            return $score;
+        });
+
         // Find the fbm's that have results for this group;
         $studentIds = collect($group['users'])->pluck('id');
         $fbmIds = StudentScore::whereIn('student_id', $studentIds)->distinct()->get()->pluck('feedbackmoment_id')->unique();
@@ -174,9 +180,7 @@ class StudentController extends Controller
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'group' => $group['name'],
-                'totalPoints' => $totalPoints,
-                'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
-                'totalAverage' => locale_number_format(($totalPoints / $totalPointsToGainUntilNow) * 10, 1),
+                'totalAverage' => ($totalPoints * 10) / $totalPointsToGainUntilNow * 10,
                 'feedbackmomenten' => $feedbackmomentenScores->toArray()
             ];
         });

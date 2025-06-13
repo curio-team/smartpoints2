@@ -142,7 +142,9 @@ class StudyPointMatrix extends Component
 
         $this->floodFillCount = $count;
         $this->floodFillSubject = $feedbackmoment;
-        $this->floodFillValue = $feedbackmoment->points;
+
+        // Convert study points to grade and set the flood fill value
+        $this->floodFillValue = $feedbackmoment->points / 10;
     }
 
     public function doFloodFill()
@@ -180,6 +182,9 @@ class StudyPointMatrix extends Component
         }
         else
         {
+            // Convert grade to study points
+            $value = $value * 10;
+
             $updatedScores = [
                 [
                     'student_id' => $student->id,
