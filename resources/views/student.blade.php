@@ -54,15 +54,28 @@
         <tbody class="text-xs sm:text-base">
             @foreach ($blok->vakken as $vak)
                 @php
-                    // If any grade is below 5.5, we set the color to red
+                    // If the average grade is below 5.5, we set the color to red
                     $colorVak = 'bg-white';
                     $colorVakAlternate = 'bg-gray-100';
 
+                    $sum = 0;
+                    $count = 0;
+
                     foreach ($vak->feedbackmomenten as $feedbackmoment) {
-                        if (isset($student->feedbackmomenten[$feedbackmoment->id]) && $student->feedbackmomenten[$feedbackmoment->id] < 5.5) {
+                        if (isset($student->feedbackmomenten[$feedbackmoment->id])) {
+                            $sum += $student->feedbackmomenten[$feedbackmoment->id];
+                            $count++;
+                        }
+                    }
+
+                    if ($count > 0) {
+                        $average = $sum / $count;
+                        if ($average < 5.5) {
                             $colorVak = 'bg-red-100';
                             $colorVakAlternate = 'bg-red-200';
-                            break;
+                        } else {
+                            $colorVak = 'bg-green-100';
+                            $colorVakAlternate = 'bg-green-200';
                         }
                     }
                 @endphp
