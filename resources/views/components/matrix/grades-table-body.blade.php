@@ -26,6 +26,20 @@
                 </x-table.td>
                 @php $columnIndex = 0; @endphp
                 @foreach ($this->blok->vakken as $vak)
+                    @php
+                        $colorVak = 'bg-white';
+                        $colorVakAlternate = 'bg-gray-100';
+
+                        // If any grade is below 5.5, we set the color to red
+                        foreach ($vak->feedbackmomenten as $feedbackmoment) {
+                            if (isset($student->feedbackmomenten[$feedbackmoment->id]) && $student->feedbackmomenten[$feedbackmoment->id] < 5.5) {
+                                $colorVak = 'bg-red-100';
+                                $colorVakAlternate = 'bg-red-200';
+                                break;
+                            }
+                        }
+                    @endphp
+
                     @foreach ($vak->feedbackmomenten as $feedbackmoment)
                         @php $columnIndex++; @endphp
                         <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
@@ -33,7 +47,7 @@
                             @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
                             @mouseleave="hoverRow = null; hoverColumn = null">
                             <input type="number" class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
-                                @if($zebra) bg-gray-100 @else bg-white @endif"
+                                @if($zebra) {{ $colorVakAlternate }} @else {{ $colorVak }} @endif"
                                 x-bind:class="{
                                     '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                     '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
