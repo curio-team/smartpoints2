@@ -180,7 +180,7 @@ class StudentController extends Controller
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'group' => $group['name'],
-                'totalAverage' => ($totalPoints * 10) / $totalPointsToGainUntilNow * 10,
+                'totalAverage' => $totalPointsToGainUntilNow > 0 ? (($totalPoints * 10) / $totalPointsToGainUntilNow * 10) : 0,
                 'feedbackmomenten' => $feedbackmomentenScores->toArray()
             ];
         });
