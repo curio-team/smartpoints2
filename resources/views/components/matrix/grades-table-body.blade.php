@@ -65,7 +65,7 @@
                                     '!bg-emerald-200': hoverRow === '{{ $student->id }}' || hoverColumn === '{{ $feedbackmoment->code }}',
                                     '!bg-emerald-400': hoverRow === '{{ $student->id }}' && hoverColumn === '{{ $feedbackmoment->code }}',
                                     '!text-gray-400' : {{ $feedbackmoment->week }} > {{ $currentWeek }},
-                                    'text-red-400 font-semibold' : $el.value < {{ $feedbackmoment->points }} && $el.value.length == 1,
+                                    'text-red-400 font-semibold' : $el.value < 5.5 && $el.value.length == 1,
                                     'border-yellow-400' : !$el.value.length && {{ $feedbackmoment->week }} < {{ $currentWeek }},
                                 }"
                                 step="1" min="0" max="{{ $feedbackmoment->points }}"
