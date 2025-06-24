@@ -23,10 +23,22 @@
             @endforeach
         </tr>
         <tr>
-            <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">punten:</x-table.th>
+            <x-table.th disabled class="sticky left-0 italic text-sm text-right font-normal pe-2">
+                {{-- acties: --}}
+            </x-table.th>
             @foreach ($this->blok->vakken as $vak)
                 @foreach ($vak->feedbackmomenten as $fbmKey => $feedbackmoment)
-                    <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment" wire:click="startFloodFill({{ $feedbackmoment->id }})">{{ $feedbackmoment->points }}</x-table.thfbm>
+                    <x-table.thfbm :loop="$loop" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" :feedbackmoment="$feedbackmoment"
+                    {{-- wire:click="startFloodFill({{ $feedbackmoment->id }})" --}}
+                    >
+                        <div class="flex flex-col gap-2 items-center justify-center">
+                            {{-- <x-icon.flood-fill class="inline-block w-4 h-4 text-gray-500 hover:text-gray-700 cursor-pointer" /> --}}
+
+                            @if ($feedbackmoment->points !== 100)
+                                <span class="text-xs text-red-500">Fout! Punten {{ $feedbackmoment->points }} ipv 100!</span>
+                            @endif
+                        </div>
+                    </x-table.thfbm>
                 @endforeach
             @endforeach
         </tr>

@@ -142,7 +142,9 @@ class StudyPointMatrix extends Component
 
         $this->floodFillCount = $count;
         $this->floodFillSubject = $feedbackmoment;
-        $this->floodFillValue = $feedbackmoment->points;
+
+        // Convert study points to grade and set the flood fill value
+        $this->floodFillValue = $feedbackmoment->points / 10;
     }
 
     public function doFloodFill()
@@ -171,46 +173,6 @@ class StudyPointMatrix extends Component
         $parts = explode('.', $key);
         $studentKey = $parts[0];
         $student = $this->students[$studentKey];
-
-        // handle b points update
-        // todo: maybe make a model out of B points...
-        if($parts[1] == 'bPointsOverview') {
-            $subjectId = $parts[count($parts) - 1];
-            $row = DB::table('student_scores_b')
-                ->where('student_id', $student->id)
-                ->where('subject_id', $subjectId)
-                ->first();
-
-            if (!$row) {
-                DB::table('student_scores_b')->insert([
-                    'student_id' => $student->id,
-                    'subject_id' => $subjectId,
-                    'score' => $value ?: 0,
-                    'teacher_id' => auth()->user()->id,
-                    'created_at' =>  \Carbon\Carbon::now(), // Not using Eloquent, so need to handle this manually..
-                    'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
-                ]);
-                return;
-            }
-            if ($value == null) {
-                // If $value is null, delete the row
-                DB::table('student_scores_b')
-                    ->where('student_id', $student->id)
-                    ->where('subject_id', $subjectId)
-                    ->delete();
-            } else {
-                // If $value is not null, update the score
-                DB::table('student_scores_b')
-                    ->where('student_id', $student->id)
-                    ->where('subject_id', $subjectId)
-                    ->update([
-                        'score' => $value,
-                        'updated_at' => \Carbon\Carbon::now(),  // Not using Eloquent, so need to handle this manually..
-                    ]);
-            }
-            return;
-        }
-
         $feedbackmomentId = $parts[count($parts) - 1];
 
         if($value == null)
@@ -220,6 +182,9 @@ class StudyPointMatrix extends Component
         }
         else
         {
+            // Convert grade to study points
+            $value = $value * 10;
+
             $updatedScores = [
                 [
                     'student_id' => $student->id,

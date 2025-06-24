@@ -42,11 +42,9 @@ class StudentController extends Controller
             onlyForUser: $studentFromApi,
             vakkenToHide: $vakkenToHide
         );
-        $bPoints = DB::table('student_scores_b')->where('student_id', $studentFromApi['id'])->get();
 
         return view('student')
             ->with('blok', $blok)
-            ->with('bPoints', $bPoints)
             ->with('fbmsActive', $fbmsActive)
             ->with('vakkenActiveB', $vakkenActiveB)
             ->with('student', $student);
@@ -125,8 +123,6 @@ class StudentController extends Controller
 
         $feedbackmomenten = $blok->vakken->pluck('feedbackmomenten')->flatten();
         $blok->totalFeedbackmomenten = $feedbackmomenten->count();
-        // b points are always 2 points per vak
-        $blok->totalBpoints = $blok->vakken->count() * 2;
 
         $students = collect($group['users']);
 
@@ -144,6 +140,12 @@ class StudentController extends Controller
 
         $scores = StudentScore::queryFeedbackForStudents($students->pluck('id')->toArray(), $feedbackmomenten->pluck('id')->toArray())->get();
 
+        // Converting study points to grades
+        $scores = $scores->map(function ($score) {
+            $score->score = $score->score / 10;
+            return $score;
+        });
+
         // Find the fbm's that have results for this group;
         $studentIds = collect($group['users'])->pluck('id');
         $fbmIds = StudentScore::whereIn('student_id', $studentIds)->distinct()->get()->pluck('feedbackmoment_id')->unique();
@@ -153,7 +155,6 @@ class StudentController extends Controller
         $totalPointsToGainUntilNow = $fbmsActive->sum('points');
 
         $vakkenActiveB = DB::table('student_scores_b')->whereIn('student_id', $studentIds)->whereIn('subject_id', $blok->vakken->pluck('uitvoer_id'))->select('subject_id')->distinct()->get()->pluck('subject_id');
-        $totalBpointsToGainUntilNow = $vakkenActiveB->count() * 2;
 
         // Only looking op for one user, so now replace list with this one user;
         if ($onlyForUser)
@@ -164,9 +165,8 @@ class StudentController extends Controller
             return [$fm->id => $scores->where('feedbackmoment_id', $fm->id)->pluck('score', 'student_id')];
         });
 
-        $students = $students->map(function ($user) use ($blok, $group, $feedbackScores, $totalPointsToGainUntilNow, $totalBpointsToGainUntilNow) {
-
-            // Calculate total points by summing the highest scores for each feedback moment.
+        $students = $students->map(function ($user) use ($blok, $group, $feedbackScores, $totalPointsToGainUntilNow) {
+            // Calculate total points by summing the highest scores for each feedback moment attempt.
             $totalPoints = collect($feedbackScores)->map(function ($scores, $fmId) use ($user) {
                 return $scores[$user['id']] ?? 0;
             })->sum();
@@ -176,28 +176,11 @@ class StudentController extends Controller
                 return [$fmId => $scores[$user['id']] ?? null];
             });
 
-            $totalBpoints = DB::table('student_scores_b')->where('student_id', $user['id'])->whereIn('subject_id', $blok->vakken->pluck('uitvoer_id'))->sum('score');
-
-            // new array from totalBPoints with key uitvoer_id from $blok->vakken and value
-            // score from student_scores_b when uitvoer_id is equal to subject_id
-            $totalBpointsOverview = $blok->vakken->mapWithKeys(function ($vak) use ($user) {
-                return [
-                    $vak->uitvoer_id => DB::table('student_scores_b')
-                        ->where('student_id', $user['id'])
-                        ->where('subject_id', $vak->uitvoer_id)
-                        ->first()->score ?? ''
-                ];
-            });
-
             return (object) [
                 'id' => $user['id'],
                 'name' => $user['name'],
                 'group' => $group['name'],
-                'totalPoints' => $totalPoints,
-                'totalBpoints' => $totalBpoints,
-                'bPointsOverview' => $totalBpointsOverview,
-                'totalPointsToGainUntilNow' => $totalPointsToGainUntilNow,
-                'totalBpointsToGainUntilNow' => $totalBpointsToGainUntilNow,
+                'totalAverage' => ($totalPoints * 10) / $totalPointsToGainUntilNow * 10,
                 'feedbackmomenten' => $feedbackmomentenScores->toArray()
             ];
         });

@@ -26,8 +26,10 @@
                 <div class="flex md:items-center md:w-auto w-full" id="navbarNav">
                     <ul class="hidden md:flex flex-col md:flex-row list-none md:ml-auto items-center">
                         @auth
+                        @teacher
                             <li class="nav-item text-sm px-2"><em>Basisdata:</em></li>
                             <li class="nav-item"><x-link href="{{ route('groups.manage') }}">groepen</x-link></li>
+                        @endteacher
                         @else
                             <li class="nav-item"><x-link href="{{ route('login') }}">Login</x-link></li>
                         @endauth

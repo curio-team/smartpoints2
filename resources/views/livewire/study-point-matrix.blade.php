@@ -1,5 +1,4 @@
 <div x-data="{
-        showPoints: 'a',
         hoverRow: null,
         hoverColumn: null,
         changesMade: {},
@@ -29,12 +28,6 @@
                     @endforeach
                 </x-input.select>
             </div>
-            <div x-show="$wire.selectedBlokId != -1">
-                <x-input.select x-model="showPoints" id="pointsChanger" class="h-9">
-                    <option value="a">A-punten</option>
-                    <option value="b">B-punten</option>
-                </x-input.select>
-            </div>
             <div x-show="$wire.isSpecialisatieBlok">
                 <x-input.select wire:model.live="specialisatieFilter" id="specialisatieFilterChanger" class="h-9">
                     <option value="">Toon Alle Modules</option>
@@ -57,19 +50,13 @@
         <span class="ps-2 text-sm italic">
             <span class="text-gray-300 font-bold">grijs:</span> fbm is in de toekomst
             | <span class="text-red-400 font-bold">rood:</span> voor hele klas nog niet ingevuld
-            | totaal is een optelling van alle <span class="font-bold">zwarte</span> fbm's
         </span>
     </div>
 
     @if(isset($this->blok))
         <div class="sticky top-[56px] z-50">
             <div class="overflow-auto syncscroll" name="syncTable">
-                <div x-show="showPoints == 'a'">
-                    <x-matrix.a-points-table-head :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
-                </div>
-                <div x-show="showPoints == 'b'">
-                    <x-matrix.b-points-table-head :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
-                </div>
+                <x-matrix.grades-table-head :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
             </div>
         </div>
 
@@ -77,12 +64,7 @@
             {{-- This button is to make saving by enter key work: --}}
             <input type="submit" style="display: none;">
 
-            <div x-show="showPoints == 'a'">
-                <x-matrix.a-points-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
-            </div>
-            <div x-show="showPoints == 'b'">
-                <x-matrix.b-points-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
-            </div>
+            <x-matrix.grades-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
         </form>
     @endif
 
