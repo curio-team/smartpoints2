@@ -68,7 +68,7 @@
                                     'text-red-400 font-semibold' : $el.value < 5.5 && $el.value.length == 1,
                                     'border-yellow-400' : !$el.value.length && {{ $feedbackmoment->week }} < {{ $currentWeek }},
                                 }"
-                                min="0" max="10"
+                                step="0.01" min="0" max="10"
                                 tabindex="{{ $columnIndex.$studentIndex }}"
                                 wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}"
                                 x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true"
