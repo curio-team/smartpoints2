@@ -46,8 +46,7 @@
                 <x-table.th class="hidden sm:table-cell">Code</x-table.th>
                 <x-table.th>Week</x-table.th>
                 <x-table.th class="w-1/4 sm:max-w-md text-left overflow:hidden text-ellipsis">Titel</x-table.th>
-                <x-table.th class="{{ $colorAverage }}">
-                    <span>{{ locale_number_format($student->totalAverage, 1) }}</span>
+                <x-table.th>Cijfer
                 </x-table.th>
             </tr>
         </thead>

@@ -22,7 +22,7 @@
                     @mouseenter="hoverRow = '{{ $student->id }}'"
                     @mouseleave="hoverRow = null">
                     <a class="truncate" target="_blank" href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
-                    <span>{{ locale_number_format($student->totalAverage, 1) }}</span>
+                    {{-- <span>{{ locale_number_format($student->totalAverage, 1) }}</span> --}}
                 </x-table.td>
                 @php $columnIndex = 0; @endphp
                 @foreach ($this->blok->vakken as $vak)
