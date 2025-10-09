@@ -34,7 +34,7 @@
                     <option value="web">Toon geen NATIVE-modules</option>
                 </x-input.select>
             </div>
-            <div>
+            <div x-show="$wire.selectedBlokId != -1">
                 <x-input.select wire:model.live="isAverageGradeView" class="h-9">
                     <option value="false" selected>Individuele Cijfers </option>
                     <option value="true">Gemiddelde Cijfers</option>
