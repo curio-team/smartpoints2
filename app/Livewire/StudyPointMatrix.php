@@ -36,13 +36,9 @@ class StudyPointMatrix extends Component
     public $floodFillCount;
     public $floodFillSubject;
 
-
-    public $isAverageGradeView = 'false';
-
+    public $isAverageGradeView = false;
 
     private $selectedCohortId;
-
-
 
     public function render()
     {

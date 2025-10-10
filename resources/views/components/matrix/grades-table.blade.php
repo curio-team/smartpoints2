@@ -1,7 +1,4 @@
 <table class="table-auto border-collapse border border-gray-400">
-    {{-- @dump($students) --}}
-    {{--  @dump ($this->blok->vakken) --}}
-
     <thead class="bg-white shadow">
         <tr>
             <x-table.th disabled class="sticky left-0" style="min-width: 300px;"></x-table.th>
@@ -86,8 +83,8 @@
                         $notAllFeedbacksAreFilled = $count < count($vak->feedbackmomenten);
                     @endphp
 
-                    @if ($isAverageGradeView === 'true')
-                        <!-- Average grade view -->
+                    @if ($isAverageGradeView)
+                        {{-- Average grade view --}}
                         @php $columnIndex++; @endphp
                         <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
                             colspan="{{ count($vak->feedbackmomenten) }}"
@@ -101,9 +98,9 @@
                                         hoverColumn === '{{ $feedbackmoment->code }}',
                                     '!bg-emerald-400': hoverRow === '{{ $student->id }}' &&
                                         hoverColumn === '{{ $feedbackmoment->code }}',
-                                
-                                
-                                
+
+
+
                                 }"
                                 tabindex="{{ $columnIndex . $studentIndex }}"
                                 value="{{ $average ? ($notAllFeedbacksAreFilled ? $average . '*' : $average) : '-' }}"
@@ -111,7 +108,7 @@
                                 x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
                         </td>
                     @else
-                        <!-- Feedback moment view / editable -->
+                        {{-- Feedback moment view / editable --}}
                         @foreach ($vak->feedbackmomenten as $feedbackmoment)
                             @php $columnIndex++; @endphp
                             <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"

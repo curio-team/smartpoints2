@@ -36,8 +36,8 @@
             </div>
             <div x-show="$wire.selectedBlokId != -1">
                 <x-input.select wire:model.live="isAverageGradeView" class="h-9">
-                    <option value="false" selected>Individuele Cijfers </option>
-                    <option value="true">Gemiddelde Cijfers</option>
+                    <option value="0" selected>Individuele Cijfers </option>
+                    <option value="1">Gemiddelde Cijfers</option>
                 </x-input.select>
             </div>
             <x-button-icon icon="save" x-cloak wire:click="save" class="relative h-9"
@@ -51,7 +51,7 @@
         <span class="ps-2 text-sm italic">
             <span class="text-gray-300 font-bold">grijs:</span> fbm is in de toekomst
             | <span class="text-red-400 font-bold">rood:</span> voor hele klas nog niet ingevuld
-            @if ($isAverageGradeView === 'true')
+            @if ($isAverageGradeView)
                 | <span class=" font-bold">* :</span> de feedbackmomenten van het vak zijn nog niet volledig ingevuld.
             @endif
         </span>
