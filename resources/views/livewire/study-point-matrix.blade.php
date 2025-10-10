@@ -1,9 +1,8 @@
 <div x-data="{
-        hoverRow: null,
-        hoverColumn: null,
-        changesMade: {},
-    }"
-    x-on:study-point-matrix-changed.window="changesMade = {}">
+    hoverRow: null,
+    hoverColumn: null,
+    changesMade: {},
+}" x-on:study-point-matrix-changed.window="changesMade = {}">
     @php $currentWeek = $this->blok->currentWeek ?? 0; @endphp
 
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
@@ -35,13 +34,15 @@
                     <option value="web">Toon geen NATIVE-modules</option>
                 </x-input.select>
             </div>
-            <x-button-icon icon="save"
-                x-cloak
-                wire:click="save"
-                class="relative h-9"
+            <div x-show="$wire.selectedBlokId != -1">
+                <x-input.select wire:model.live="isAverageGradeView" class="h-9">
+                    <option value="0" selected>Individuele Cijfers </option>
+                    <option value="1">Gemiddelde Cijfers</option>
+                </x-input.select>
+            </div>
+            <x-button-icon icon="save" x-cloak wire:click="save" class="relative h-9"
                 x-show="Object.keys(changesMade).length > 0">
-                <x-badge color="bg-red-500"
-                    class="absolute -top-1 -right-1">
+                <x-badge color="bg-red-500" class="absolute -top-1 -right-1">
                     <span x-text="Object.keys(changesMade).length"></span>
                 </x-badge>
                 @lang('Save')
@@ -50,21 +51,25 @@
         <span class="ps-2 text-sm italic">
             <span class="text-gray-300 font-bold">grijs:</span> fbm is in de toekomst
             | <span class="text-red-400 font-bold">rood:</span> voor hele klas nog niet ingevuld
+            @if ($isAverageGradeView)
+                | <span class=" font-bold">* :</span> de feedbackmomenten van het vak zijn nog niet volledig ingevuld.
+            @endif
         </span>
     </div>
 
-    @if(isset($this->blok))
-        <div class="sticky top-[56px] z-50">
+    @if (isset($this->blok))
+        {{-- <div class="sticky top-[56px] z-50">
             <div class="overflow-auto syncscroll" name="syncTable">
                 <x-matrix.grades-table-head :blok="$blok" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
             </div>
-        </div>
+        </div> --}}
 
         <form class="overflow-auto z-0 syncscroll" name="syncTable" wire:submit="save">
             {{-- This button is to make saving by enter key work: --}}
             <input type="submit" style="display: none;">
 
-            <x-matrix.grades-table-body :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek" />
+            <x-matrix.grades-table :blok="$blok" :students="$students" :fbmsActive="$fbmsActive" :currentWeek="$currentWeek"
+                :isAverageGradeView="$isAverageGradeView" />
         </form>
     @endif
 
@@ -76,20 +81,25 @@
 
     <div class="modals">
         @if ($floodFillValue > -1)
-        <x-modal.confirmation cancel="$wire.cancelFloodFill()">
-            <x-slot name="title">Alles vullen</x-slot>
+            <x-modal.confirmation cancel="$wire.cancelFloodFill()">
+                <x-slot name="title">Alles vullen</x-slot>
 
-            <p>Weet je zeker dat je alle niet gevulde waardes bij <span class="font-semibold">{{ __(':feedbackmoment (:fb_code)', [
-                'feedbackmoment' => $floodFillSubject->naam,
-                'fb_code' => $floodFillSubject->code
-            ]) }}</span> van de <span class="font-semibold">{{ $floodFillCount }}</span> studenten in deze klas wilt overschrijven met de waarde <span class="font-semibold">{{ $floodFillValue }}</span>?</p>
-            <p class="mt-4"><span class="font-semibold">Je kunt deze actie niet ongedaan maken!</span></p>
+                <p>Weet je zeker dat je alle niet gevulde waardes bij <span
+                        class="font-semibold">{{ __(':feedbackmoment (:fb_code)', [
+                            'feedbackmoment' => $floodFillSubject->naam,
+                            'fb_code' => $floodFillSubject->code,
+                        ]) }}</span>
+                    van de <span class="font-semibold">{{ $floodFillCount }}</span> studenten in deze klas wilt
+                    overschrijven met de waarde <span class="font-semibold">{{ $floodFillValue }}</span>?</p>
+                <p class="mt-4"><span class="font-semibold">Je kunt deze actie niet ongedaan maken!</span></p>
 
-            <x-slot name="footer">
-                <x-button-icon icon="close" wire:click="cancelFloodFill" wire:loading.attr="disabled">Annuleren</x-button-icon>
-                <x-button-icon icon="save" wire:click="doFloodFill" class="bg-red-500 hover:bg-red-600" wire:loading.attr="disabled">Vullen</x-button-icon>
-            </x-slot>
-        </x-modal.confirmation>
+                <x-slot name="footer">
+                    <x-button-icon icon="close" wire:click="cancelFloodFill"
+                        wire:loading.attr="disabled">Annuleren</x-button-icon>
+                    <x-button-icon icon="save" wire:click="doFloodFill" class="bg-red-500 hover:bg-red-600"
+                        wire:loading.attr="disabled">Vullen</x-button-icon>
+                </x-slot>
+            </x-modal.confirmation>
         @endif
     </div>
 
@@ -98,7 +108,10 @@
             const loading = document.getElementById('loadingIndicator');
             loading.setAttribute('wire:loading', '');
 
-            Livewire.hook('morph.updated', ({ el, component }) => {
+            Livewire.hook('morph.updated', ({
+                el,
+                component
+            }) => {
                 syncscroll.reset();
             })
         });
