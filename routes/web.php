@@ -45,3 +45,7 @@ Route::get('/sdclient/error', function() {
 
     return 'There was an error signing in: ' . $error_description . ' (' . $error . ')<br><a href="/login">Try again</a>';
 });
+
+Route::get('/auth/check', function () {
+    return response()->json(['auth' => auth()->check()]);
+});
