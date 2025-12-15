@@ -4,7 +4,7 @@
     changesMade: {},
 }" x-on:study-point-matrix-changed.window="changesMade = {}">
     @php $currentWeek = $this->blok->currentWeek ?? 0; @endphp
-
+    <script src="/js/checksession.js"></script>
     <div class="flex flex-row items-center justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 h-14">
         <div class="flex flex-row items-center gap-3">
             <div>

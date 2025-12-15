@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Models\StudentScore;
 use App\Models\Group;
 use App\Traits\SendsNotifications;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Curio\SdClient\Facades\SdApi;
@@ -191,5 +192,10 @@ class StudyPointMatrix extends Component
             ];
             StudentScore::updateFeedbackForStudents($updatedScores);
         }
+    }
+
+    public function changed()
+    {
+        if (!Auth::check()) return redirect()->route('login');
     }
 }
