@@ -6,6 +6,7 @@ use App\Http\Controllers\StudentController;
 use App\Models\StudentScore;
 use App\Models\Group;
 use App\Traits\SendsNotifications;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Curio\SdClient\Facades\SdApi;
@@ -35,6 +36,8 @@ class StudyPointMatrix extends Component
     public $floodFillValue = -1;
     public $floodFillCount;
     public $floodFillSubject;
+
+    public $isAverageGradeView = false;
 
     private $selectedCohortId;
 
@@ -128,9 +131,8 @@ class StudyPointMatrix extends Component
         // Count the students that have a score for this feedbackmoment and wont be affected by the floodfill
         $studentsWithScore = 0;
 
-        foreach($this->students as $student)
-        {
-            if(isset($student->feedbackmomenten[$feedbackmomentId]))
+        foreach ($this->students as $student) {
+            if (isset($student->feedbackmomenten[$feedbackmomentId]))
                 $studentsWithScore++;
         }
 
@@ -149,10 +151,8 @@ class StudyPointMatrix extends Component
 
     public function doFloodFill()
     {
-        foreach($this->students as $key => $student)
-        {
-            if(!isset($student->feedbackmomenten[$this->floodFillSubject->id]))
-            {
+        foreach ($this->students as $key => $student) {
+            if (!isset($student->feedbackmomenten[$this->floodFillSubject->id])) {
                 $student->feedbackmomenten[$this->floodFillSubject->id] = $this->floodFillValue;
                 $this->updatedStudents($this->floodFillValue, $key . '.feedbackmomenten.' . $this->floodFillSubject->id);
             }
@@ -175,13 +175,10 @@ class StudyPointMatrix extends Component
         $student = $this->students[$studentKey];
         $feedbackmomentId = $parts[count($parts) - 1];
 
-        if($value == null)
-        {
+        if ($value == null) {
             $score = StudentScore::where('student_id', $student->id)->where('feedbackmoment_id', $feedbackmomentId)->first();
             $score?->delete();
-        }
-        else
-        {
+        } else {
             // Convert grade to study points
             $value = $value * 10;
 
@@ -195,5 +192,10 @@ class StudyPointMatrix extends Component
             ];
             StudentScore::updateFeedbackForStudents($updatedScores);
         }
+    }
+
+    public function changed()
+    {
+        if (!Auth::check()) return redirect()->route('login');
     }
 }
