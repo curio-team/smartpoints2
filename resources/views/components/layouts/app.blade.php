@@ -28,7 +28,8 @@
                         @auth
                         @teacher
                             <li class="nav-item text-sm px-2"><em>Basisdata:</em></li>
-                            <li class="nav-item"><x-link href="{{ route('groups.manage') }}">groepen</x-link></li>
+                            <li class="nav-item"><x-link href="{{ route('groups.manage') }}">Groepen</x-link></li>
+                            <li class="nav-item"><x-link href="{{ route('orphaned-scores.index') }}">Verweesde scores</x-link></li>
                         @endteacher
                         @else
                             <li class="nav-item"><x-link href="{{ route('login') }}">Login</x-link></li>

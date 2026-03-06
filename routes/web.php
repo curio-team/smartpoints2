@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrphanedScoresController;
 use App\Http\Controllers\StudentController;
 use App\Livewire\GroupManager;
 use App\Livewire\SchoolWeekManager;
@@ -23,6 +24,10 @@ Route::middleware(['auth', 'teacher'])->group(function () {
 	Route::get('/groups', GroupManager::class)->name('groups.manage');
 	Route::get('/groups/{group}', StudyPointMatrix::class)->name('groups.show');
 	Route::get('/student/{id}', [StudentController::class, 'show'])->name('student.show');
+	Route::get('/orphaned-scores', [OrphanedScoresController::class, 'index'])->name('orphaned-scores.index');
+	Route::get('/orphaned-scores/data', [OrphanedScoresController::class, 'data'])->name('orphaned-scores.data');
+	Route::post('/orphaned-scores/bulk-destroy', [OrphanedScoresController::class, 'bulkDestroyStudents'])->name('orphaned-scores.bulk-destroy');
+	Route::post('/orphaned-groups/bulk-destroy', [OrphanedScoresController::class, 'bulkDestroyGroups'])->name('orphaned-groups.bulk-destroy');
 });
 
 // Student routes:
