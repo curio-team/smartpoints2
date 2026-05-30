@@ -99,6 +99,7 @@ class StudentController extends Controller
             if (config('app.debug') == false) {
                 abort(404);
             } else {
+                /** @psalm-suppress ForbiddenCode */
                 dd([
                     'error' => 'Blok not found',
                     'message' => $ex->getMessage(),
@@ -187,7 +188,7 @@ class StudentController extends Controller
 
         $students = $students->map(function ($user) use ($group, $feedbackScores, $totalPointsToGainUntilNow) {
             // Calculate total points by summing the highest scores for each feedback moment attempt.
-            $totalPoints = collect($feedbackScores)->map(function ($scores, $fmId) use ($user) {
+            $totalPoints = (int) collect($feedbackScores)->map(function ($scores, $fmId) use ($user) {
                 return $scores[$user['id']] ?? 0;
             })->sum();
 

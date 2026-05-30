@@ -77,13 +77,26 @@ class StudyPointMatrix extends Component
         $selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
         $group = SdApi::get('groups/'.$this->selectedGroupId);
 
+        $apiUrl = implode('/', [
+            rtrim(config('app.currapp.api_url'), '/'),
+            'cohorts',
+            $selectedCohortId,
+            'uitvoeren',
+        ]);
+
         // List available blokken for this group
-        $this->blokken = json_decode(file_get_contents(config('app.currapp.api_url').'/cohorts/'.$selectedCohortId.'/uitvoeren', false, stream_context_create([
-            'http' => [
-                'method' => 'GET',
-                'header' => 'Authorization: Bearer '.config('app.currapp.api_token'),
-            ],
-        ])));
+        $this->blokken = json_decode(
+            file_get_contents(
+                $apiUrl,
+                false,
+                stream_context_create([
+                    'http' => [
+                        'method' => 'GET',
+                        'header' => 'Authorization: Bearer '.config('app.currapp.api_token'),
+                    ],
+                ])
+            )
+        );
 
         [$this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB] =
             StudentController::getStudentScoresForBlok(

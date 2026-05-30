@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('student_scores_b', function(Blueprint $table) {
+        Schema::create('student_scores_b', function (Blueprint $table) {
             $table->id();
-            $table->string('student_id')->references('id')->on('users');
-            $table->string('teacher_id')->references('id')->on('users');
-            $table->string('subject_id')->constrained();
+
+            $table->string('student_id');
+            $table->string('teacher_id');
+            $table->string('subject_id');
 
             $table->integer('score')->nullable();
             $table->string('feedback')->nullable();

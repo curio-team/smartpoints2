@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             // The student who received the score
-            $table->string('student_id')->references('id')->on('users');
+            $table->string('student_id');
 
             // Which feedbackmoment is this score for?
             $table->unsignedBigInteger('feedbackmoment_id');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('feedback')->nullable();
 
             // The teacher who gave the score
-            $table->string('teacher_id')->references('id')->on('users');
+            $table->string('teacher_id');
 
             // Was this a retake? If not, attempt = 1
             $table->unsignedInteger('attempt')->default(1);
