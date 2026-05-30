@@ -3,43 +3,47 @@
 namespace App\Livewire;
 
 use App\Http\Controllers\StudentController;
-use App\Models\StudentScore;
 use App\Models\Group;
+use App\Models\StudentScore;
 use App\Traits\SendsNotifications;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Livewire\Component;
 use Curio\SdClient\Facades\SdApi;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Url;
+use Livewire\Component;
 
 class StudyPointMatrix extends Component
 {
     use SendsNotifications;
 
     public $blok;
+
     public $groups;
+
     public $blokken = [];
+
     public $students;
 
     #[Url(as: 'group', history: true)]
     public $selectedGroupId = -1;
 
     public $selectedBlokId = -1;
+
     public $isSpecialisatieBlok = false;
 
     #[Url(as: 'specialisatie')]
     public $specialisatieFilter = null;
 
     public $fbmsActive;
+
     public $vakkenActiveB;
 
     public $floodFillValue = -1;
+
     public $floodFillCount;
+
     public $floodFillSubject;
 
     public $isAverageGradeView = false;
-
-    private $selectedCohortId;
 
     public function render()
     {
@@ -49,12 +53,13 @@ class StudyPointMatrix extends Component
     public function mount()
     {
         // List available groups
-        $groupsFromApi = collect(SdApi::get('/groups'))->map(fn($g) => (object) $g);
+        $groupsFromApi = collect(SdApi::get('/groups'))->map(fn ($g) => (object) $g);
 
         $groups = Group::all()
-            ->filter(fn($group) => $groupsFromApi->firstWhere('id', $group->group_id) !== null)
+            ->filter(fn ($group) => $groupsFromApi->firstWhere('id', $group->group_id) !== null)
             ->map(function ($group) use ($groupsFromApi) {
                 $group->name = $groupsFromApi->firstWhere('id', $group->group_id)->name;
+
                 return $group;
             })
             ->sortByDesc('name');
@@ -65,20 +70,22 @@ class StudyPointMatrix extends Component
 
     private function updateStudentScores()
     {
-        if ($this->selectedGroupId == -1) return;
+        if ($this->selectedGroupId == -1) {
+            return;
+        }
 
         $selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
-        $group = SdApi::get('groups/' . $this->selectedGroupId);
+        $group = SdApi::get('groups/'.$this->selectedGroupId);
 
         // List available blokken for this group
-        $this->blokken = json_decode(file_get_contents(config('app.currapp.api_url') . '/cohorts/' . $selectedCohortId . '/uitvoeren', false, stream_context_create([
+        $this->blokken = json_decode(file_get_contents(config('app.currapp.api_url').'/cohorts/'.$selectedCohortId.'/uitvoeren', false, stream_context_create([
             'http' => [
                 'method' => 'GET',
-                'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
-            ]
+                'header' => 'Authorization: Bearer '.config('app.currapp.api_token'),
+            ],
         ])));
 
-        list($this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB) =
+        [$this->blok, $this->fbmsActive, $this->students, $this->vakkenActiveB] =
             StudentController::getStudentScoresForBlok(
                 $group,
                 $selectedCohortId,
@@ -91,6 +98,7 @@ class StudyPointMatrix extends Component
         // Specialisatie filter hack
         if ($this->selectedBlokId == -1) {
             $this->isSpecialisatieBlok = false;
+
             return;
         }
 
@@ -102,7 +110,9 @@ class StudyPointMatrix extends Component
 
     public function updatedSelectedGroupId()
     {
-        if ($this->selectedGroupId == -1) return redirect()->route('home');
+        if ($this->selectedGroupId == -1) {
+            return redirect()->route('home');
+        }
         $this->selectedBlokId = -1;
         $this->updateStudentScores();
     }
@@ -132,15 +142,17 @@ class StudyPointMatrix extends Component
         $studentsWithScore = 0;
 
         foreach ($this->students as $student) {
-            if (isset($student->feedbackmomenten[$feedbackmomentId]))
+            if (isset($student->feedbackmomenten[$feedbackmomentId])) {
                 $studentsWithScore++;
+            }
         }
 
         $count = $studentCount - $studentsWithScore;
 
         // TODO: Nice message that tells the user nobody will be affected by the floodfill
-        if ($count == 0)
+        if ($count == 0) {
             return;
+        }
 
         $this->floodFillCount = $count;
         $this->floodFillSubject = $feedbackmoment;
@@ -152,9 +164,9 @@ class StudyPointMatrix extends Component
     public function doFloodFill()
     {
         foreach ($this->students as $key => $student) {
-            if (!isset($student->feedbackmomenten[$this->floodFillSubject->id])) {
+            if (! isset($student->feedbackmomenten[$this->floodFillSubject->id])) {
                 $student->feedbackmomenten[$this->floodFillSubject->id] = $this->floodFillValue;
-                $this->updatedStudents($this->floodFillValue, $key . '.feedbackmomenten.' . $this->floodFillSubject->id);
+                $this->updatedStudents($this->floodFillValue, $key.'.feedbackmomenten.'.$this->floodFillSubject->id);
             }
         }
 
@@ -186,8 +198,8 @@ class StudyPointMatrix extends Component
                 [
                     'student_id' => $student->id,
                     'feedbackmoment_id' => $feedbackmomentId,
-                    'teacher_id' => auth()->user()->id,
-                    'score' => $value ?: 0
+                    'teacher_id' => Auth::user()->id,
+                    'score' => $value ?: 0,
                 ],
             ];
             StudentScore::updateFeedbackForStudents($updatedScores);
@@ -196,6 +208,8 @@ class StudyPointMatrix extends Component
 
     public function changed()
     {
-        if (!Auth::check()) return redirect()->route('login');
+        if (! Auth::check()) {
+            return redirect()->route('login');
+        }
     }
 }

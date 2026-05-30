@@ -3,38 +3,41 @@
 namespace App\Livewire;
 
 use App\Models\Group;
-use Livewire\Component;
 use Curio\SdClient\Facades\SdApi;
+use Livewire\Component;
 
 class GroupManager extends Component
 {
-
     public $groups;
+
     public $cohorts;
 
     public function mount()
     {
         $this->groups = collect(SdApi::get('groups'))
-            ->filter(function($group) {
-                return ($group['type'] == "class");
+            ->filter(function ($group) {
+                return $group['type'] == 'class';
             });
 
-        $this->cohorts = collect(json_decode(file_get_contents(config('app.currapp.api_url') . '/cohorts', false, stream_context_create([
+        $this->cohorts = collect(json_decode(file_get_contents(config('app.currapp.api_url').'/cohorts', false, stream_context_create([
             'http' => [
                 'method' => 'GET',
-                'header' => 'Authorization: Bearer ' . config('app.currapp.api_token')
-            ]
+                'header' => 'Authorization: Bearer '.config('app.currapp.api_token'),
+            ],
         ]))));
 
-        $this->groups = $this->groups->map(function ($groupFromApi){
+        $this->groups = $this->groups->map(function ($groupFromApi) {
             // $groupFromApi = (object) $groupFromApi;
             $groupFromDb = Group::where('group_id', $groupFromApi['id'])->first();
 
             $groupFromApi['cohort'] = -1;
-            if($groupFromDb)
-            {
+
+            if ($groupFromDb) {
                 $cohortFromApi = $this->cohorts->firstWhere('id', $groupFromDb->cohort_id);
-                if($cohortFromApi) $groupFromApi['cohort'] = $cohortFromApi->id;
+
+                if ($cohortFromApi) {
+                    $groupFromApi['cohort'] = $cohortFromApi->id;
+                }
             }
 
             return $groupFromApi;
@@ -48,19 +51,14 @@ class GroupManager extends Component
 
     public function save()
     {
-        foreach($this->groups as $group)
-        {
-            if($group['cohort'] > 0)
-            {
+        foreach ($this->groups as $group) {
+            if ($group['cohort'] > 0) {
                 Group::updateOrCreate(
                     ['group_id' => $group['id']],
                     ['cohort_id' => $group['cohort']],
                 );
-            }
-            else
-            {
-                $group = Group::where('group_id', $group['id']);
-                if($group) $group->delete();
+            } else {
+                Group::where('group_id', $group['id'])->delete();
             }
         }
     }
