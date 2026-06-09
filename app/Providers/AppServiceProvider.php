@@ -22,7 +22,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::if('teacher', function () {
-            return Auth::user()?->type === 'teacher';
+            if (! Auth::check()) {
+                return false;
+            }
+
+            $type = Auth::user()->type;
+
+            return $type === 'teacher' || $type === 'admin';
         });
     }
 }

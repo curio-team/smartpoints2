@@ -11,11 +11,16 @@ class IsTeacher
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->user()->type == 'teacher') return $next($request);
+        $type = $request->user()->type;
+
+        if ($type === 'teacher' || $type === 'admin') {
+            return $next($request);
+        }
+
         return redirect()->route('student.home');
     }
 }
