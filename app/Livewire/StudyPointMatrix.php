@@ -53,7 +53,9 @@ class StudyPointMatrix extends Component
     public function mount()
     {
         // List available groups
-        $groupsFromApi = collect(SdApi::get('/groups'))->map(fn ($g) => (object) $g);
+        $groupsFromApi = collect(SdApi::get('/groups'))
+            ->map(fn ($g) => (object) $g)
+            ->filter(fn ($g) => empty($g->date_end) || ! \Illuminate\Support\Carbon::parse($g->date_end)->endOfDay()->isPast());
 
         $groups = Group::all()
             ->filter(fn ($group) => $groupsFromApi->firstWhere('id', $group->group_id) !== null)
