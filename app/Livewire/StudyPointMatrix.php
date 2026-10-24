@@ -8,6 +8,7 @@ use App\Models\StudentScore;
 use App\Traits\SendsNotifications;
 use Curio\SdClient\Facades\SdApi;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 
@@ -15,12 +16,16 @@ class StudyPointMatrix extends Component
 {
     use SendsNotifications;
 
+    #[Locked]
     public $blok;
 
+    #[Locked]
     public $groups;
 
+    #[Locked]
     public $blokken = [];
 
+    // Not locked so scores can be edited, see updatingStudents for what the client may change.
     public $students;
 
     #[Url(as: 'group', history: true)]
@@ -28,22 +33,34 @@ class StudyPointMatrix extends Component
 
     public $selectedBlokId = -1;
 
+    #[Locked]
     public $isSpecialisatieBlok = false;
 
     #[Url(as: 'specialisatie')]
     public $specialisatieFilter = null;
 
+    #[Locked]
     public $fbmsActive;
 
+    #[Locked]
     public $vakkenActiveB;
 
+    #[Locked]
     public $floodFillValue = -1;
 
+    #[Locked]
     public $floodFillCount;
 
+    #[Locked]
     public $floodFillSubject;
 
     public $isAverageGradeView = false;
+
+    public function boot()
+    {
+        // Runs on every request, including Livewire updates which skip non-persistent route middleware.
+        abort_unless(Auth::user()?->isTeacher(), 403);
+    }
 
     public function render()
     {
@@ -76,8 +93,11 @@ class StudyPointMatrix extends Component
             return;
         }
 
-        $selectedCohortId = Group::firstWhere('group_id', $this->selectedGroupId)->cohort_id;
-        $group = SdApi::get('groups/'.$this->selectedGroupId);
+        $selectedGroup = Group::firstWhere('group_id', (int) $this->selectedGroupId);
+        abort_if($selectedGroup === null, 404);
+
+        $selectedCohortId = $selectedGroup->cohort_id;
+        $group = SdApi::get('groups/'.$selectedGroup->group_id);
 
         $apiUrl = implode('/', [
             rtrim(config('app.currapp.api_url'), '/'),
@@ -151,7 +171,11 @@ class StudyPointMatrix extends Component
     public function startFloodFill($feedbackmomentId)
     {
         $studentCount = count($this->students);
-        $feedbackmoment = $this->blok->vakken->pluck('feedbackmomenten')->flatten()->firstWhere('id', $feedbackmomentId);
+        $feedbackmoment = $this->getFeedbackmomenten()->firstWhere('id', $feedbackmomentId);
+
+        if (! $feedbackmoment) {
+            return;
+        }
 
         // Count the students that have a score for this feedbackmoment and wont be affected by the floodfill
         $studentsWithScore = 0;
@@ -178,6 +202,10 @@ class StudyPointMatrix extends Component
 
     public function doFloodFill()
     {
+        if (! $this->floodFillSubject) {
+            return;
+        }
+
         foreach ($this->students as $key => $student) {
             if (! isset($student->feedbackmomenten[$this->floodFillSubject->id])) {
                 $student->feedbackmomenten[$this->floodFillSubject->id] = $this->floodFillValue;
@@ -195,6 +223,19 @@ class StudyPointMatrix extends Component
         $this->floodFillCount = null;
     }
 
+    public function updatingStudents($value, $key)
+    {
+        // Only a single score of a listed student, for a feedbackmoment in this blok, may be changed.
+        // Otherwise the client could change student ids (or the whole list) and write arbitrary scores.
+        if (
+            ! preg_match('/^([^.]+)\.feedbackmomenten\.(\d+)$/', (string) $key, $matches)
+            || ! isset($this->students[$matches[1]])
+            || ! $this->getFeedbackmomenten()->contains('id', (int) $matches[2])
+        ) {
+            abort(403);
+        }
+    }
+
     public function updatedStudents($value, $key)
     {
         $parts = explode('.', $key);
@@ -202,7 +243,19 @@ class StudyPointMatrix extends Component
         $student = $this->students[$studentKey];
         $feedbackmomentId = $parts[count($parts) - 1];
 
+        if ($value !== null && $value !== '' && (! is_numeric($value) || $value < 0 || $value > 10)) {
+            // Restore the stored score, so the invalid value isn't used when rendering
+            $score = StudentScore::where('student_id', $student->id)->where('feedbackmoment_id', $feedbackmomentId)->first();
+            $student->feedbackmomenten[$feedbackmomentId] = $score ? $score->score / 10 : null;
+            $this->addError('students.'.$key, 'Een cijfer moet een getal tussen 0 en 10 zijn.');
+
+            return;
+        }
+
         if ($value == null) {
+            // Livewire doesn't convert empty strings to null, which would break the average calculations
+            $student->feedbackmomenten[$feedbackmomentId] = null;
+
             $score = StudentScore::where('student_id', $student->id)->where('feedbackmoment_id', $feedbackmomentId)->first();
             $score?->delete();
         } else {
@@ -219,6 +272,11 @@ class StudyPointMatrix extends Component
             ];
             StudentScore::updateFeedbackForStudents($updatedScores);
         }
+    }
+
+    private function getFeedbackmomenten()
+    {
+        return collect($this->blok?->vakken)->pluck('feedbackmomenten')->flatten();
     }
 
     public function changed()

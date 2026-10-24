@@ -29,7 +29,9 @@ class User extends Authenticatable
     /**
      * The attributes that should be hidden for serialization.
      */
-    protected $hidden = [];
+    protected $hidden = [
+        'remember_token',
+    ];
 
     /**
      * The attributes that should be cast.
@@ -37,4 +39,9 @@ class User extends Authenticatable
     protected $casts = [];
 
     public $incrementing = false;
+
+    public function isTeacher(): bool
+    {
+        return $this->type === 'teacher' || $this->type === 'admin';
+    }
 }

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
+    public const SPECIALISATIES = ['web', 'native'];
+
     public function show($id = null)
     {
         $studentFromApi = $this->getStudent($id);
@@ -30,10 +32,15 @@ class StudentController extends Controller
         $cohortId = $groupData->cohort_id;
 
         $vakkenToHide = [];
+        $specialisatie = request()->query('specialisatie');
+
+        if (! in_array($specialisatie, self::SPECIALISATIES, true)) {
+            $specialisatie = '';
+        }
 
         // If the user has the specialisatie filter query parameter, we need to hide some vakken.
-        if (request()->has('specialisatie')) {
-            $vakkenToHide = self::getSpecialisatieVakkenToHide(request()->get('specialisatie'));
+        if ($specialisatie !== '') {
+            $vakkenToHide = self::getSpecialisatieVakkenToHide($specialisatie);
         }
 
         [$blok, $fbmsActive, $student, $vakkenActiveB] = self::getStudentScoresForBlok(
@@ -47,7 +54,8 @@ class StudentController extends Controller
             ->with('blok', $blok)
             ->with('fbmsActive', $fbmsActive)
             ->with('vakkenActiveB', $vakkenActiveB)
-            ->with('student', $student);
+            ->with('student', $student)
+            ->with('specialisatie', $specialisatie);
     }
 
     private function getStudent($id = null)
@@ -83,7 +91,8 @@ class StudentController extends Controller
 
     private static function fetchBlok($cohortId, $blokId)
     {
-        return file_get_contents(config('app.currapp.api_url').'/cohorts/'.$cohortId.'/uitvoer/'.$blokId, false, stream_context_create([
+        // Cast to int, the blok id comes from the client and this request uses our own API token.
+        return file_get_contents(config('app.currapp.api_url').'/cohorts/'.(int) $cohortId.'/uitvoer/'.(int) $blokId, false, stream_context_create([
             'http' => [
                 'method' => 'GET',
                 'header' => 'Authorization: Bearer '.config('app.currapp.api_token'),

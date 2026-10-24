@@ -9,11 +9,11 @@
                 </div>
             </x-table.th>
         </tr>
-        @foreach($groups as $key => $group)
+        @foreach($groups as $group)
             <x-table.tr>
                 <x-table.td zebra="{{ !$loop->even }}">{{ $group['name'] }}</x-table.td>
                 <x-table.td zebra="{{ !$loop->even }}">
-                    <x-input.select wire:model="groups.{{ $key }}.cohort">
+                    <x-input.select wire:model="cohortSelections.{{ $group['id'] }}">
                         <option value="-1">link met cohort</option>
                         @foreach($cohorts as $cohort)
                             <option value="{{ $cohort->id }}">{{ $cohort->naam }}</option>

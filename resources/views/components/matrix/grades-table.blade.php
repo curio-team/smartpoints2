@@ -46,7 +46,7 @@
 
                 <x-table.td style="width: 300px;"
                     class="whitespace-nowrap left-0 sticky z-10 flex justify-between items-center {{ $color }}"
-                    @mouseenter="hoverRow = '{{ $student->id }}'" @mouseleave="hoverRow = null">
+                    @mouseenter="hoverRow = {{ Js::from($student->id) }}" @mouseleave="hoverRow = null">
                     <a class="truncate" target="_blank"
                         href="{{ route('student.show', $student->id) }}">{{ $student->name }}</a>
                     {{-- <span>{{ locale_number_format($student->totalAverage, 1) }}</span> --}}
@@ -88,16 +88,16 @@
                         @php $columnIndex++; @endphp
                         <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
                             colspan="{{ count($vak->feedbackmomenten) }}"
-                            @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
+                            @mouseenter="hoverRow = {{ Js::from($student->id) }}; hoverColumn = {{ Js::from($feedbackmoment->code) }}"
                             @mouseleave="hoverRow = null; hoverColumn = null">
                             <input type="text"
                                 class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
                                 @if ($zebra) {{ $colorVakAlternate }} @else {{ $colorVak }} @endif"
                                 x-bind:class="{
-                                    '!bg-emerald-200': hoverRow === '{{ $student->id }}' ||
-                                        hoverColumn === '{{ $feedbackmoment->code }}',
-                                    '!bg-emerald-400': hoverRow === '{{ $student->id }}' &&
-                                        hoverColumn === '{{ $feedbackmoment->code }}',
+                                    '!bg-emerald-200': hoverRow === {{ Js::from($student->id) }} ||
+                                        hoverColumn === {{ Js::from($feedbackmoment->code) }},
+                                    '!bg-emerald-400': hoverRow === {{ Js::from($student->id) }} &&
+                                        hoverColumn === {{ Js::from($feedbackmoment->code) }},
 
 
 
@@ -105,7 +105,7 @@
                                 tabindex="{{ $columnIndex . $studentIndex }}"
                                 value="{{ $average ? ($notAllFeedbacksAreFilled ? $average . '*' : $average) : '-' }}"
                                 disabled
-                                x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
+                                x-on:focus="hoverRow = {{ Js::from($student->id) }}; hoverColumn = {{ Js::from($feedbackmoment->code) }}" />
                         </td>
                     @else
                         {{-- Feedback moment view / editable --}}
@@ -113,26 +113,26 @@
                             @php $columnIndex++; @endphp
                             <td class="p-0 relative z-0 h-auto" style="min-width: 50px;"
                                 wire:key="fbm-{{ $feedbackmoment->id }}-student-{{ $student->id }}-blok-{{ $blok->id }}-{{ time() }}"
-                                @mouseenter="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'"
+                                @mouseenter="hoverRow = {{ Js::from($student->id) }}; hoverColumn = {{ Js::from($feedbackmoment->code) }}"
                                 @mouseleave="hoverRow = null; hoverColumn = null">
                                 <input type="number"
                                     class="w-full h-full nospin text-center absolute bottom-0 top-0 left-0 right-0 border
                                 @if ($zebra) {{ $colorVakAlternate }} @else {{ $colorVak }} @endif"
                                     x-bind:class="{
-                                        '!bg-emerald-200': hoverRow === '{{ $student->id }}' ||
-                                            hoverColumn === '{{ $feedbackmoment->code }}',
-                                        '!bg-emerald-400': hoverRow === '{{ $student->id }}' &&
-                                            hoverColumn === '{{ $feedbackmoment->code }}',
-                                        '!text-gray-400': {{ $feedbackmoment->week }} > {{ $currentWeek }},
+                                        '!bg-emerald-200': hoverRow === {{ Js::from($student->id) }} ||
+                                            hoverColumn === {{ Js::from($feedbackmoment->code) }},
+                                        '!bg-emerald-400': hoverRow === {{ Js::from($student->id) }} &&
+                                            hoverColumn === {{ Js::from($feedbackmoment->code) }},
+                                        '!text-gray-400': {{ Js::from($feedbackmoment->week) }} > {{ Js::from($currentWeek) }},
                                         'text-red-400 font-semibold': $el.value < 5.5 && $el.value.length > 0,
-                                        'border-yellow-400': !$el.value.length && {{ $feedbackmoment->week }} <
-                                            {{ $currentWeek }},
+                                        'border-yellow-400': !$el.value.length && {{ Js::from($feedbackmoment->week) }} <
+                                            {{ Js::from($currentWeek) }},
                                     }"
                                     step="0.01" min="0" max="10"
                                     tabindex="{{ $columnIndex . $studentIndex }}"
                                     wire:model="students.{{ $key }}.feedbackmomenten.{{ $feedbackmoment->id }}"
-                                    x-on:input="changesMade['{{ $student->id }} - {{ $feedbackmoment->id }}'] = true"
-                                    x-on:focus="hoverRow = '{{ $student->id }}'; hoverColumn = '{{ $feedbackmoment->code }}'" />
+                                    x-on:input="changesMade[{{ Js::from($student->id.' - '.$feedbackmoment->id) }}] = true"
+                                    x-on:focus="hoverRow = {{ Js::from($student->id) }}; hoverColumn = {{ Js::from($feedbackmoment->code) }}" />
                             </td>
                         @endforeach
                     @endif

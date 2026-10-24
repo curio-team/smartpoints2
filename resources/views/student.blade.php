@@ -1,13 +1,12 @@
 <x-layouts.app class="text-base" :title="$student->name">
-    {{-- Livewire handles injecting alpine for us, but in this Laravel controller we must handle it ourselves --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{-- Livewire only injects its bundled Alpine (incl. persist) on pages with components, so we load it ourselves instead of from a CDN --}}
+    @livewireScripts
 
     <?php $currentWeek = $blok->currentWeek ?? 0; ?>
     <div
         class="flex flex-col sm:flex-row items-center justify:center sm:justify-between bg-gray-100 shadow p-2 px-4 sticky top-0 z-50 sm:h-14 ">
         <div class="flex gap-2" x-data="{
-            specialisatieFilter: $persist('{{ request()->get('specialisatie') }}'),
+            specialisatieFilter: $persist(@js($specialisatie)),
             goToFilter() {
                 window.location = `${window.location.pathname}?specialisatie=${this.specialisatieFilter}`;
             }

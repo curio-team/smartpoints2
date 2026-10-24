@@ -15,7 +15,7 @@
         'cursor-pointer' => $attributes->has('wire:click'),
     ]) }}
 
-    @mouseenter="hoverColumn = '{{ $feedbackmoment->code }}'"
+    @mouseenter="hoverColumn = {{ Js::from($feedbackmoment->code) }}"
     @mouseleave="hoverColumn = null"
 
     >{{ $slot }}</th>
@@ -25,7 +25,7 @@
         'bg-gray-100' => $loop->parent->even,
     ]) }}
 
-    @mouseenter="hoverColumn = '{{ $feedbackmoment->code }}'"
+    @mouseenter="hoverColumn = {{ Js::from($feedbackmoment->code) }}"
     @mouseleave="hoverColumn = null"
 
     >{{ $slot }}</th>

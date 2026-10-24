@@ -10,7 +10,7 @@
         @if ($errors->any())
             @foreach ($errors->all() as $error)
                 window.Toastify({
-                    text: "{{ $error }}",
+                    text: @js($error),
                     duration: 3000,
                     className: messageTypes['error'],
                 }).showToast();

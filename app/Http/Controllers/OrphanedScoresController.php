@@ -17,6 +17,85 @@ class OrphanedScoresController extends Controller
 
     public function data()
     {
+        [$orphanedGroups, $orphanedInA, $orphanedInB] = $this->findOrphans();
+
+        $allOrphanedIds = $orphanedInA->keys()->merge($orphanedInB->keys())->unique();
+
+        $users = User::whereIn('id', $allOrphanedIds)->get()->keyBy('id');
+
+        $orphans = $allOrphanedIds->map(function ($studentId) use ($orphanedInA, $orphanedInB, $users) {
+            return [
+                'student_id' => $studentId,
+                'name'       => $users->has($studentId) ? $users[$studentId]->name : '(onbekend)',
+                'count_a'    => $orphanedInA->has($studentId) ? $orphanedInA[$studentId]->count_a : 0,
+                'count_b'    => $orphanedInB->has($studentId) ? $orphanedInB[$studentId]->count_b : 0,
+            ];
+        })->sortBy('name')->values();
+
+        return response()->json([
+            'orphanedGroups' => $orphanedGroups->map(fn($g) => ['group_id' => $g->group_id, 'cohort_id' => $g->cohort_id]),
+            'orphans'        => $orphans,
+        ]);
+    }
+
+    public function bulkDestroyStudents(Request $request)
+    {
+        $request->validate([
+            'student_ids'   => ['array'],
+            'student_ids.*' => ['string'],
+        ]);
+
+        $ids = $request->input('student_ids', []);
+        if (empty($ids)) {
+            return redirect()->route('orphaned-scores.index');
+        }
+
+        // Only delete scores of students that are actually orphaned, never those of active students
+        [, $orphanedInA, $orphanedInB] = $this->findOrphans();
+        $ids = collect($ids)
+            ->intersect($orphanedInA->keys()->merge($orphanedInB->keys()))
+            ->unique()
+            ->values();
+
+        DB::table('student_scores_a')->whereIn('student_id', $ids)->delete();
+        DB::table('student_scores_b')->whereIn('student_id', $ids)->delete();
+
+        return redirect()->route('orphaned-scores.index')
+            ->with('success', count($ids) . ' student(en) verwijderd.');
+    }
+
+    public function bulkDestroyGroups(Request $request)
+    {
+        $request->validate([
+            'group_ids'   => ['array'],
+            'group_ids.*' => ['integer'],
+        ]);
+
+        $ids = $request->input('group_ids', []);
+        if (empty($ids)) {
+            return redirect()->route('orphaned-scores.index');
+        }
+
+        // Only delete groups that no longer exist in the API
+        [$orphanedGroups] = $this->findOrphans();
+        $ids = collect($ids)
+            ->map(fn($id) => (int) $id)
+            ->intersect($orphanedGroups->pluck('group_id'))
+            ->unique()
+            ->values();
+
+        Group::whereIn('group_id', $ids)->delete();
+
+        return redirect()->route('orphaned-scores.index')
+            ->with('success', count($ids) . ' groep(en) verwijderd.');
+    }
+
+    /**
+     * Find the local groups that no longer exist in the API and the scores (per table, keyed by
+     * student id) of students that are not in any active group.
+     */
+    private function findOrphans()
+    {
         // One API call to get all group IDs — no per-group 404 calls needed
         $apiGroupIds = collect(SdApi::get('/groups'))->pluck('id');
 
@@ -25,8 +104,7 @@ class OrphanedScoresController extends Controller
         // Groups in local DB whose API ID no longer exists
         $orphanedGroups = $localGroups
             ->filter(fn($group) => !$apiGroupIds->contains($group->group_id))
-            ->values()
-            ->map(fn($g) => ['group_id' => $g->group_id, 'cohort_id' => $g->cohort_id]);
+            ->values();
 
         // Active groups: only fetch user lists for groups that actually exist
         $activeStudentIds = collect();
@@ -55,49 +133,6 @@ class OrphanedScoresController extends Controller
             ->filter(fn($row) => !$activeStudentIds->contains($row->student_id))
             ->keyBy('student_id');
 
-        $allOrphanedIds = $orphanedInA->keys()->merge($orphanedInB->keys())->unique();
-
-        $users = User::whereIn('id', $allOrphanedIds)->get()->keyBy('id');
-
-        $orphans = $allOrphanedIds->map(function ($studentId) use ($orphanedInA, $orphanedInB, $users) {
-            return [
-                'student_id' => $studentId,
-                'name'       => $users->has($studentId) ? $users[$studentId]->name : '(onbekend)',
-                'count_a'    => $orphanedInA->has($studentId) ? $orphanedInA[$studentId]->count_a : 0,
-                'count_b'    => $orphanedInB->has($studentId) ? $orphanedInB[$studentId]->count_b : 0,
-            ];
-        })->sortBy('name')->values();
-
-        return response()->json([
-            'orphanedGroups' => $orphanedGroups,
-            'orphans'        => $orphans,
-        ]);
-    }
-
-    public function bulkDestroyStudents(Request $request)
-    {
-        $ids = $request->input('student_ids', []);
-        if (empty($ids)) {
-            return redirect()->route('orphaned-scores.index');
-        }
-
-        DB::table('student_scores_a')->whereIn('student_id', $ids)->delete();
-        DB::table('student_scores_b')->whereIn('student_id', $ids)->delete();
-
-        return redirect()->route('orphaned-scores.index')
-            ->with('success', count($ids) . ' student(en) verwijderd.');
-    }
-
-    public function bulkDestroyGroups(Request $request)
-    {
-        $ids = $request->input('group_ids', []);
-        if (empty($ids)) {
-            return redirect()->route('orphaned-scores.index');
-        }
-
-        Group::whereIn('group_id', $ids)->delete();
-
-        return redirect()->route('orphaned-scores.index')
-            ->with('success', count($ids) . ' groep(en) verwijderd.');
+        return [$orphanedGroups, $orphanedInA, $orphanedInB];
     }
 }

@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\IsTeacher;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,13 +24,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::if('teacher', function () {
-            if (! Auth::check()) {
-                return false;
-            }
-
-            $type = Auth::user()->type;
-
-            return $type === 'teacher' || $type === 'admin';
+            return Auth::user()?->isTeacher() ?? false;
         });
+
+        // Livewire only re-applies route middleware on its update requests when it is
+        // marked as persistent. Without this, students could call teacher components.
+        Livewire::addPersistentMiddleware([
+            IsTeacher::class,
+        ]);
     }
 }

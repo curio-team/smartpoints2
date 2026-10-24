@@ -36,7 +36,7 @@ class StudentScore extends Model
     {
         StudentScore::upsert(
             $updatedScores,
-            ['student_id', 'module_version_id', 'feedbackmoment_id', 'attempt'],
+            ['student_id', 'feedbackmoment_id', 'attempt'],
             ['score', 'feedback', 'teacher_id']
         );
     }

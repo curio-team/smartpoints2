@@ -1,6 +1,6 @@
 <x-layouts.app title="Verweesde scores">
-    {{-- Livewire handles injecting alpine for us, but in this Laravel controller we must handle it ourselves --}}
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    {{-- Livewire only injects its bundled Alpine on pages with components, so we load it ourselves instead of from a CDN --}}
+    @livewireScripts
 
     <div class="p-4 md:p-8 max-w-4xl mx-auto" x-data="{
         loading: true,
